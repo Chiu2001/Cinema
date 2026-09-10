@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -92,6 +93,9 @@ public class CinemaController {
 
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
+
+	@Value("${google.oauth.client-id}")
+	private String googleClientId;
 
 	/**
 	 * 获取所有电影
@@ -293,10 +297,12 @@ public class CinemaController {
 	@PostMapping("/google-login")
 	public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> request) {
 		   String googleToken = request.get("token");
+
+		   System.out.println("目前後端讀到的 google.oauth.client-id = [" + googleClientId + "]");
    
 		   JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 		   GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), jsonFactory)
-				   .setAudience(Collections.singletonList(""))
+				   .setAudience(Collections.singletonList(googleClientId))
 				   .build();
    
 		   try {

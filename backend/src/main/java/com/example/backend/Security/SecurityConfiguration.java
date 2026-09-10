@@ -21,8 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Value("${app.cors.allowed-origins:http://localhost:3000}")
-private List<String> allowedOrigins;
+
 @Configuration
 public class SecurityConfiguration {
 
@@ -34,6 +33,9 @@ public class SecurityConfiguration {
 
 	@Autowired
 	JwtService jwtService;
+
+	@Value("${app.cors.allowed-origins:http://localhost:3000}")
+	private List<String> allowedOrigins;
 
 	@Autowired
 	public SecurityConfiguration(AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtAuthFilter) {

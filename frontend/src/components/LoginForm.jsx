@@ -5,7 +5,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
 
-const clientId = "210567720043-255mub33p83168jpgsoh5icunnppn1nu.apps.googleusercontent.com";
+const clientId = "817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com";
 
 const LoginForm = () => {
     const navigate = useNavigate();

@@ -27,7 +27,7 @@ import EcpayPage from './pages/EcpayPage';
 import PaymentResultPage from './pages/PaymentResultPage';
 import { CartContext } from './CartContext';
 
-const clientId = '210567720043-255mub33p83168jpgsoh5icunnppn1nu.apps.googleusercontent.com';
+const clientId = '817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com';
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
