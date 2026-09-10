@@ -20,17 +20,18 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class JwtService {
 
     
-    private static final String SECRET_KEY = 
-        "T8qJvKSoH/kU7vDWIQ/YFqkti03oRdSN4X+2vSF/b1D9JLfMqx5EiUNrOnNV5hZm";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

@@ -17,9 +17,12 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Value("${app.cors.allowed-origins:http://localhost:3000}")
+private List<String> allowedOrigins;
 @Configuration
 public class SecurityConfiguration {
 
@@ -42,7 +45,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors(cors -> cors.configurationSource(request -> {
 			CorsConfiguration corsConfig = new CorsConfiguration();
-			corsConfig.setAllowedOriginPatterns(Collections.singletonList("*"));
+			corsConfig.setAllowedOriginPatterns(allowedOrigins);
 			corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 			corsConfig.setAllowedHeaders(List.of("*"));
 			corsConfig.setAllowCredentials(true);
