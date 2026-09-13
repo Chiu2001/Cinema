@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styles from '../styles/OrderManagement.module.css';
+import { API_BASE_URL } from '../apiConfig';
 
 const OrderManagement = () => {
     const [orders, setOrders] = useState([]);
@@ -10,7 +11,7 @@ const OrderManagement = () => {
     const ordersPerPage = 10;
 
     useEffect(() => {
-        axios.get('http://localhost:8443/tickets')  // 更新為後端新的 API 端點
+        axios.get(`${API_BASE_URL}/api/admin/tickets`)  // 更新為後端新的 API 端點
             .then(response => {
                 setOrders(response.data);
             })

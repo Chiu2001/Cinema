@@ -14,7 +14,7 @@
 
 //     const payment = async () => {
 //         try {
-//             const response = await fetch('http://localhost:8443/movie/ecpay/checkout', {
+//             const response = await fetch(`${API_BASE_URL}/ecpay/checkout`, {
 //                 method: 'POST',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -102,6 +102,7 @@ import Titles from './Titles'
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOutIn() {
     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -152,7 +153,7 @@ export default function CheckOutIn() {
         };
 
         // 發送 POST 請求到後端
-        fetch('http://localhost:8443/movie/checkout/save', {
+        fetch(`${API_BASE_URL}/checkout/save`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -179,7 +180,7 @@ export default function CheckOutIn() {
         }
 
         // 第一步：取得結帳細節
-        fetch(`http://localhost:8443/movie/checkout/details/${savedOrderId}`, {
+        fetch(`${API_BASE_URL}/checkout/details/${savedOrderId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +191,7 @@ export default function CheckOutIn() {
                 console.log('取得結帳細節:', data)
 
                 // 第二步：把取得的資料送到 LinePay 進行付款
-                return fetch('http://localhost:8443/movie/checkout/payment', {
+                return fetch(`${API_BASE_URL}/checkout/payment`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

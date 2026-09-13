@@ -3,6 +3,7 @@ import styles from '../styles/HomePage.module.css';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { API_BASE_URL } from '../apiConfig';
 
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
@@ -32,7 +33,7 @@ const Home = () => {
 
     // Fetching movies data
     useEffect(() => {
-        fetch('http://localhost:8443/movie/api/movie/movies')
+        fetch(`${API_BASE_URL}/api/movie/movies`)
             .then(response => response.json())
             .then(data => setMovies(data))
             .catch(error => console.error('Error fetching movies:', error));
@@ -40,7 +41,7 @@ const Home = () => {
 
     // Fetching news data
     useEffect(() => {
-        fetch('http://localhost:8443/movie/api/movie/news')
+        fetch(`${API_BASE_URL}/api/movie/news`)
             .then(response => response.json())
             .then(data => setNews(data))
             .catch(error => console.error('Error fetching news:', error));

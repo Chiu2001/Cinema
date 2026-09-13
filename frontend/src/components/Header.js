@@ -4,6 +4,7 @@ import styles from '../styles/header.module.css';
 import search_icon from '../assets/search.png';
 import movie_icon from '../assets/movie.png';
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -15,7 +16,7 @@ const Header = () => {
 
         if (query) {
             try {
-                const response = await axios.get(`http://localhost:8443/movie/api/movie/search?keyword=${query}`);
+                const response = await axios.get(`${API_BASE_URL}/api/movie/search?keyword=${query}`);
                 setFilteredMovies(response.data);
             } catch (error) {
                 console.error('搜尋失敗:', error);

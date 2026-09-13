@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/UserList.module.css';
 import axios from 'axios';
+import { API_BASE_URL } from '../apiConfig';
 
 const UserList = ({ userId }) => {
     const [user, setUser] = useState(null);
@@ -9,7 +10,7 @@ const UserList = ({ userId }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await axios.put(`http://localhost:8443/movie/api/movie/update/{id}`);
+            const response = await axios.put(`${API_BASE_URL}/api/movie/update/{id}`);
             setUser(response.data);
         };
         fetchUser();

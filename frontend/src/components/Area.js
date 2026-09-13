@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from '../styles/area.module.css';
 import QuantityBtn from './QuantityBtn';
+import { API_BASE_URL } from '../apiConfig';
 
 const Area = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,8 +16,8 @@ const Area = () => {
   const totalSeats = { A: 20, B: 15, C: 15, D: 30, E: 20 };
 
   useEffect(() => {
-    const fetchMovieInfo = fetch(`http://localhost:8443/movie/api/movie/area/${showtime_id}`).then(response => response.json());
-    const fetchSeatInfo = fetch(`http://localhost:8443/movie/api/movie/seatsResearch/${showtime_id}`).then(response => response.json());
+    const fetchMovieInfo = fetch(`${API_BASE_URL}/api/movie/area/${showtime_id}`).then(response => response.json());
+    const fetchSeatInfo = fetch(`${API_BASE_URL}/api/movie/seatsResearch/${showtime_id}`).then(response => response.json());
 
     Promise.all([fetchMovieInfo, fetchSeatInfo])
       .then(([movieData, seatData]) => {

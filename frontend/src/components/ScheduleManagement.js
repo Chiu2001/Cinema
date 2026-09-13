@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/ScheduleManagement.module.css';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../apiConfig';
 
 const ScheduleManagement = () => {
     const [movies, setMovies] = useState([]);
@@ -30,7 +31,7 @@ const ScheduleManagement = () => {
             return;
         }
 
-        axios.get('http://localhost:8443/movie/api/admin/movies', {
+        axios.get(`${API_BASE_URL}/api/admin/movies`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -111,7 +112,7 @@ const ScheduleManagement = () => {
             return;
         }
     
-        const url = selectedMovie ? `http://localhost:8443/movie/api/admin/movie/${selectedMovie.id}/update` : 'http://localhost:8443/movie/api/admin/add-movie';
+        const url = selectedMovie ? `${API_BASE_URL}/api/admin/movie/${selectedMovie.id}/update` : `${API_BASE_URL}/api/admin/add-movie`;
         const method = selectedMovie ? 'put' : 'post';
     
         axios({

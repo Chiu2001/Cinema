@@ -4,6 +4,7 @@ import styles from '../styles/LoginForm.module.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../apiConfig';
 
 const clientId = "817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com";
 
@@ -18,7 +19,7 @@ const LoginForm = () => {
                 const { credential } = credentialResponse;
     
                 // 不再解碼 token，直接將 credential 傳送到後端
-                const res = await fetch('http://localhost:8443/movie/api/movie/google-login', {
+                const res = await fetch(`${API_BASE_URL}/api/movie/google-login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ const LoginForm = () => {
         const password = document.getElementById('password').value;
 
         try {
-            const response = await fetch('http://localhost:8443/movie/api/movie/login', {
+            const response = await fetch(`${API_BASE_URL}/api/movie/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/OrderList.module.css'; // 引入 CSS 模組
+import { API_BASE_URL } from '../apiConfig';
 
 const OrderListIn = () => {
     const [orders, setOrders] = useState([]);
@@ -10,7 +11,7 @@ const OrderListIn = () => {
     // 查詢歷史訂單
     const fetchOrders = async () => {
         try {
-            const response = await axios.get(`http://localhost:8443/movie/api/orders/user?userId=${userId}`);
+            const response = await axios.get(`${API_BASE_URL}/api/orders/user?userId=${userId}`);
             setOrders(response.data);
         } catch (error) {
             console.error('無法獲取訂單', error);
@@ -20,7 +21,7 @@ const OrderListIn = () => {
     // 查詢單筆訂單詳情
     const fetchOrderDetail = async (orderNumber) => {
         try {
-            const response = await axios.get(`http://localhost:8443/movie/api/orders/details?orderNumber=${orderNumber}`);
+            const response = await axios.get(`${API_BASE_URL}/api/orders/details?orderNumber=${orderNumber}`);
             setSelectedOrder(response.data); // 保存訂單詳情
         } catch (error) {
             console.error('無法獲取訂單詳情', error);

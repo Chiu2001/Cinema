@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from '../styles/NewsManagement.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../apiConfig';
 
 const NewsManagement = () => {
     const [news, setNews] = useState([]);
@@ -24,7 +25,7 @@ const NewsManagement = () => {
             return;
         }
 
-        axios.get('http://localhost:8443/movie/api/movie/news', {
+        axios.get(`${API_BASE_URL}/api/movie/news`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -92,8 +93,8 @@ const NewsManagement = () => {
         }
 
         const url = selectedNews 
-            ? `http://localhost:8443/movie/api/admin/news/${selectedNews.id}/update` 
-            : 'http://localhost:8443/movie/api/admin/add-news';
+            ? `${API_BASE_URL}/api/admin/news/${selectedNews.id}/update` 
+            : `${API_BASE_URL}/api/admin/add-news`;
         const method = selectedNews ? 'put' : 'post';
 
         axios({

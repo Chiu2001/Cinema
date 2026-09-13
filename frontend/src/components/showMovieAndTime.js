@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import styles from '../styles/ShowMovieAndTime.module.css'; // 導入模組化的CSS
+import { API_BASE_URL } from '../apiConfig';
 
 export default function ShowMovieAndTime({ movieId }) {
     const [cinemas, setCinemas] = useState([]);
@@ -12,7 +13,7 @@ export default function ShowMovieAndTime({ movieId }) {
 
     //抓取cinemas的資料
     useEffect(() => {
-        fetch('http://localhost:8443/movie/api/movie/cinemas')
+        fetch(`${API_BASE_URL}/api/movie/cinemas`)
             .then(response => response.json())
             .then(data => setCinemas(data));
     }, []);
@@ -21,7 +22,7 @@ export default function ShowMovieAndTime({ movieId }) {
     const handleCinemaClick = (cinemaId) => {
         setSelectedCinema(cinemaId);
 
-        fetch(`http://localhost:8443/movie/api/movie/cinemas/${cinemaId}/showdates`)
+        fetch(`${API_BASE_URL}/api/movie/cinemas/${cinemaId}/showdates`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch showdates');
@@ -51,7 +52,7 @@ export default function ShowMovieAndTime({ movieId }) {
 
     // 新增的 fetchShowtimes 函数，用于获取并过滤 showtimes 数据
     const fetchShowtimes = (cinemaId, showDateId) => {
-        fetch(`http://localhost:8443/movie/api/movie/cinemas/${cinemaId}/showtimes/${showDateId}`)
+        fetch(`${API_BASE_URL}/api/movie/cinemas/${cinemaId}/showtimes/${showDateId}`)
             .then(response => response.json())
             .then(data => {
                 const filteredShowtimes = data.filter(showtime =>
@@ -62,7 +63,7 @@ export default function ShowMovieAndTime({ movieId }) {
                 const uniqueHallIds = [...new Set(hallIds)];
                 if (uniqueHallIds.length > 0) {
                     Promise.all(uniqueHallIds.map(hallId =>
-                        fetch(`http://localhost:8443/movie/api/movie/halls/${hallId}`)
+                        fetch(`${API_BASE_URL}/api/movie/halls/${hallId}`)
                         .then(res => res.json())
                     )).then(hallsData => {
                         setHalls(hallsData);

@@ -14,7 +14,7 @@
 
 //     const payment = async () => {
 //         try {
-//             const response = await fetch('http://localhost:8443/movie/ecpay/checkout', {
+//             const response = await fetch(`${API_BASE_URL}/ecpay/checkout`, {
 //                 method: 'POST',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -101,6 +101,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOut() {
     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -122,7 +123,7 @@ export default function CheckOut() {
         }
     
         try {
-            const response = await fetch('http://localhost:8443/movie/api/orders/create', {
+            const response = await fetch(`${API_BASE_URL}/api/orders/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

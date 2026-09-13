@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/Signup.module.css'; // 使用命名空間導入你的CSS文件
+import { API_BASE_URL } from '../apiConfig';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ const RegisterForm = () => {
             return;
         }
 
-        fetch('http://localhost:8443/movie/api/movie/register', {
+        fetch(`${API_BASE_URL}/api/movie/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

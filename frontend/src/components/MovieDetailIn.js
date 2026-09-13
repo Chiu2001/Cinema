@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
 import ShowMovieAndTime from './showMovieAndTime';
 import movieDetailStyles from '../styles/MovieDetail.module.css'; // 引入 MovieDetail 的模組樣式
+import { API_BASE_URL } from '../apiConfig';
 
 export default function MovieDetailIn() {
 
@@ -12,7 +13,7 @@ export default function MovieDetailIn() {
         console.log("Fetching movie data with id:", params.id);
 
         // 正確的 API 路徑，將 params.id 動態傳入
-        fetch(`http://localhost:8443/movie/api/movie/movies/${params.id}`)
+        fetch(`${API_BASE_URL}/api/movie/movies/${params.id}`)
             .then(response => {
                 // 檢查 API 回應的狀態碼
                 if (!response.ok) {

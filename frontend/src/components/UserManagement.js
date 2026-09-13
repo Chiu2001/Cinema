@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from '../styles/UserManagement.module.css';
+import { API_BASE_URL } from '../apiConfig';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -18,7 +19,7 @@ const UserManagement = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('http://localhost:8443/movie/api/admin/getusers', {
+                const response = await axios.get(`${API_BASE_URL}/api/admin/getusers`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     }
@@ -37,7 +38,7 @@ const UserManagement = () => {
         console.log('Current role:', role);
         if (role === 'ROLE_MANAGER') {
             try {
-                await axios.put(`http://localhost:8443/movie/api/manager/${id}/role`, null, {
+                await axios.put(`${API_BASE_URL}/api/manager/${id}/role`, null, {
                     params: { role: newRole }, // 使用 query parameter 傳遞角色
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,

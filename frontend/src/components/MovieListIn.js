@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import styles from '../styles/MovieList.module.css'; // 引入模組樣式
+import { API_BASE_URL } from '../apiConfig';
 
 export default function MovieListIn() {
     let [movieList, setMovieList] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8443/movie/api/movie/movies")
+        fetch(`${API_BASE_URL}/api/movie/movies`)
             .then(response => response.json())
             .then(data => setMovieList(data))
             .catch(error => console.error('Error fetching data:', error));
