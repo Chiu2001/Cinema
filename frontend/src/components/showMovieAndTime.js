@@ -21,6 +21,9 @@ export default function ShowMovieAndTime({ movieId }) {
     //點擊cinemas的按鈕，出現showdate的按鈕
     const handleCinemaClick = (cinemaId) => {
         setSelectedCinema(cinemaId);
+        setSelectedDate(null);
+        setShowtimes([]);
+        setHalls([]);
 
         fetch(`${API_BASE_URL}/api/movie/cinemas/${cinemaId}/showdates`)
             .then(response => {
@@ -31,14 +34,6 @@ export default function ShowMovieAndTime({ movieId }) {
             })
             .then(data => {
                 setShowdates(data);
-                if (data.length > 0) {
-                    const defaultDateId = data[0].showdate_id;
-                    setSelectedDate(defaultDateId);
-                    fetchShowtimes(cinemaId, defaultDateId); // 调用 fetchShowtimes 函数
-                } else {
-                    setShowtimes([]);
-                    console.log("Fetched showtimes:", filteredShowtimes);
-                }
             })
             .catch(error => console.error('Error fetching showdates:', error));
     };
@@ -64,7 +59,7 @@ export default function ShowMovieAndTime({ movieId }) {
                 if (uniqueHallIds.length > 0) {
                     Promise.all(uniqueHallIds.map(hallId =>
                         fetch(`${API_BASE_URL}/api/movie/halls/${hallId}`)
-                        .then(res => res.json())
+                            .then(res => res.json())
                     )).then(hallsData => {
                         setHalls(hallsData);
                         console.log("Fetched halls:", hallsData);
@@ -99,12 +94,16 @@ export default function ShowMovieAndTime({ movieId }) {
                         {showdates.map(date => (
                             <button key={date.showdate_id}
                                 onClick={() => handleDateClick(date.showdate_id)}
-                                className={styles.showdateInfo}>
+                                className={styles.showdateInfo}
+                                style={date.showdate_id === selectedDate ? { fontWeight: 'bold', textDecoration: 'underline' } : undefined}>
                                 {date.show_date}
                             </button>
                         ))}
                     </div>
                     <div className={styles.showtimeGroup}>
+                        {selectedDate && groupedShowtimes.length === 0 && (
+                            <p>這個日期目前沒有場次，請選擇其他日期。</p>
+                        )}
                         {groupedShowtimes.map((group, index) => (
                             <div key={index} className={styles.showtimeRow}>
                                 <div className={styles.hallInfo}>
