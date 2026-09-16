@@ -36,8 +36,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.JsonFactory;
 
 /**
- * 註冊、登入（含 Google 登入）、更新使用者資料。
- * 從原本的 CinemaController 拆出來，讓職責單一。
+ * Registration, login (including Google login), and user profile updates.
+ * Split out of the original CinemaController to keep responsibilities focused.
  */
 @RestController
 @RequestMapping("/api/movie")
@@ -55,15 +55,15 @@ public class AuthController {
 	@Autowired
 	private JwtService jwtService;
 
-	// 原本這裡是寫死的 Collections.singletonList("")：
-	// GoogleIdTokenVerifier 會拿 Google 核發的 token 裡的 aud claim 跟這個清單比對，
-	// 但 aud 永遠不可能是空字串，代表 Google 登入的驗證步驟實際上永遠會失敗（idToken 永遠是 null）。
-	// 改成從設定檔讀取真正的 Google OAuth Client ID，Google 登入才驗證得過。
+	// This used to be hardcoded as Collections.singletonList(""):
+	// GoogleIdTokenVerifier compares this list against the aud claim in the token Google issues,
+	// but aud can never be an empty string, so Google login verification always failed (idToken was always null).
+	// Now it reads the real Google OAuth Client ID from configuration so Google login can actually be verified.
 	@Value("${google.oauth.client-id}")
 	private String googleClientId;
 
 	/**
-	 * 用户注册
+	 * Register a new user
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<Map<String, String>> saveUser(@RequestBody UserDTO user) {
@@ -75,12 +75,12 @@ public class AuthController {
 			return ResponseEntity.status(201).body(response);
 		} catch (Exception e) {
 			response.put("error", e.getMessage());
-			return ResponseEntity.status(400).body(response); // 返回400狀態碼以表示請求錯誤
+			return ResponseEntity.status(400).body(response); // Return 400 to indicate a bad request
 		}
 	}
 
 	/**
-	 * 用户登录
+	 * User login
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
@@ -132,7 +132,7 @@ public class AuthController {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid Google token"));
 			}
 		} catch (Exception e) {
-			// 捕獲所有異常並返回詳細的錯誤訊息
+			// Catch all exceptions and return a detailed error message
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("error", "Google login error: " + e.getMessage()));
 		}

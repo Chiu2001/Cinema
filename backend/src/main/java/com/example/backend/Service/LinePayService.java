@@ -44,7 +44,7 @@ public class LinePayService {
     @Value("${Linepay.api.ChannelSecret}")
     private String ChannelSecret;
 
-    //存入資料庫
+    // Save to the database
     public void saveCheckoutPaymentRequest(Map<String, Object> requestBody) {
         LinePayCheckoutPaymentRequestForm checkoutForm = new LinePayCheckoutPaymentRequestForm();
 
@@ -82,7 +82,7 @@ public class LinePayService {
     }
 
     public static String encrypt(final String keys, final String data) {
-        // HmacUtils.getHmacSha256已被棄用，故改HmacUtils.getInitializedMac方法
+        // HmacUtils.getHmacSha256 is deprecated, so use HmacUtils.getInitializedMac instead
         return toBase64String(HmacUtils.getInitializedMac(
                 HmacAlgorithms.HMAC_SHA_256,
                 keys.getBytes())
@@ -94,42 +94,43 @@ public class LinePayService {
         return new String(byteArray);
     }
 
-    // 查詢資料庫，才能丟到controller與前端串接
+    // Query the database so the data can be passed to the controller and the frontend
     public Map<String, Object> getCheckoutPaymentDetails(String orderId) {
-        
+
         Optional<LinePayCheckoutPaymentRequestForm> optionalForm = repository.findByOrderId(orderId);
-        //要用LinkedHashMap，而不是HashMap是因為json順序問題會影響資料經過加密或使用 HMAC、數字簽名進行驗證
+        // Use LinkedHashMap instead of HashMap because JSON key order matters when the data
+        // is encrypted or verified using HMAC / digital signatures
         Map<String, Object> result = new LinkedHashMap<>();
 
         if (optionalForm.isPresent()) {
             LinePayCheckoutPaymentRequestForm form = optionalForm.get();
 
-            // 取得基本訊息
+            // Get the basic information
             result.put("amount", form.getAmount());
             result.put("currency", form.getCurrency());
             result.put("orderId", form.getOrderId());
 
-            // 取得 RedirectUrls 
+            // Get the RedirectUrls
             LinePayRedirectUrls redirectUrls = form.getRedirectUrls();
             if (redirectUrls != null) {
                 Map<String, Object> redirectUrlsMap = new LinkedHashMap<>();
                 redirectUrlsMap.put("confirmUrl", redirectUrls.getConfirmUrl());
-                redirectUrlsMap.put("cancelUrl", null);//先預設為null
+                redirectUrlsMap.put("cancelUrl", null);// Default to null for now
                 result.put("redirectUrls", redirectUrlsMap);
             } else {
                 result.put("error", "RedirectUrls is null for CheckoutPaymentRequestForm ID: " + orderId);
             }
 
-            // 取得 ProductPackageForm 和 ProductForm 
+            // Get the ProductPackageForm and ProductForm entries
             List<Map<String, Object>> productPackages = form.getPackages().stream()
                     .map(packageForm -> {
                         Map<String, Object> packageDetails = new LinkedHashMap<>();
                         String packageId = String.valueOf(packageForm.getId());
                         packageDetails.put("id", packageId);
-                        packageDetails.put("name", packageForm.getName());//官方不一定要
+                        packageDetails.put("name", packageForm.getName());// Not required by the LINE Pay API
                         packageDetails.put("amount", packageForm.getAmount());
 
-                        // 取得 ProductForm 
+                        // Get the ProductForm entries
                         List<Map<String, Object>> products = packageForm.getProducts().stream()
                                 .map(productForm -> {
                                     Map<String, Object> productDetails = new LinkedHashMap<>();
@@ -172,7 +173,7 @@ public class LinePayService {
                     ChannelSecret + requestUri + body + nonce);
             System.out.println("signature: " + signature);
 
-            // 準備 Request Body 和 Headers
+            // Prepare the request body and headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.add("X-LINE-ChannelId", ChannelId); 
@@ -180,14 +181,14 @@ public class LinePayService {
             headers.add("X-LINE-Authorization", signature);
             headers.add("X-LINE-MerchantDeviceType", deviceType);
 
-            // 創建 HttpEntity
+            // Create the HttpEntity
             HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(result, headers);
 
-            // 發送 POST 請求
+            // Send the POST request
             String url = "https://sandbox-api-pay.line.me/v3/payments/request";
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
 
-            // 處理響應
+            // Handle the response
             if (response.getStatusCode().is2xxSuccessful()) {
                 return Map.of("status", "success", "response", response.getBody());
             } else {

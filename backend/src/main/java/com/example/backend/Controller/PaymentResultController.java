@@ -26,7 +26,7 @@ public class PaymentResultController {
 
 	@PostMapping("/paymentResult")
 	public ResponseEntity<String> handleServerPostRequest(@RequestParam Map<String, String> params) {
-		// 从请求中获取参数
+		// Get the parameters from the request
 		String merchantTradeNo = params.get("MerchantTradeNo");
 		String merchantTradeDate = params.get("MerchantTradeDate");
 
@@ -34,38 +34,38 @@ public class PaymentResultController {
 		System.out.println("Received MerchantTradeNo (Server POST): " + merchantTradeNo);
 		System.out.println("Received MerchantTradeDate (Server POST): " + merchantTradeDate);
 
-		// 检查是否缺少必要的参数
+		// Check whether the required parameters are missing
 		if (merchantTradeNo == null || merchantTradeDate == null) {
-			return ResponseEntity.badRequest().body("请求参数中缺少 MerchantTradeNo 或 MerchantTradeDate");
+			return ResponseEntity.badRequest().body("Request is missing the required MerchantTradeNo or MerchantTradeDate parameter");
 		}
 
-		// 将 MerchantTradeDate 转换为 LocalDateTime
+		// Convert MerchantTradeDate into a LocalDateTime
 		LocalDateTime parsedMerchantTradeDate = null;
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 			parsedMerchantTradeDate = LocalDateTime.parse(merchantTradeDate, formatter);
 		} catch (DateTimeParseException e) {
-			return ResponseEntity.badRequest().body("MerchantTradeDate 的日期格式无效，应为：yyyy/MM/dd HH:mm:ss");
+			return ResponseEntity.badRequest().body("Invalid MerchantTradeDate format, expected: yyyy/MM/dd HH:mm:ss");
 		}
 
 		try {
-			// 获取订单记录
+			// Get the order record
 			Order orderData = payService.getOrderDetails(Integer.parseInt(merchantTradeNo));
 
-			// 更新支付数据
-			payService.updatePaydata(orderData, parsedMerchantTradeDate, "綠界金流", "已付款");
+			// Update the payment data
+			payService.updatePaydata(orderData, parsedMerchantTradeDate, "ECPay", "Paid");
 
-			// 返回1|OK给ECPay，表示成功处理
+			// Return 1|OK to ECPay to indicate the request was processed successfully
 			return ResponseEntity.ok("1|OK");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(500).body("更新支付数据时发生错误");
+			return ResponseEntity.status(500).body("An error occurred while updating the payment data");
 		}
 	}
 
 	@PostMapping("/orderResult")
     public ResponseEntity<String> handleClientPostRequest(@RequestParam Map<String, String> params) {
-        // 从请求中获取参数
+        // Get the parameters from the request
         String merchantTradeNo = params.get("MerchantTradeNo");
         String merchantTradeDate = params.get("MerchantTradeDate");
 
@@ -73,34 +73,34 @@ public class PaymentResultController {
         System.out.println("Received MerchantTradeNo (Client POST): " + merchantTradeNo);
         System.out.println("Received MerchantTradeDate (Client POST): " + merchantTradeDate);
 
-        // 检查是否缺少必要的参数
+        // Check whether the required parameters are missing
         if (merchantTradeNo == null || merchantTradeDate == null) {
-            return ResponseEntity.badRequest().body("请求参数中缺少 MerchantTradeNo 或 MerchantTradeDate");
+            return ResponseEntity.badRequest().body("Request is missing the required MerchantTradeNo or MerchantTradeDate parameter");
         }
 
-        // 将 MerchantTradeDate 转换为 LocalDateTime
+        // Convert MerchantTradeDate into a LocalDateTime
         LocalDateTime parsedMerchantTradeDate = null;
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             parsedMerchantTradeDate = LocalDateTime.parse(merchantTradeDate, formatter);
         } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().body("MerchantTradeDate 的日期格式无效，应为：yyyy/MM/dd HH:mm:ss");
+            return ResponseEntity.badRequest().body("Invalid MerchantTradeDate format, expected: yyyy/MM/dd HH:mm:ss");
         }
 
         try {
-        	
+
         	Order order = payService.getOrderDetails(Integer.parseInt(merchantTradeNo));
-            
-            // 更新订单状态为已支付
+
+            // Update the order status to paid
             payService.updateOrder(order.getOrderNumber(), null, null, null, null, true);
-            // 构建重定向 URL 到前端 React 页面，包含交易参数
+            // Build the redirect URL to the frontend React page, including the transaction parameters
             String redirectUrl = "http://localhost:3000/PaymentResultPage?MerchantTradeNo=" + merchantTradeNo
                                  + "&MerchantTradeDate=" + merchantTradeDate;
             String htmlResponse = "<html><body><script>window.location.href = '" + redirectUrl + "';</script></body></html>";
             return ResponseEntity.ok(htmlResponse);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("处理客户端请求时发生错误");
+            return ResponseEntity.status(500).body("An error occurred while processing the client request");
         }
     }
 }

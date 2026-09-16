@@ -1,7 +1,7 @@
 // import React, { useContext } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { CartContext } from '../CartContext';
-// import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+// import styles from '../styles/Checkout.module.css'; // Import CSS module
 
 // export default function CheckOutIn() {
 //     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -28,50 +28,50 @@
 //             });
 
 //             if (!response.ok) {
-//                 throw new Error('網路響應錯誤');
+//                 throw new Error('Network response error');
 //             }
 
 //             const formHtml = await response.text();
-//             console.log('Received ECPay HTML:', formHtml); // 檢查返回的 HTML
+//             console.log('Received ECPay HTML:', formHtml); // Check the returned HTML
 //             navigate('/ecpay', { state: { ecpayHTML: formHtml } });
 //         } catch (error) {
-//             console.error('結帳時發生錯誤：', error);
+//             console.error('Error during checkout:', error);
 //         }
 //     };
 
 //     return (
 //         <div className={styles.pageWrapper}>
-//             <h1>您的購物車</h1>
+//             <h1>Your Cart</h1>
 
 //             {cartEmpty ? (
 //                 <div className={styles.emptyCartMessage}>
 //                     <Link to="/MovieList">
-//                         <a>購物車為空</a><br />
-//                         <a>前往購票吧</a>
+//                         <a>Your cart is empty</a><br />
+//                         <a>Go buy tickets</a>
 //                     </Link>
 //                 </div>
 //             ) : (
 //                 <div className={styles.cartContainer}>
 //                     <div id={styles.cartSection}>
-//                         {/* 產品列表 */}
+//                         {/* Product list */}
 //                         {cartItems.map(item => (
 //                             <div className={styles.cartItemCard} key={item.movie.id}>
 //                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
 //                                 <div className={styles.textContent}>
-//                                     <p>電影名稱: {item.movie.title}</p>
-//                                     <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-//                                     <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
-//                                     <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-//                                     <p>價格: {item.hall.price}</p>
-//                                     <p>數量: {item.quantity}</p>
-//                                     <p>座位: {item.seatNumbers.join(', ')}</p>
+//                                     <p>Movie Title: {item.movie.title}</p>
+//                                     <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
+//                                     <p>Showtime: {item.showtime ? item.showtime : 'Time not specified'}</p>
+//                                     <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+//                                     <p>Price: {item.hall.price}</p>
+//                                     <p>Quantity: {item.quantity}</p>
+//                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
 //                                 </div>
 //                                 <div className={styles.deleteButtonContainer}>
 //                                     <button
 //                                         className={styles.deleteButton}
-//                                         onClick={() => removeCartItem(item.movie.id)} // 調用 removeCartItem 函數
+//                                         onClick={() => removeCartItem(item.movie.id)} // Call the removeCartItem function
 //                                     >
-//                                         刪除
+//                                         Delete
 //                                     </button>
 //                                 </div>
 //                             </div>
@@ -79,16 +79,16 @@
 //                     </div>
 
 //                     <div id={styles.checkoutSection}>
-//                         <div>總價一共：{grandTotal}元</div>
+//                         <div>Grand Total: NT${grandTotal}</div>
 //                         {grandTotal >= freeFood ? (
-//                             <div>滿${freeFood}贈送免費爆米花</div>
+//                             <div>Spend ${freeFood} and get free popcorn</div>
 //                         ) : (
 //                             <div>
-//                                 滿${freeFood}贈送免費爆米花<br />
-//                                 還差${freeFood - grandTotal}
+//                                 Spend ${freeFood} and get free popcorn<br />
+//                                 ${freeFood - grandTotal} to go
 //                             </div>
 //                         )}
-//                         <button className={styles.checkoutButton} onClick={payment}>結帳</button>
+//                         <button className={styles.checkoutButton} onClick={payment}>Checkout</button>
 //                     </div>
 //                 </div>
 //             )}
@@ -101,7 +101,7 @@ import React, { useContext, useState } from 'react';
 import Titles from './Titles'
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
-import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+import styles from '../styles/Checkout.module.css'; // Import CSS module
 import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOutIn() {
@@ -114,12 +114,12 @@ export default function CheckOutIn() {
     const freeFood = 350;
     const orderNumber = `ORD-${new Date().getTime()}`;
 
-    // 使用 useState 管理 savedOrderId 和顯示 LinePay 按鈕的狀態
+    // Use useState to manage savedOrderId and whether the LinePay button is shown
     const [savedOrderId, setSavedOrderId] = useState(null);
     const [showLinePayButton, setShowLinePayButton] = useState(false);
 
-    // 建立一筆「未付款」的訂單，回傳真正的訂單編號。
-    // LinePay 跟 Stripe 都要用，抽出來共用，不要各寫一次。
+    // Create an "unpaid" order and return its real order number.
+    // Both LinePay and Stripe need this, so it's extracted for reuse instead of duplicated.
     const createPendingOrder = async (items = cartItems) => {
         const totalAmount = items.reduce((total, item) => {
             return total + item.hall.price * item.quantity;
@@ -144,7 +144,7 @@ export default function CheckOutIn() {
     const LinePayHandleCheckout = async (items = cartItems) => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登入!');
+            alert('Please log in first!');
             navigate('/login');
             return;
         }
@@ -182,7 +182,7 @@ export default function CheckOutIn() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('訂單保存成功:', data);
+                console.log('Order saved successfully:', data);
                 return fetch(`${API_BASE_URL}/checkout/details/${realOrderNumber}`, {
                     method: 'GET',
                     headers: {
@@ -192,7 +192,7 @@ export default function CheckOutIn() {
             })
             .then(response => response.json())
             .then(detailData => {
-                console.log('取得結帳細節:', detailData);
+                console.log('Retrieved checkout details:', detailData);
                 return fetch(`${API_BASE_URL}/checkout/payment`, {
                     method: 'POST',
                     headers: {
@@ -203,26 +203,26 @@ export default function CheckOutIn() {
             })
             .then(response => response.json())
             .then(paymentData => {
-                console.log('LinePay 付款處理結果:', paymentData);
+                console.log('LinePay payment processing result:', paymentData);
                 const responseInfo = JSON.parse(paymentData.response);
 
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    // 只移除這次真正拿去結帳的品項，不是清空整個購物車
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    // Only remove the items that were actually checked out this time, not the whole cart
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = responseInfo.info.paymentUrl.web;
                 } else {
-                    alert('付款失敗');
+                    alert('Payment failed');
                 }
             })
             .catch(error => {
-                console.error('錯誤:', error);
+                console.error('Error:', error);
             });
     };
 
     const StripeHandleCheckout = async (items = cartItems) => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登入!');
+            alert('Please log in first!');
             navigate('/login');
             return;
         }
@@ -253,25 +253,25 @@ export default function CheckOutIn() {
             .then(response => response.json())
             .then(data => {
                 if (data.url) {
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = data.url;
                 } else {
-                    alert('無法建立 Stripe 付款，請稍後再試');
+                    alert('Unable to create Stripe payment, please try again later');
                 }
             })
-            .catch(error => console.error('Stripe 付款錯誤:', error));
+            .catch(error => console.error('Stripe payment error:', error));
     };
 
     return (
         <div className={styles.checkoutPageWrapper}>
-            <Titles mainTitle={"您的購物車"} />
+            <Titles mainTitle={"Your Cart"} />
 
             {
                 cartEmpty &&
                 <div className={styles.checkoutEmptyCartMessage}>
                     <Link to="/">
-                        <a>購物車為空</a><br />
-                        <a>前往購票吧</a>
+                        <a>Your cart is empty</a><br />
+                        <a>Go buy tickets</a>
                     </Link>
                 </div>
             }
@@ -280,41 +280,41 @@ export default function CheckOutIn() {
                 !cartEmpty &&
                 <div className={styles.checkoutCartContainer}>
                     <div id={styles.checkoutCartSection}>
-                        {/* 產品列表 */}
+                        {/* Product list */}
                         {cartItems.map(item => (
                             <div className={styles.checkoutCartItemCard} key={item.cartItemId}>
                                 <img className={styles.checkoutImg} src={process.env.PUBLIC_URL + "/image/" + item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.checkoutTextContent}>
-                                    <p>電影名稱: {item.movie.title}</p>
-                                    <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-                                    <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
-                                    <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-                                    <p>價格: {item.hall.price}</p>
-                                    <p>數量: {item.quantity}</p>
-                                    <p>座位: {item.seatNumbers.join(', ')}</p>
+                                    <p>Movie Title: {item.movie.title}</p>
+                                    <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
+                                    <p>Showtime: {item.showtime ? item.showtime : 'Time not specified'}</p>
+                                    <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+                                    <p>Price: {item.hall.price}</p>
+                                    <p>Quantity: {item.quantity}</p>
+                                    <p>Seats: {item.seatNumbers.join(', ')}</p>
                                 </div>
                                 <div>
-                                    <button onClick={() => removeCartItem(item.cartItemId)}>移除</button>
-                                    <button onClick={() => LinePayHandleCheckout([item])}>單獨用 LinePay 結帳</button>
-                                    <button onClick={() => StripeHandleCheckout([item])}>單獨用 Stripe 結帳</button>
+                                    <button onClick={() => removeCartItem(item.cartItemId)}>Remove</button>
+                                    <button onClick={() => LinePayHandleCheckout([item])}>Checkout this item with LinePay</button>
+                                    <button onClick={() => StripeHandleCheckout([item])}>Checkout this item with Stripe</button>
                                 </div>
                             </div>
                         ))}
                     </div>
 
                     <div id={styles.checkoutCheckoutSection}>
-                        {/* 價錢總數 */}
-                        <div>總價一共：{grandTotal}元</div>
+                        {/* Total price */}
+                        <div>Grand Total: NT${grandTotal}</div>
                         {
-                            /* 免費送爆米花 */
+                            /* Free popcorn */
                             grandTotal >= freeFood ?
-                                <div>滿${freeFood}贈送免費爆米花</div> :
+                                <div>Spend ${freeFood} and get free popcorn</div> :
                                 <div>
-                                    滿${freeFood}贈送免費爆米花<br />
-                                    還差${freeFood - grandTotal}</div>
+                                    Spend ${freeFood} and get free popcorn<br />
+                                    ${freeFood - grandTotal} to go</div>
                         }
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay結帳</button>
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={StripeHandleCheckout}>使用信用卡付款（Stripe）</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => LinePayHandleCheckout()}>Checkout with LinePay</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
                     </div>
                 </div>
             }

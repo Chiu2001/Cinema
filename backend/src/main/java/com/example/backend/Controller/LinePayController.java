@@ -22,31 +22,31 @@ public class LinePayController {
     @Autowired
     private LinePayService service;
 
-    // 保存支付請求
+    // Save the payment request
     @PostMapping("/save")
     public ResponseEntity<Map<String, Object>> saveCheckoutPaymentRequest(@RequestBody Map<String, Object> requestBody) {
         service.saveCheckoutPaymentRequest(requestBody);
 
-        // 創建返回的 Map
+        // Build the response Map
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "訂單保存成功");
-        response.put("orderId", requestBody.get("orderId"));  // 可以返回剛保存的訂單ID
+        response.put("message", "Order saved successfully");
+        response.put("orderId", requestBody.get("orderId"));  // Return the ID of the order just saved
 
         return ResponseEntity.ok(response);
     }
 
-    // 取得指定 ID 的支付詳細訊息
+    // Get the payment details for the given ID
     @GetMapping("/details/{orderId}")
     public ResponseEntity<?> getCheckoutPaymentDetails(@PathVariable String orderId) {
-        
+
         Map<String, Object> response = service.getCheckoutPaymentDetails(orderId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 發送支付請求到 Line Pay API
+    // Send the payment request to the LINE Pay API
     @PostMapping("/payment")
     public ResponseEntity<?> processPaymentRequest(@RequestBody Map<String, Object> requestBody) {
-        // 將傳入的 request body 傳遞給 service 進行處理
+        // Pass the incoming request body to the service for processing
         Map<String, Object> response = service.sendPaymentRequest(requestBody);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 /**
- * 全域例外處理器。
- * 所有 Controller 丟出的例外都會先經過這裡，統一轉成 ApiError 格式，
- * 依例外類型回傳對應的 HTTP 狀態碼。
+ * Global exception handler.
+ * Every exception thrown by a Controller passes through here first and is converted
+ * into the ApiError shape, with the HTTP status chosen based on the exception type.
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
-        return buildResponse(HttpStatus.FORBIDDEN, "沒有權限執行此操作", request);
+        return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to perform this action", request);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -43,22 +43,23 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
-    // 表單/DTO 上有 @Valid 驗證標註時，驗證失敗會丟這個例外
+    // Thrown when a form/DTO annotated with @Valid fails validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
         String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + "：" + fieldError.getDefaultMessage())
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return buildResponse(HttpStatus.BAD_REQUEST, message.isEmpty() ? "請求參數不正確" : message, request);
+        return buildResponse(HttpStatus.BAD_REQUEST, message.isEmpty() ? "Invalid request parameters" : message, request);
     }
 
-    // 兜底處理：任何沒被上面攔截到的例外，統一回傳 500，
-    // 訊息刻意寫成通用文字，避免把內部細節（stack trace、SQL 錯誤）洩漏給使用者，
-    // 真正的例外內容則寫進伺服器 log 供除錯。
+    // Fallback handler: any exception not caught above is returned as a generic 500.
+    // The message is deliberately generic to avoid leaking internal details
+    // (stack traces, SQL errors, etc.) to the client; the real exception is logged
+    // on the server for debugging.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleUnexpected(Exception ex, WebRequest request) {
         logger.error("Unhandled exception at {}", request.getDescription(false), ex);
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "伺服器發生未預期的錯誤，請稍後再試", request);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected server error occurred. Please try again later.", request);
     }
 
     private ResponseEntity<ApiError> buildResponse(HttpStatus status, String message, WebRequest request) {

@@ -19,7 +19,7 @@ const Header = () => {
                 const response = await axios.get(`${API_BASE_URL}/api/movie/search?keyword=${query}`);
                 setFilteredMovies(response.data);
             } catch (error) {
-                console.error('搜尋失敗:', error);
+                console.error('Search failed:', error);
             }
         } else {
             setFilteredMovies([]);
@@ -44,10 +44,10 @@ const Header = () => {
                 <img src={movie_icon} alt="Logo" className={styles.logo} />
             </Link>
             <ul>
-                <li><Link to="/MovieList">電影資訊</Link></li>
-                <li><Link to="/about">關於我們</Link></li>
-                <li><Link to="/OrderList">購票紀錄</Link></li>
-                {/* <li><Link to="/CheckOut">購物車</Link></li> */}
+                <li><Link to="/MovieList">Movie Info</Link></li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/OrderList">Order History</Link></li>
+                {/* <li><Link to="/CheckOut">Cart</Link></li> */}
             </ul>
 
             <div className={styles['search-box']}>
@@ -67,7 +67,7 @@ const Header = () => {
 
             {isSearchActive && (
                 <div className={styles['search-results']}>
-                    <h3>搜尋結果：</h3>
+                    <h3>Search Results:</h3>
                     <ul>
                         {filteredMovies.map((movie, index) => (
                             <li key={index}>
@@ -81,8 +81,8 @@ const Header = () => {
             )}
 
             <div className={styles['user-actions']}>
-                {/* 未登入時顯示登入按鈕 */}
-                <Link to="/login" className="btn btn-outline-secondary">👤 會員登入</Link>
+                {/* Show login button when not logged in */}
+                <Link to="/login" className="btn btn-outline-secondary">👤 Member Login</Link>
             </div>
         </div>
     );

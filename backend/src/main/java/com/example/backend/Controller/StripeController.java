@@ -76,11 +76,11 @@ public class StripeController {
         }
     }
 
-    // 新增：把「這筆訂單要記錄成誰買的、買了什麼」一起帶過來，
-    // 之後付款成功的 webhook 觸發時，才知道要幫誰建立哪一筆訂單。
+    // New: carry along "who this order belongs to and what they bought" so that
+    // when the payment-succeeded webhook fires, we know which order to update for which user.
     public static class CheckoutRequest {
         private Integer userId;
-        private Integer orderNumber; // 新增：帶著 Step 2 已經建立好的真實訂單編號
+        private Integer orderNumber; // New: the real order number already created in Step 2
         private String description;
         private String itemName;
         private List<CheckoutItem> items;
@@ -144,8 +144,8 @@ public class StripeController {
                         .build())
                 .collect(Collectors.toList());
 
-        // 新增：把 userId、description、itemName 存進 Stripe Session 的 metadata，
-        // 這些資料 Stripe 會原封不動存著，付款完成通知我們時會一起傳回來。
+        // New: store userId, description, and itemName in the Stripe Session metadata.
+        // Stripe keeps this data as-is and sends it back to us when payment completes.
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(frontendUrl + "/OrderList?stripe=success")
@@ -162,7 +162,8 @@ public class StripeController {
         return ResponseEntity.ok(Map.of("url", session.getUrl()));
     }
 
-    // 新增：Stripe 付款狀態變化時，會主動呼叫這支 API 通知我們（不是前端呼叫的）。
+    // New: Stripe calls this endpoint itself whenever a payment's status changes
+    // (it's not something the frontend calls).
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(
             @RequestBody String payload,
@@ -170,11 +171,11 @@ public class StripeController {
 
         Event event;
         try {
-            // 驗證這個請求真的是 Stripe 發的（用 webhook secret 驗簽章），
-            // 避免有心人士假冒 Stripe 打這支 API 來偽造訂單。
+            // Verify this request genuinely came from Stripe (checked via the webhook secret's signature),
+            // to stop someone from forging orders by impersonating Stripe against this endpoint.
             event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
         } catch (SignatureVerificationException e) {
-            System.err.println("Stripe webhook 簽章驗證失敗：" + e.getMessage());
+            System.err.println("Stripe webhook signature verification failed: " + e.getMessage());
             return ResponseEntity.status(400).body("Invalid signature");
         }
 
@@ -186,10 +187,10 @@ public class StripeController {
                 Integer userId = Integer.valueOf(metadata.getOrDefault("userId", "0"));
                 String description = metadata.get("description");
                 String itemName = metadata.get("itemName");
-                Integer amount = (int) (session.getAmountTotal() / 100); // Stripe 金額單位是分，換回元
+                Integer amount = (int) (session.getAmountTotal() / 100); // Stripe amounts are in cents; convert back to dollars
 
                 Integer orderNumber = Integer.valueOf(metadata.get("orderNumber"));
-paymentService.updateOrder(orderNumber, LocalDateTime.now(), amount, description, itemName, true);
+                paymentService.updateOrder(orderNumber, LocalDateTime.now(), amount, description, itemName, true);
             });
         }
 

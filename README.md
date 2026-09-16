@@ -1,45 +1,45 @@
-# 專案名稱 ConcertProject
+# Project Name: Cinema
 
 [![Java](https://img.shields.io/badge/language-Java-brightgreen)](https://www.oracle.com/java/)
 
-## 專案簡介
-此專案為實作電影購票頁面，包含電影首頁、登入、註冊、購買電影票並劃位、購物車、第三方登入、第三方支付(綠界、LinePay)、管理員系統等，旨在提升使用者購票頁面。
+## Project Overview
+This project implements a movie ticket booking website, including a movie homepage, login, sign-up, seat selection and ticket purchasing, a shopping cart, third-party login, third-party payment (ECPay, LinePay, and now Stripe), and an admin system, with the goal of improving the user's ticket-booking experience.
 
 
-## 系統架構
-1. WEB 前端
-   - 使用者登入、google 登入
-   - 管理員後臺(上架、下架電影)
-   - 電影劃位
-   - 第三方支付(綠界、LinePay)
+## System Architecture
+1. Web Frontend
+   - User login, Google login
+   - Admin backend (publish/unpublish movies)
+   - Movie seat selection
+   - Third-party payment (ECPay, LinePay, Stripe)
 
-2. 後端
-   - 實現購買座位保留座位功能
-   - Spring Security 資安保護
-   - Restful 風格 API設置
-   - CRUD 資料庫操作 
+2. Backend
+   - Seat reservation for ticket purchases
+   - Spring Security for application security
+   - RESTful API design
+   - CRUD database operations
 
-## 安裝與使用
+## Installation and Usage
 
-### 環境要求
+### Requirements
 
-- Windows Mac Linux 系統電腦 
+- A computer running Windows, Mac, or Linux
 
-### 安裝步驟
+### Installation Steps
 
- 下載專案：
+Clone the project:
 
    ```bash
-   git clone https://github.com/happy010203/ConcertProject
-   cd ConcertProject
+   git clone https://github.com/Chiu2001/Cinema
+   cd Cinema
    ```
 
-## 聯繫方式
+## Contact
 
-如果有任何問題或建議，歡迎通過以下方式聯繫我：
-- Name：邱鄭一、蔡孟恩
+If you have any questions or suggestions, feel free to reach out:
+- Name: Chiu Cheng-Yi, Tsai Meng-En
 - Email: your.email@example.com
-- GitHub Issues: [點此提交](https://github.com/你的用戶名/你的專案名稱/issues)
+- GitHub Issues: [Submit here](https://github.com/Chiu2001/Cinema/issues)
 
 ## Reference
 - https://chatgpt.com/share/66eb98a2-c7cc-8004-bdda-5909133b5c49

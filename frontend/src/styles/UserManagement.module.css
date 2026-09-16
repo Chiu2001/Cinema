@@ -1,4 +1,4 @@
-/* 整體容器樣式 */
+/* Overall container styles */
 .container {
     padding: 20px;
     background-color: #f9f9f9;
@@ -6,7 +6,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 表格樣式 */
+/* Table styles */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -24,7 +24,7 @@
     color: #333;
 }
 
-/* 頂部導航欄樣式 */
+/* Top nav bar styles */
 .headerST ul {
     list-style-type: none;
     margin: 0;
@@ -51,7 +51,7 @@
     background-color: #555;
 }
 
-/* 搜索框樣式 */
+/* Search box styles */
 .searchBox {
     width: 100%;
     padding: 10px;
@@ -61,7 +61,7 @@
     box-sizing: border-box;
 }
 
-/* 角色下拉選單樣式 */
+/* Role dropdown styles */
 .roleDropdown {
     padding: 8px;
     border: 1px solid #ddd;
@@ -70,7 +70,7 @@
     cursor: pointer;
 }
 
-/* 分頁按鈕樣式 */
+/* Pagination button styles */
 .pagination {
     display: flex;
     justify-content: center;

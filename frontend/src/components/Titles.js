@@ -21,4 +21,4 @@ export default function Titles(props) {
 //         </div>
 //     )
 // }
-// 另一種寫法
+// Another way to write this

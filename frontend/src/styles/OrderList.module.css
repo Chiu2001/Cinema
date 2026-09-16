@@ -1,4 +1,4 @@
-/* 訂單頁面外容器 */
+/* Order page outer container */
 .pageContainer {
     max-width: 900px;
     margin: 0 auto;
@@ -8,7 +8,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 標題樣式 */
+/* Heading styles */
 .heading {
     font-size: 28px;
     font-weight: bold;
@@ -17,20 +17,20 @@
     color: #333;
 }
 
-/* 無訂單時的訊息 */
+/* Message shown when there are no orders */
 .noOrdersMessage {
     text-align: center;
     font-size: 18px;
     color: #888;
 }
 
-/* 訂單列表樣式 */
+/* Order list styles */
 .orderList {
     list-style: none;
     padding: 0;
 }
 
-/* 單個訂單卡片樣式 */
+/* Individual order card styles */
 .orderItem {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -40,7 +40,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 訂單細節樣式 */
+/* Order details styles */
 .orderDetails {
     font-size: 16px;
     line-height: 1.6;
@@ -55,7 +55,7 @@
     color: #000;
 }
 
-/* 查看詳情按鈕 */
+/* View details button */
 .detailsButton {
     background-color: #4CAF50;
     color: white;
@@ -74,7 +74,7 @@
     background-color: #45a049;
 }
 
-/* 選中的訂單詳情 */
+/* Selected order details */
 .selectedOrderDetails {
     margin-top: 20px;
     padding: 20px;

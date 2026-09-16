@@ -37,7 +37,7 @@ public class LinePayCheckoutPaymentRequestForm {
 	private List<LinePayProductPackageForm> packages; 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "line_pay_redirect_urls", referencedColumnName = "id", nullable = false) // 外鍵指向 RedirectUrls 的主鍵 id
+    @JoinColumn(name = "line_pay_redirect_urls", referencedColumnName = "id", nullable = false) // Foreign key referencing the RedirectUrls primary key id
     private LinePayRedirectUrls redirectUrls;
 
 		// @ManyToOne
@@ -47,18 +47,18 @@ public class LinePayCheckoutPaymentRequestForm {
 	// @ManyToOne
 	// @JoinColumn(name = "hall_id", referencedColumnName = "hall_id", nullable = false)
 	// private Halls hall;
-	
+
     // public BigDecimal getAmount() {
     //     if (movie != null && hall != null) {
     //         BigDecimal movieQuantity = BigDecimal.valueOf(movie.getQuantity());
     //         BigDecimal hallPrice = BigDecimal.valueOf(hall.getPrice());
     //         return movieQuantity.multiply(hallPrice);
     //     }
-    //     // 如果關聯不存在，則返回預設值或拋出異常
+    //     // If the association does not exist, return a default value or throw an exception
     //     return BigDecimal.ZERO;
     // }
 
-	// // 計算 amount
+	// // Calculate amount
 	// public void setAmount() {
 	// 	if (movie != null && hall != null) {
 	// 		BigDecimal movieQuantity = BigDecimal.valueOf(movie.getQuantity());

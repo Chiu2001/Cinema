@@ -38,7 +38,7 @@ public class PaymentController {
     @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
-        this.allInOne = new AllInOne("3002607"); // 設定 ECPay 配置
+        this.allInOne = new AllInOne("3002607"); // ECPay configuration
     }
 
     @PostMapping("/checkout")
@@ -53,7 +53,7 @@ public class PaymentController {
                     orderDTO.getAmount(),
                     orderDTO.getDescription(),
                     orderDTO.getItemName(),
-                    false // 設定支付狀態為未支付
+                    false // Payment status set to unpaid
             );
 
             AioCheckOutALL obj = new AioCheckOutALL();
@@ -71,18 +71,18 @@ public class PaymentController {
             return ResponseEntity.ok(ecpayFormHtml);
         } catch (EcpayException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("結帳失敗：" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Checkout failed: " + e.getMessage());
         }
     }
 
-    // 获取指定用户的历史订单
+    // Get the order history for a given user
     @GetMapping("/user")
     public ResponseEntity<List<Order>> getUserOrders(@RequestParam Integer userId) {
         List<Order> userOrders = paymentService.getOrdersByUserId(userId);
         return ResponseEntity.ok(userOrders);
     }
 
-    // 获取订单详情
+    // Get order details
     @GetMapping("/details")
     public ResponseEntity<Order> getOrderDetails(@RequestParam Integer orderNumber) {
         try {
@@ -90,12 +90,13 @@ public class PaymentController {
             return ResponseEntity.ok(order);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(404).body(null); // 处理订单未找到的情况
+            return ResponseEntity.status(404).body(null); // Handle order-not-found case
         }
     }
 
-    // 新增：確認結帳當下就先建立一筆訂單，狀態是「未付款」，
-    // 不管使用者最後選哪種付款方式，訂單都已經存在，之後只需要更新付款狀態。
+    // New: create a pending order as soon as checkout is confirmed, with status "unpaid",
+    // so the order already exists no matter which payment method the user ends up choosing;
+    // afterwards we only need to update its payment status.
     @PostMapping("/create-pending")
     public ResponseEntity<Order> createPendingOrder(@RequestBody OrderDTO orderDTO) {
         Integer orderNumber = paymentService.generateOrderNumber();
@@ -107,7 +108,7 @@ public class PaymentController {
                 orderDTO.getAmount(),
                 orderDTO.getDescription(),
                 orderDTO.getItemName(),
-                false // 未付款
+                false // unpaid
         );
 
         return ResponseEntity.ok(order);

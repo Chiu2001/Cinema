@@ -10,7 +10,7 @@ import com.example.backend.Service.ShowtimeService;
 @Service
 public class ShowtimeServiceImpl implements ShowtimeService{
 	
-	//從 ShowtimeRepositoryDAO 取得 ShowtimeById
+	// Get ShowtimeById from ShowtimeRepositoryDAO
 	 @Autowired
 	 private ShowtimeRepo showtimeRepo;
 

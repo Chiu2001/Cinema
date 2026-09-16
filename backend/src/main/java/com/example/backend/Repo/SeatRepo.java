@@ -13,10 +13,10 @@ import com.example.backend.Entity.Showtime;
 
 public interface SeatRepo extends JpaRepository<Seat, Long> {
     
-    // 查找特定座位
+    // Find a specific seat
     Seat findByShowtimeIdAndCinemaIdAndHallIdAndSeatNumber(Showtime showtimeId, Cinema cinemaId, Hall hallId, String seatNumber);
 
-    // 使用命名規則定義自動查詢
+    // Define an auto-generated query using naming conventions
     @Query("SELECT s FROM Seat s WHERE s.showtimeId.cinema.cinema_id = :cinemaId AND s.showtimeId.hall.hall_id = :hallId AND s.showtimeId.showDate.show_date = :showDate")
     List<Seat> findSeatsByCinemaIdAndHallIdAndShowDate(@Param("cinemaId") Integer cinemaId, @Param("hallId") Integer hallId, @Param("showDate") String showDate);
 

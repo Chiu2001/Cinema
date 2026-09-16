@@ -1,7 +1,7 @@
 // import React, { useContext } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { CartContext } from '../CartContext';
-// import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+// import styles from '../styles/Checkout.module.css'; // Import CSS module
 
 // export default function CheckOut() {
 //     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -28,50 +28,50 @@
 //             });
 
 //             if (!response.ok) {
-//                 throw new Error('網路響應錯誤');
+//                 throw new Error('Network response error');
 //             }
 
 //             const formHtml = await response.text();
-//             console.log('Received ECPay HTML:', formHtml); // 檢查返回的 HTML
+//             console.log('Received ECPay HTML:', formHtml); // Check the returned HTML
 //             navigate('/ecpay', { state: { ecpayHTML: formHtml } });
 //         } catch (error) {
-//             console.error('結帳時發生錯誤：', error);
+//             console.error('Error during checkout:', error);
 //         }
 //     };
 
 //     return (
 //         <div className={styles.pageWrapper}>
-//             <h1>您的購物車</h1>
+//             <h1>Your Cart</h1>
 
 //             {cartEmpty ? (
 //                 <div className={styles.emptyCartMessage}>
 //                     <Link to="/MovieList">
-//                         <a>購物車為空</a><br />
-//                         <a>前往購票吧</a>
+//                         <a>Your cart is empty</a><br />
+//                         <a>Go buy tickets</a>
 //                     </Link>
 //                 </div>
 //             ) : (
 //                 <div className={styles.cartContainer}>
 //                     <div id={styles.cartSection}>
-//                         {/* 產品列表 */}
+//                         {/* Product list */}
 //                         {cartItems.map(item => (
 //                             <div className={styles.cartItemCard} key={item.movie.id}>
 //                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
 //                                 <div className={styles.textContent}>
-//                                     <p>電影名稱: {item.movie.title}</p>
-//                                     <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-//                                     <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
-//                                     <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-//                                     <p>價格: {item.hall.price}</p>
-//                                     <p>數量: {item.quantity}</p>
-//                                     <p>座位: {item.seatNumbers.join(', ')}</p>
+//                                     <p>Movie Title: {item.movie.title}</p>
+//                                     <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
+//                                     <p>Showtime: {item.showtime ? item.showtime : 'Time not specified'}</p>
+//                                     <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+//                                     <p>Price: {item.hall.price}</p>
+//                                     <p>Quantity: {item.quantity}</p>
+//                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
 //                                 </div>
 //                                 <div className={styles.deleteButtonContainer}>
 //                                     <button
 //                                         className={styles.deleteButton}
-//                                         onClick={() => removeCartItem(item.movie.id)} // 調用 removeCartItem 函數
+//                                         onClick={() => removeCartItem(item.movie.id)} // Call the removeCartItem function
 //                                     >
-//                                         刪除
+//                                         Delete
 //                                     </button>
 //                                 </div>
 //                             </div>
@@ -79,16 +79,16 @@
 //                     </div>
 
 //                     <div id={styles.checkoutSection}>
-//                         <div>總價一共：{grandTotal}元</div>
+//                         <div>Grand Total: NT${grandTotal}</div>
 //                         {grandTotal >= freeFood ? (
-//                             <div>滿${freeFood}贈送免費爆米花</div>
+//                             <div>Spend ${freeFood} and get free popcorn</div>
 //                         ) : (
 //                             <div>
-//                                 滿${freeFood}贈送免費爆米花<br />
-//                                 還差${freeFood - grandTotal}
+//                                 Spend ${freeFood} and get free popcorn<br />
+//                                 ${freeFood - grandTotal} to go
 //                             </div>
 //                         )}
-//                         <button className={styles.checkoutButton} onClick={payment}>結帳</button>
+//                         <button className={styles.checkoutButton} onClick={payment}>Checkout</button>
 //                     </div>
 //                 </div>
 //             )}
@@ -100,7 +100,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
-import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+import styles from '../styles/Checkout.module.css'; // Import CSS module
 import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOut() {
@@ -114,75 +114,75 @@ export default function CheckOut() {
 
     const placeOrder = async () => {
         const token = localStorage.getItem('token');
-    
-        // 檢查是否已登入
+
+        // Check whether the user is logged in
         if (!token) {
-            alert('請先登入!');
-            navigate('/login'); // 跳轉到登入頁面
-            return; // 停止執行結帳邏輯
+            alert('Please log in first!');
+            navigate('/login'); // Redirect to the login page
+            return; // Stop executing the checkout logic
         }
-    
+
         try {
-            const response = await fetch(`${API_BASE_URL}/api/orders/create`, {
+            const response = await fetch(`${API_BASE_URL}/api/orders/create-pending`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: localStorage.getItem('userid'),
+                    userId: parseInt(localStorage.getItem('userid'), 10),
                     amount: grandTotal,
                     description: cartItems.map(item => item.seatNumbers.join(', ')).join('; '),
                     itemName: cartItems.map(item => item.movie.title).join('; '),
                 }),
             });
-    
+
             if (!response.ok) {
-                throw new Error('網路響應錯誤');
+                throw new Error('Network response error');
             }
-    
+
             const orderDetails = await response.json();
-            console.log('訂單詳情:', orderDetails);
-    
-            // 結帳完成後導航到 OrderList 頁面
+            console.log('Order details:', orderDetails);
+
+            // Navigate to the OrderList page once checkout is complete
             navigate('/OrderList');
         } catch (error) {
-            console.error('結帳時發生錯誤：', error);
+            console.error('Error during checkout:', error);
         }
     };
 
     return (
         <div className={styles.pageWrapper}>
-            <h1>您的購物車</h1>
+            <h1>Your Cart</h1>
 
             {cartEmpty ? (
                 <div className={styles.emptyCartMessage}>
                     <Link to="/MovieList">
-                        <a>購物車為空</a><br />
-                        <a>前往購票吧</a>
+                        <a>Your cart is empty</a><br />
+                        <a>Go buy tickets</a>
                     </Link>
                 </div>
             ) : (
                 <div className={styles.cartContainer}>
                     <div id={styles.cartSection}>
-                        {/* 產品列表 */}
+                        {/* Product list */}
                         {cartItems.map(item => (
                             <div className={styles.cartItemCard} key={item.cartItemId}>
                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.textContent}>
-                                    <p>電影名稱: {item.movie.title}</p>
-                                    <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-                                    <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
-                                    <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-                                    <p>價格: {item.hall.price}</p>
-                                    <p>數量: {item.quantity}</p>
-                                    <p>座位: {item.seatNumbers.join(', ')}</p>
+                                    <p>Movie Title: {item.movie.title}</p>
+                                    <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
+                                    <p>Showtime: {item.showtime ? item.showtime : 'Time not specified'}</p>
+                                    <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+                                    <p>Price: {item.hall.price}</p>
+                                    <p>Quantity: {item.quantity}</p>
+                                    <p>Seats: {item.seatNumbers.join(', ')}</p>
                                 </div>
                                 {/* <div className={styles.deleteButtonContainer}>
                                     <button
                                         className={styles.deleteButton}
-                                        onClick={() => removeCartItem(item.movie.id)} // 调用 removeCartItem 函数
+                                        onClick={() => removeCartItem(item.movie.id)} // Call the removeCartItem function
                                     >
-                                        刪除
+                                        Delete
                                     </button>
                                 </div> */}
                             </div>
@@ -190,16 +190,16 @@ export default function CheckOut() {
                     </div>
 
                     <div id={styles.checkoutSection}>
-                        <div>總價一共：{grandTotal}元</div>
+                        <div>Grand Total: NT${grandTotal}</div>
                         {grandTotal >= freeFood ? (
-                            <div>滿${freeFood}贈送免費爆米花</div>
+                            <div>Spend ${freeFood} and get free popcorn</div>
                         ) : (
                             <div>
-                                滿${freeFood}贈送免費爆米花<br />
-                                還差${freeFood - grandTotal}
+                                Spend ${freeFood} and get free popcorn<br />
+                                ${freeFood - grandTotal} to go
                             </div>
                         )}
-                        <button className={styles.checkoutButton} onClick={placeOrder}>結帳</button>
+                        <button className={styles.checkoutButton} onClick={placeOrder}>Checkout</button>
                     </div>
                 </div>
             )}

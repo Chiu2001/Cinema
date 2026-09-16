@@ -17,8 +17,8 @@ import com.example.backend.Repo.NewsRepo;
 import com.example.backend.Service.MovieService;
 
 /**
- * 電影、新聞相關的查詢與搜尋。
- * 從原本的 CinemaController 拆出來，讓職責單一。
+ * Movie and news queries and search.
+ * Split out of the original CinemaController to keep responsibilities focused.
  */
 @RestController
 @RequestMapping("/api/movie")
@@ -34,7 +34,7 @@ public class MovieController {
 	private MovieService movieService;
 
 	/**
-	 * 获取所有电影
+	 * Get all movies
 	 */
 	@GetMapping("/movies")
 	public List<Movie> getMovies() {
@@ -54,7 +54,7 @@ public class MovieController {
 	}
 
 	/**
-	 * 根据标题或导演搜索电影
+	 * Search movies by title or director
 	 */
 	@GetMapping("/search")
 	public List<Movie> searchByTitleOrDirector(@RequestParam String keyword) {

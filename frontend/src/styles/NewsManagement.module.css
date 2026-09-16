@@ -1,17 +1,17 @@
-/* 整體容器樣式 */
+/* Overall container styles */
 .container {
     padding: 20px;
     text-align: center;
 }
 
-/* 卡片網格布局 */
+/* Card grid layout */
 .cardGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
 
-/* 單個新聞卡片樣式 */
+/* Individual news card styles */
 .card {
     background-color: #fff;
     border-radius: 8px;
@@ -31,7 +31,7 @@
     border-radius: 8px;
 }
 
-/* 新增按鈕樣式 */
+/* Add button styles */
 .addButton {
     margin-top: 20px;
     padding: 10px 20px;
@@ -46,7 +46,7 @@
     background-color: #45a049;
 }
 
-/* 模態框樣式 */
+/* Modal styles */
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -98,7 +98,7 @@
     border-radius: 8px;
 }
 
-/* 模態框按鈕樣式 */
+/* Modal button styles */
 .modalButtons {
     display: flex;
     justify-content: flex-end;
@@ -131,7 +131,7 @@
     background-color: #e53935;
 }
 
-/* 頂部導航欄樣式 */
+/* Top nav bar styles */
 .headerST ul {
     list-style-type: none;
     margin: 0;

@@ -17,33 +17,33 @@ const LoginForm = () => {
         if (credentialResponse && credentialResponse.credential) {
             try {
                 const { credential } = credentialResponse;
-    
-                // 不再解碼 token，直接將 credential 傳送到後端
+
+                // No longer decoding the token client-side; send the credential straight to the backend
                 const res = await fetch(`${API_BASE_URL}/api/movie/google-login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ token: credential }),  // 傳送 Google 返回的憑證到後端
+                    body: JSON.stringify({ token: credential }),  // Send the credential returned by Google to the backend
                 });
-    
+
                 const data = await res.json();
-                console.log('Received data:', data); // 確保收到的數據是預期中的 JSON 格式
-    
+                console.log('Received data:', data); // Confirm the data received is in the expected JSON format
+
                 if (res.ok) {
                     const { token, roles, name, email, id } = data;
-    
-                    // 儲存從後端返回的 token 和用戶資料
+
+                    // Store the token and user data returned by the backend
                     localStorage.setItem('token', token);
                     localStorage.setItem('roles', JSON.stringify(roles));
                     localStorage.setItem('name', name);
                     localStorage.setItem('email', email);
-                    localStorage.setItem('userid', id);  // 儲存 id
-    
+                    localStorage.setItem('userid', id);  // Store the id
+
                     console.log('Login Success: Token and roles stored');
                     navigate('/HomePageIn');
                 } else {
-                    console.error('後端登入失敗:', data.message);
+                    console.error('Backend login failed:', data.message);
                     alert('Google login failed: ' + data.message);
                 }
             } catch (error) {
@@ -52,13 +52,13 @@ const LoginForm = () => {
             }
         } else {
             console.error('No credential found in response');
-            alert('登入失敗，請重試。');
+            alert('Login failed, please try again.');
         }
     };
 
     const responseGoogleError = (error) => {
         console.error('Login Failed:', error);
-        alert('Google 登入失敗，請重試。');
+        alert('Google login failed, please try again.');
     };
 
     const handleSubmit = async (event) => {
@@ -84,7 +84,7 @@ const LoginForm = () => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('email', email);
                 localStorage.setItem('roles', JSON.stringify(roles));
-                localStorage.setItem('userid', id); // 儲存 id
+                localStorage.setItem('userid', id); // Store the id
 
                 navigate('/HomePageIn');
             } else {

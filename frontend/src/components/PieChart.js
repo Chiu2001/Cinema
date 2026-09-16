@@ -10,7 +10,7 @@ function PieChart() {
         datasets: [
             {
                 label: 'Categories',
-                data: [30, 50, 20], // 初始數據
+                data: [30, 50, 20], // Initial data
                 backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
                 hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
             },
@@ -18,8 +18,8 @@ function PieChart() {
     });
 
     useEffect(() => {
-        // 模擬從資料庫讀取數據並更新圖表
-        fetch('/api/data') // 假設這裡是讀取資料庫數據的 API
+        // Simulate reading data from the database and updating the chart
+        fetch('/api/data') // Assume this is the API for reading database data
             .then((response) => response.json())
             .then((data) => {
                 setChartData({
@@ -27,7 +27,7 @@ function PieChart() {
                     datasets: [
                         {
                             label: 'Categories',
-                            data: data.values, // 動態更新數據
+                            data: data.values, // Dynamically updated data
                             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
                             hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
                         },

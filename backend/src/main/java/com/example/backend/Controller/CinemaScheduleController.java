@@ -21,8 +21,8 @@ import com.example.backend.Repo.ShowtimeRepo;
 import com.example.backend.Service.ShowtimeService;
 
 /**
- * 影城、廳別、場次日期、場次相關查詢。
- * 從原本的 CinemaController 拆出來，讓職責單一。
+ * Cinema, hall, show date, and showtime queries.
+ * Split out of the original CinemaController to keep responsibilities focused.
  */
 @RestController
 @RequestMapping("/api/movie")
@@ -98,7 +98,7 @@ public class CinemaScheduleController {
 		}
 	}
 
-	// 從 showtime_id 打數據至前端
+	// Push data to the frontend based on showtime_id
 	@GetMapping("/area/{showtimeId}")
 	public ResponseEntity<Showtime> getShowtimeById(@PathVariable Integer showtimeId) {
 		Showtime showtime = showtimeService.getShowtimeById(showtimeId);
