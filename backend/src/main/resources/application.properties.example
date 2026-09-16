@@ -1,0 +1,39 @@
+# Copy this file to application.properties (excluded by .gitignore, so it never gets
+# committed), then fill in real values for your local/deployment environment.
+#
+# Why this file exists: application.properties itself being excluded by .gitignore is
+# correct (it keeps secrets from leaking), but that also means the repo has nowhere
+# listing "what settings this project actually needs" — anyone who clones it fresh
+# (or an interviewer) has no idea what to fill in, and the project just won't start.
+
+# ---- Database (MariaDB) ----
+spring.datasource.url=jdbc:mariadb://localhost:3306/cinema
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+
+# ---- JWT ----
+# Secret used to sign/verify login tokens. Must be a randomly generated string
+# that is never made public.
+# Generate one locally with: openssl rand -base64 64
+jwt.secret=
+
+# ---- CORS ----
+# Comma-separated list of frontend origins allowed to call the API with credentials.
+# Defaults to http://localhost:3000 for local development; swap in the real
+# frontend URL for production.
+app.cors.allowed-origins=http://localhost:3000
+
+# ---- Static files (movie poster / news image uploads) ----
+file.upload-dir=uploads
+app.base-url=http://localhost:8443/movie
+
+# ---- Google login ----
+# The Client ID obtained after creating an OAuth Client in Google Cloud Console
+# (must be the exact same Client ID the frontend's @react-oauth/google uses,
+# or the two sides won't match up).
+google.oauth.client-id=
+
+# ---- LinePay ----
+Linepay.api.ChannelId=
+Linepay.api.ChannelSecret=

@@ -25,25 +25,25 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class JwtService {
 
-    
+
     @Value("${jwt.secret}")
     private String secretKey;
 
-    
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    
+
     public String generateToken(String email) {
-        return generateToken(Map.of(), email, 1000 * 60 * 60); // 默認有效期為 1 小時
+        return generateToken(Map.of(), email, 1000 * 60 * 60); // Default expiry: 1 hour
     }
-    
+
     public String generateToken(String email, List<String> roles) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", roles); // 將角色添加到 Claims 中
-        return generateToken(claims, email, 1000 * 60 * 60 * 24); // Token 有效期設為 24 小時
+        claims.put("roles", roles); // Add roles into the claims
+        return generateToken(claims, email, 1000 * 60 * 60 * 24); // Token expiry set to 24 hours
     }
 
 
@@ -52,32 +52,32 @@ public class JwtService {
         claims.put("roles", userDetails.getAuthorities().stream()
                                    .map(GrantedAuthority::getAuthority)
                                    .collect(Collectors.toList()));
-        return generateToken(claims, userDetails.getUsername(), 1000 * 60 * 60 * 24); // 默認有效期為 24 小時
+        return generateToken(claims, userDetails.getUsername(), 1000 * 60 * 60 * 24); // Default expiry: 24 hours
     }
 
-    // 生成 JWT，並設定一些默認的 Claims
+    // Generate the JWT with some default claims
     private String generateToken(Map<String, Object> claims, String subject, long expirationMillis) {
         return Jwts.builder()
-                .setClaims(claims) // 設置自訂的 Claims
-                .setSubject(subject) // 設置 Subject 為用戶名
-                .setIssuedAt(new Date(System.currentTimeMillis())) // 設置簽發時間
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis)) // 設置到期時間
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // 使用固定的密鑰和 HMAC SHA-256 簽名演算法對 JWT 進行簽名
+                .setClaims(claims) // Set the custom claims
+                .setSubject(subject) // Set the subject to the username
+                .setIssuedAt(new Date(System.currentTimeMillis())) // Set the issued-at time
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis)) // Set the expiration time
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // Sign the JWT with the configured key using HMAC SHA-256
                 .compact();
     }
 
-    
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    
+
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    
+
     public boolean isTokenValid(String token, UserDetails userDetails, List<String> requiredRoles) {
         final String username = extractUsername(token);
         boolean isValidUser = username.equals(userDetails.getUsername()) && !isTokenExpired(token);
@@ -90,17 +90,17 @@ public class JwtService {
         return false;
     }
 
-    // 檢查 JWT 是否已過期
+    // Check whether the JWT has expired
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    // 提取 JWT 的到期時間
+    // Extract the JWT's expiration time
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // 從 JWT 提取角色
+    // Extract the roles from the JWT
     private List<String> extractRoles(String token) {
         return extractClaim(token, claims -> {
             Object rolesClaim = claims.get("roles");
@@ -109,11 +109,11 @@ public class JwtService {
                 List<String> roles = (List<String>) rolesClaim;
                 return roles;
             }
-            return List.of(); // 返回空列表以防錯誤的類型
+            return List.of(); // Return an empty list in case of an unexpected type
         });
     }
 
-    
+
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parserBuilder()

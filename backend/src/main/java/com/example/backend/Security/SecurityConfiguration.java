@@ -68,14 +68,13 @@ public class SecurityConfiguration {
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-				// 添加 Content Security Policy (CSP)
-								// 添加 Content Security Policy (CSP)
+				// Add Content Security Policy (CSP)
 				.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(
 					"default-src 'self'; " +
 					"script-src 'self' https://kevin-0514.github.io 'unsafe-inline'; " +
 					"style-src 'self' 'unsafe-inline'; " +
 					"img-src 'self' data: https://payment-stage.ecPay.com.tw; " +
-					"connect-src 'self' https://sandbox-api-pay.line.me https://payment-stage.ecPay.com.tw; " + 
+					"connect-src 'self' https://sandbox-api-pay.line.me https://payment-stage.ecPay.com.tw; " +
 					"frame-src https://payment-stage.ecPay.com.tw;" +
 					"form-action 'self' https://payment-stage.ecPay.com.tw; " +
 					"base-uri 'self';")))
@@ -88,12 +87,12 @@ public class SecurityConfiguration {
 
 	private AuthenticationEntryPoint unauthorizedEntryPoint() {
 		return (request, response, authException) ->
-			writeErrorResponse(response, HttpStatus.UNAUTHORIZED, "請先登入");
+			writeErrorResponse(response, HttpStatus.UNAUTHORIZED, "Please log in first");
 	}
 
 	private AccessDeniedHandler accessDeniedHandler() {
 		return (request, response, accessDeniedException) ->
-			writeErrorResponse(response, HttpStatus.FORBIDDEN, "沒有權限執行此操作");
+			writeErrorResponse(response, HttpStatus.FORBIDDEN, "You do not have permission to perform this action");
 	}
 
 	private void writeErrorResponse(jakarta.servlet.http.HttpServletResponse response, HttpStatus status, String message) throws java.io.IOException {

@@ -17,8 +17,8 @@ import com.example.backend.DTO.SeatDTO;
 import com.example.backend.Service.SeatService;
 
 /**
- * 座位保留與查詢。
- * 從原本的 CinemaController 拆出來，讓職責單一。
+ * Seat reservation and lookup.
+ * Split out of the original CinemaController to keep responsibilities focused.
  */
 @RestController
 @RequestMapping("/api/movie")
@@ -32,23 +32,23 @@ public class SeatController {
 			@PathVariable String seatNumber,
 			@RequestBody SeatDTO seatDTO) {
 		try {
-			// 檢查 SeatDto 是否非空
+			// Check that the SeatDto isn't null
 			if (seatDTO == null) {
 				return ResponseEntity.badRequest().body("SeatDto cannot be null");
 			}
 
-			// 設置 DTO 的相關資訊
+			// Fill in the DTO's remaining details
 			seatDTO.setShowtimeId(showtimeId);
 			seatDTO.setSeatNumber(seatNumber);
 
-			// 調用 SeatService 的 saveSeatInfo 函數來保存座位資訊，其他外鍵由後端查詢
+			// Call SeatService to persist the seat info; other foreign keys are resolved on the backend
 			seatService.addSeat(seatDTO);
 
-			// 返回成功響應
+			// Return a success response
 			return ResponseEntity.ok("Seat information saved successfully");
 
 		} catch (Exception e) {
-			// 捕獲並處理異常，返回 500 狀態碼和錯誤訊息
+			// Catch and handle the exception, returning a 500 status and error message
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error saving seat information: " + e.getMessage());
 		}
@@ -62,32 +62,32 @@ public class SeatController {
 			@PathVariable String showDate) {
 
 		try {
-			// 調用 service 層的方法來獲取座位信息
+			// Call the service layer to fetch seat information
 			List<SeatDTO> seats = seatService.getSeatsByShowtimeCinemaAndHallAndDate(showtimeId, cinemaId, hallId,
 					showDate);
 
-			// 返回成功響應和座位信息
+			// Return a success response with the seat information
 			return ResponseEntity.ok(seats);
 
 		} catch (Exception e) {
-			// 捕獲並處理異常，返回 500 狀態碼和錯誤訊息
+			// Catch and handle the exception, returning a 500 status and error message
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Collections.emptyList()); // 返回空的列表，表示沒有數據
+					.body(Collections.emptyList()); // Return an empty list to indicate no data
 		}
 	}
 
 	@GetMapping("/seatsResearch/{showtimeId}")
 	public ResponseEntity<List<SeatDTO>> getSeatsByShowtimeId(@PathVariable Integer showtimeId) {
 		try {
-			// 根據 showtimeId 查詢相關的 cinemaId, hallId 和 showDate
+			// Look up the cinemaId, hallId, and showDate associated with this showtimeId
 			List<SeatDTO> seats = seatService.getSeatsByShowtimeId(showtimeId);
 
-			// 返回座位信息
+			// Return the seat information
 			return ResponseEntity.ok(seats);
 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Collections.emptyList()); // 返回空列表表示沒有數據
+					.body(Collections.emptyList()); // Return an empty list to indicate no data
 		}
 	}
 }

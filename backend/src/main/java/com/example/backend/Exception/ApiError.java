@@ -3,9 +3,10 @@ package com.example.backend.Exception;
 import java.time.Instant;
 
 /**
- * 統一的錯誤回應格式。
- * 目的：讓所有 API 出錯時，前端拿到的 JSON 結構都一樣，
- * 不用像現在這樣每支 API 猜欄位到底叫 error 還是 message。
+ * Unified error response shape.
+ * Purpose: so that whenever any API fails, the frontend always gets the same JSON
+ * structure back, instead of having to guess per-endpoint whether the field is called
+ * "error" or "message".
  */
 public class ApiError {
 
