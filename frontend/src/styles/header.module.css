@@ -1,4 +1,4 @@
-/* headerST: 設定 header 的樣式，使其占據整個寬度並水平排列 */
+/* headerST: sets the header style so it spans the full width and lays out horizontally */
 .headerSTY {
     width: 100%;
     display: flex;
@@ -10,20 +10,20 @@
     color: #FFB53D;
 }
 
-/* logo: 設定 logo 的樣式和大小，讓其具有點擊性 */
+/* logo: sets the logo's style and size, making it clickable */
 .logo {
     width: 150px;
     cursor: pointer;
 }
 
-/* ul: 設定導航列的樣式，將列表置中 */
+/* ul: sets the nav bar style, centering the list */
 ul {
     flex: 1;
     list-style: none;
     text-align: center;
 }
 
-/* ul li: 設定每個導航列項目的樣式，包含邊距和字體大小 */
+/* ul li: sets the style of each nav item, including margin and font size */
 ul li {
     display: inline-block;
     margin: 10px 20px;
@@ -31,22 +31,22 @@ ul li {
     cursor: pointer;
 }
 
-/* ul li a: 去掉下底線並改為 #FFB53D */
-/* 將導航列的字體加粗並改成#FFB43D顏色 */
+/* ul li a: removes the underline and changes color to #FFB53D */
+/* Makes the nav bar font bold and changes it to color #FFB43D */
 ul li a {
-    text-decoration: none !important; /* 去掉下底線 */
-    color: #FFB43D !important; /* 改為 #FFB43D */
-    font-weight: bold; /* 字體加粗 */
+    text-decoration: none !important; /* remove underline */
+    color: #FFB43D !important; /* change to #FFB43D */
+    font-weight: bold; /* bold font */
 }
 
 
-/* ul li a:hover: 添加滑鼠懸停效果 */
+/* ul li a:hover: adds a mouse hover effect */
 ul li a:hover {
-    color: #feaa24; /* 滑鼠懸停時，顏色變深一些 */
+    color: #feaa24; /* slightly darker color on hover */
 }
 
 
-/* search-box: 設定搜尋框的樣式，包含內距和背景色 */
+/* search-box: sets the search box style, including padding and background color */
 .search-box {
     display: flex;
     align-items: center;
@@ -56,7 +56,7 @@ ul li a:hover {
     margin-right: 10%;
 }
 
-/* search-box input: 設定搜尋框輸入欄的樣式 */
+/* search-box input: sets the style of the search box input field */
 .search-box input {
     padding: 6px;
     background: transparent;
@@ -67,33 +67,33 @@ ul li a:hover {
     max-width: 200px;
 }
 
-/* search-box input::placeholder: 設定 placeholder 的顏色 */
+/* search-box input::placeholder: sets the placeholder color */
 .search-box input::placeholder {
     color: rgb(97, 97, 97);
 }
 
-/* search-box img: 設定搜尋按鈕圖示的大小和點擊效果 */
+/* search-box img: sets the size and click effect of the search button icon */
 .search-box img {
     width: 20px;
     cursor: pointer;
 }
 
-/* user-actions: 設定用戶操作區域的樣式，包含 CART 和 MY ACCOUNT 的按鈕樣式 */
+/* user-actions: sets the style of the user actions area, including the CART and MY ACCOUNT button styles */
 .user-actions a {
     margin-right: 10px;
-    /* CART 和 MY ACCOUNT 之間的間隔 */
+    /* spacing between CART and MY ACCOUNT */
 }
 
 .user-actions a:last-child {
     margin-right: 0;
-    /* 最後一個元素不需要右邊距 */
+    /* the last element doesn't need right margin */
 }
 
-/* search-results: 設定搜尋結果彈窗的樣式 */
+/* search-results: sets the style of the search results popup */
 .search-results {
     position: absolute;
     top: 60px;
-    /* 根據需要調整位置 */
+    /* adjust position as needed */
     right: 7%;
     background-color: #333;
     color: #fff;
@@ -104,37 +104,37 @@ ul li a:hover {
     z-index: 1000;
 }
 
-/* search-results h3: 設定搜尋結果標題的樣式 */
+/* search-results h3: sets the style of the search results heading */
 .search-results h3 {
     margin-bottom: 10px;
     font-size: 18px;
     color: #f8f8f8;
 }
 
-/* search-results ul: 設定搜尋結果列表的樣式 */
+/* search-results ul: sets the style of the search results list */
 .search-results ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-/* search-results li: 設定每個搜尋結果項目的樣式 */
+/* search-results li: sets the style of each search result item */
 .search-results li {
     margin-bottom: 10px;
 }
 
-/* search-results li a: 設定搜尋結果連結的樣式 */
+/* search-results li a: sets the style of search result links */
 .search-results li link {
     color: #ddd;
     text-decoration: none;
 }
 
-/* search-results li a:hover: 設定搜尋結果連結的滑鼠懸停效果 */
+/* search-results li a:hover: sets the mouse hover effect for search result links */
 .search-results li a:hover {
     text-decoration: underline;
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 850px 的情況，調整導航列字體大小 */
+/* Media query: for screen widths below 850px, adjust nav bar font size */
 @media screen and (max-width: 850px) {
     ul li {
         font-size: 16px;
@@ -147,7 +147,7 @@ ul li a:hover {
     }
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 550px 的情況，調整導航列佈局 */
+/* Media query: for screen widths below 550px, adjust nav bar layout */
 @media screen and (max-width: 550px) {
     ul li {
         font-size: 14px;
@@ -164,7 +164,7 @@ ul li a:hover {
     }
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 400px 的情況，調整搜尋框大小 */
+/* Media query: for screen widths below 400px, adjust search box size */
 @media screen and (max-width: 400px) {
     .search-box input {
         font-size: 12px;

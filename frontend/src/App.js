@@ -61,7 +61,7 @@ function App() {
                         <Route path="/area/:showtime_id" element={<Area />} />
                         <Route path="/EcpayPage" element={<PrivateRoute element={<EcpayPage />} />} />
                         <Route path="/PaymentResultPage" element={<PrivateRoute element={<PaymentResultPage />} />} />
-                        <Route path="*" element={<h1>找不到頁面</h1>} />
+                        <Route path="*" element={<h1>Page Not Found</h1>} />
                     </Routes>
                     </CartContext.Provider>
                 </Router>

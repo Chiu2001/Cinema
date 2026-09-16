@@ -38,7 +38,7 @@ public class PaymentController {
     @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
-        this.allInOne = new AllInOne("3002607"); // 設定 ECPay 配置
+        this.allInOne = new AllInOne("3002607"); // Set the ECPay configuration
     }
 
     
@@ -54,7 +54,7 @@ public class PaymentController {
                 orderDTO.getAmount(),
                 orderDTO.getDescription(),
                 orderDTO.getItemName(),
-                false // 設定支付狀態為未支付
+                false // Set the payment status to unpaid
             );
 
             AioCheckOutALL obj = new AioCheckOutALL();
@@ -71,18 +71,18 @@ public class PaymentController {
             return ResponseEntity.ok(ecpayFormHtml);
         } catch (EcpayException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("結帳失敗：" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Checkout failed: " + e.getMessage());
         }
     }
 
-    // 获取指定用户的历史订单
+    // Get the order history for the specified user
     @GetMapping("/user")
     public ResponseEntity<List<Order>> getUserOrders(@RequestParam Integer userId) {
         List<Order> userOrders = paymentService.getOrdersByUserId(userId);
         return ResponseEntity.ok(userOrders);
     }
 
-    // 获取订单详情
+    // Get order details
     @GetMapping("/details")
     public ResponseEntity<Order> getOrderDetails(@RequestParam Integer orderNumber) {
         try {
@@ -90,7 +90,7 @@ public class PaymentController {
             return ResponseEntity.ok(order);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(404).body(null); // 处理订单未找到的情况
+            return ResponseEntity.status(404).body(null); // Handle the case where the order is not found
         }
     }
 }

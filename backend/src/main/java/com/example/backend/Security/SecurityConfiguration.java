@@ -59,7 +59,7 @@ public class SecurityConfiguration {
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-				// 添加 Content Security Policy (CSP)
+				// Add a Content Security Policy (CSP)
 				.headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(
 					"default-src 'self'; " +
 					"script-src 'self' https://kevin-0514.github.io 'unsafe-inline'; " +

@@ -80,18 +80,18 @@ public class SeatServiceImpl implements SeatService{
 		return seatDtos;
 	}
 	
-    // 根據 showtimeId 查詢相關信息
+    // Query related information by showtimeId
     public List<SeatDTO> getSeatsByShowtimeId(Integer showtimeId) {
-        // 查詢 showtimeId 對應的 Showtimes 實體
+        // Look up the Showtime entity for the given showtimeId
         Showtime showtime = showtimeRepo.findById(showtimeId)
             .orElseThrow(() -> new RuntimeException("Showtime not found"));
 
-        // 從 Showtimes 實體中提取外鍵資訊
-        Integer cinemaId = showtime.getCinema().getCinema_id();  // 獲取 cinemaId
-        Integer hallId = showtime.getHall().getHall_id();  // 獲取 hallId
-        String showDate = showtime.getShowDate().getShow_date();  // 獲取 showDate
+        // Extract the foreign key information from the Showtime entity
+        Integer cinemaId = showtime.getCinema().getCinema_id();  // Get cinemaId
+        Integer hallId = showtime.getHall().getHall_id();  // Get hallId
+        String showDate = showtime.getShowDate().getShow_date();  // Get showDate
 
-        // 根據提取的資訊查詢座位
+        // Query seats using the extracted information
         List<Seat> seatEntities = seatRepo.findSeatsByCinemaIdAndHallIdAndShowDate(cinemaId, hallId, showDate);
         return seatEntities.stream()
         .map(seatEntity -> new SeatDTO(

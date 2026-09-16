@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';  // 使用 React Router 的 Link 元件
+import { Link } from 'react-router-dom';  // Use React Router's Link component
 import styles from '../styles/footer.module.css';
 import fb from '../assets/fbimg.png';
 import twitter from '../assets/twitterimg.png';
@@ -12,31 +12,31 @@ const FooterIn = () => {
             <div className={styles.sbFooter + " " + styles.sectionPadding}>
                 <div className={styles.sbFooterLinks}>
                     <div className={styles.sbFooterLinksDiv}>
-                        <h3>關於我們</h3>
-                        <p>營業人名稱：華盛頓影城股份有限公司台北分公司</p>
-                        <p>統一編號：80412345</p>
-                        <p>地址：台北市大安區建國南路二段231號</p>
-                        <p>電話：02-2700-5858</p>
+                        <h3>About Us</h3>
+                        <p>Business name: Washington Cinemas Co., Ltd., Taipei Branch</p>
+                        <p>Business registration number: 80412345</p>
+                        <p>Address: No. 231, Sec. 2, Jianguo S. Rd., Da'an Dist., Taipei City</p>
+                        <p>Phone: 02-2700-5858</p>
                     </div>
 
                     <div className={styles.sbFooterLinksDiv}>
-                        <h3>相關資訊</h3>
+                        <h3>Related Information</h3>
                         <Link to="/AboutPageIn" className={styles.link}>
-                            <p>影院介紹</p>
+                            <p>About the Cinema</p>
                         </Link>
                         <Link to="/press" className={styles.link}>
-                            <p>客服信箱</p>
+                            <p>Customer Service Email</p>
                         </Link>
                         <Link to="/career" className={styles.link}>
-                            <p>會員規章</p>
+                            <p>Membership Rules</p>
                         </Link>
                         <Link to="/contact" className={styles.link}>
-                            <p>常見問題</p>
+                            <p>FAQ</p>
                         </Link>
                     </div>
 
                     <div className={styles.sbFooterLinksDiv}>
-                        <h4>我們的社群</h4>
+                        <h4>Our Community</h4>
                         <div className={styles.socialMedia}>
                             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
                                 <img src={fb} alt="Facebook" />

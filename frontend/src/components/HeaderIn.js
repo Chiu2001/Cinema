@@ -13,7 +13,7 @@ const HeaderIn = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // 每當 roles 在 localStorage 中變更時，更新狀態
+        // Update state whenever roles changes in localStorage
         const storedRoles = JSON.parse(localStorage.getItem('roles') || '[]');
         setRoles(storedRoles);
     }, []);
@@ -26,7 +26,7 @@ const HeaderIn = () => {
                 const response = await axios.get(`http://localhost:8443/movie/api/movie/search?keyword=${query}`);
                 setFilteredMovies(response.data);
             } catch (error) {
-                console.error('搜尋失敗:', error);
+                console.error('Search failed:', error);
             }
         } else {
             setFilteredMovies([]);
@@ -46,9 +46,9 @@ const HeaderIn = () => {
     };
 
     const handleLogout = () => {
-        // 清空 localStorage 並將 token 和 roles 設為 null
+        // Clear localStorage and reset token and roles to null
         localStorage.clear();
-        navigate('/home'); // 導向首頁
+        navigate('/home'); // Redirect to the home page
     };
 
     return (
@@ -57,14 +57,14 @@ const HeaderIn = () => {
                 <img src={movie_icon} alt="Logo" className={styles.logo} />
             </Link>
             <ul>
-                <li><Link to="/MovieListIn">電影資訊</Link></li>
-                <li><Link to="/AboutPageIn">關於我們</Link></li>
-                <li><Link to="/OrderListIn">購票紀錄</Link></li>
-                <li><Link to="/CheckOutIn">購物車</Link></li>
-                {/* <li><Link to="/UserListIn">會員中心</Link></li> */}
-                {/* 根據 roles 顯示 "系統管理" */}
+                <li><Link to="/MovieListIn">Movie Info</Link></li>
+                <li><Link to="/AboutPageIn">About Us</Link></li>
+                <li><Link to="/OrderListIn">Order History</Link></li>
+                <li><Link to="/CheckOutIn">Cart</Link></li>
+                {/* <li><Link to="/UserListIn">Member Center</Link></li> */}
+                {/* Show "System Administration" based on roles */}
                 {roles.includes("ROLE_MANAGER") || roles.includes("ROLE_ADMIN") ? (
-                    <li><Link to="/schedule">系統管理</Link></li>
+                    <li><Link to="/schedule">System Administration</Link></li>
                 ) : null}
             </ul>
 
@@ -85,7 +85,7 @@ const HeaderIn = () => {
 
             {isSearchActive && (
                 <div className={styles['search-results']}>
-                    <h3>搜尋結果：</h3>
+                    <h3>Search Results:</h3>
                     <ul>
                         {filteredMovies.map((movie, index) => (
                             <li key={index}>
@@ -99,8 +99,8 @@ const HeaderIn = () => {
             )}
 
             <div className={styles['user-actions']}>
-                {/* 已登入時顯示登出按鈕 */}
-                <button onClick={handleLogout} className="btn btn-outline-secondary">👤 登出</button>
+                {/* Show logout button when logged in */}
+                <button onClick={handleLogout} className="btn btn-outline-secondary">👤 Logout</button>
             </div>
         </div>
     );

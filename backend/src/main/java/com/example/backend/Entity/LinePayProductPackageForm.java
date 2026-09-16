@@ -46,11 +46,11 @@ public class LinePayProductPackageForm {
     //         BigDecimal hallPrice = BigDecimal.valueOf(hall.getPrice());
     //         return movieQuantity.multiply(hallPrice);
     //     }
-    //     // 如果關聯不存在，則返回預設值或拋出異常
+    //     // Return a default value or throw an exception if the association does not exist
     //     return BigDecimal.ZERO;
     // }
 
-	// // 計算 amount
+	// // Calculate amount
 	// public void setAmount() {
 	// 	if (movie != null && hall != null) {
 	// 		BigDecimal movieQuantity = BigDecimal.valueOf(movie.getQuantity());

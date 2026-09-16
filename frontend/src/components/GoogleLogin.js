@@ -1,53 +1,53 @@
 // import React from 'react';
 // import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-// import jwt_decode from 'jwt-decode';  // 用來解析 Google 回傳的 JWT token
-// import { useNavigate } from 'react-router-dom';  // 引入 useNavigate 進行導航
+// import jwt_decode from 'jwt-decode';  // Used to decode the JWT token returned by Google
+// import { useNavigate } from 'react-router-dom';  // Import useNavigate for navigation
 
-// const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;  // 使用環境變數
+// const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;  // Use an environment variable
 
 // const GoogleLoginComponent = () => {
-//     const navigate = useNavigate();  // 使用 useNavigate 進行導航
+//     const navigate = useNavigate();  // Use useNavigate for navigation
 
 //     const handleLoginSuccess = async (credentialResponse) => {
 //         console.log('Google Login Success:', credentialResponse);
 
-//         // 檢查是否有獲取到 credential
+//         // Check whether a credential was received
 //         if (credentialResponse && credentialResponse.credential) {
 //             try {
-//                 // 從 Google 回傳的 credentialResponse 取得 JWT token
+//                 // Get the JWT token from the credentialResponse returned by Google
 //                 const { credential } = credentialResponse;
 
-//                 // 使用 jwt_decode 來解析 JWT token，取得使用者資訊
+//                 // Use jwt_decode to decode the JWT token and get the user info
 //                 const decodedToken = jwt_decode(credential);
 //                 console.log('Decoded Token:', decodedToken);
 
-//                 const { name, email } = decodedToken;  // 從 token 中提取使用者資訊
+//                 const { name, email } = decodedToken;  // Extract user info from the token
 
-//                 // 將 token 和使用者資訊傳送到後端進行驗證
+//                 // Send the token and user info to the backend for verification
 //                 const res = await fetch('https://localhost:8443/movie/api/movie/google-login', {
 //                     method: 'POST',
 //                     headers: {
 //                         'Content-Type': 'application/json',
 //                     },
-//                     body: JSON.stringify({ token: credential }),  // 发送 Google 返回的凭证到后端
+//                     body: JSON.stringify({ token: credential }),  // Send the credential returned by Google to the backend
 //                 });
 
 //                 const data = await res.json();
 
 //                 if (res.ok) {
-//                     // 假设后端返回 JWT token 和用户信息，存储到 localStorage
+//                     // Assume the backend returns a JWT token and user info, store them in localStorage
 //                     const { token, roles } = data;
-//                     localStorage.setItem('token', token);  // 保存後端返回的 JWT token
-//                     localStorage.setItem('roles', JSON.stringify(roles));  // 保存 roles
-//                     localStorage.setItem('name', name);  // 保存使用者名稱
-//                     localStorage.setItem('email', email);  // 保存使用者 Email
+//                     localStorage.setItem('token', token);  // Save the JWT token returned by the backend
+//                     localStorage.setItem('roles', JSON.stringify(roles));  // Save roles
+//                     localStorage.setItem('name', name);  // Save the user's name
+//                     localStorage.setItem('email', email);  // Save the user's email
 
 //                     console.log('Login Success: Token and roles stored');
 
-//                     // 成功後跳轉到首頁
+//                     // Redirect to the home page on success
 //                     navigate('/home');
 //                 } else {
-//                     console.error('後端登入失敗:', data.message);
+//                     console.error('Backend login failed:', data.message);
 //                     alert('Google login failed: ' + data.message);
 //                 }
 //             } catch (error) {
@@ -56,13 +56,13 @@
 //             }
 //         } else {
 //             console.error('No credential found in response');
-//             alert('登入失敗，請重試。');
+//             alert('Login failed, please try again.');
 //         }
 //     };
 
 //     const handleLoginFailure = (error) => {
 //         console.log('Google Login Failed:', error);
-//         alert('Google 登入失敗，請重試。');
+//         alert('Google login failed, please try again.');
 //     };
 
 //     return (

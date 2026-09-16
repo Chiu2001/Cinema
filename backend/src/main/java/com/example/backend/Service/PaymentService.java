@@ -16,19 +16,19 @@ public class PaymentService {
     @Autowired
     private OrderRepo orderRepo;
 
-    private static final String PAYMENT_SUCCESS = "已付款"; // 定义支付成功的状态
-    
+    private static final String PAYMENT_SUCCESS = "Paid"; // Defines the "payment successful" status
+
     public Integer generateOrderNumber() {
-        // 生成 10 位随机整数作为订单号
+        // Generate a 10-digit random integer as the order number
         Random random = new Random();
         return 100000000 + random.nextInt(900000000);
     }
 
-    // 新增订单
+    // Create a new order
     public Order addOrder(Integer orderNumber, Integer userId, LocalDateTime createdDate, Integer amount, String description, String itemName, Boolean isPaid) {
-        // 使用现有构造函数创建对象时传递所有必要的字段
+        // Pass all required fields when creating the object using the existing constructor
         Order newOrder = new Order();
-        newOrder.setOrderNumber(orderNumber); // 设置生成的订单号
+        newOrder.setOrderNumber(orderNumber); // Set the generated order number
         newOrder.setUserId(userId);
         newOrder.setCreatedDate(createdDate);
         newOrder.setAmount(amount);
@@ -36,13 +36,13 @@ public class PaymentService {
         newOrder.setItemName(itemName);
         newOrder.setIsPaid(isPaid);
 
-        return orderRepo.save(newOrder); // 保存到数据库
+        return orderRepo.save(newOrder); // Save to the database
     }
 
-    // 更新订单
+    // Update an order
     public Order updateOrder(Integer orderNumber, LocalDateTime createdDate, Integer amount, String description, String itemName, Boolean isPaid) {
     	Order existingOrder = orderRepo.findByOrderNumber(orderNumber)
-                .orElseThrow(() -> new RuntimeException("未找到订单，订单号：" + orderNumber));
+                .orElseThrow(() -> new RuntimeException("Order not found, order number: " + orderNumber));
 
         if (createdDate != null) existingOrder.setCreatedDate(createdDate);
         if (amount != null) existingOrder.setAmount(amount);
@@ -55,18 +55,18 @@ public class PaymentService {
 
     public Order getOrderDetails(Integer orderNumber) {
         return orderRepo.findByOrderNumber(orderNumber)
-                .orElseThrow(() -> new RuntimeException("未找到订单，订单号：" + orderNumber));
+                .orElseThrow(() -> new RuntimeException("Order not found, order number: " + orderNumber));
     }
 
-    // 更新支付数据
+    // Update payment data
     public void updatePaydata(Order orderData, LocalDateTime merchantTradeDate, String payMethod, String payStatus) {
-        orderData.setIsPaid(PAYMENT_SUCCESS.equals(payStatus)); // 根据支付状态更新支付状态
-        orderData.setDescription(payStatus); // 更新描述为支付状态
-        orderData.setCreatedDate(merchantTradeDate); // 更新订单日期
-        orderRepo.save(orderData); // 保存更新后的数据
+        orderData.setIsPaid(PAYMENT_SUCCESS.equals(payStatus)); // Update the paid status based on the payment status
+        orderData.setDescription(payStatus); // Update the description with the payment status
+        orderData.setCreatedDate(merchantTradeDate); // Update the order date
+        orderRepo.save(orderData); // Save the updated data
     }
-    
+
     public List<Order> getOrdersByUserId(Integer userId) {
-        return orderRepo.findByUserId(userId); // 通过用户ID获取订单
+        return orderRepo.findByUserId(userId); // Get orders by user ID
     }
 }

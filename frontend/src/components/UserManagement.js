@@ -12,9 +12,9 @@ const UserManagement = () => {
     });
     const [currentPage, setCurrentPage] = useState(1);
     const usersPerPage = 10;
-    const navigate = useNavigate(); // 使用 useNavigate 進行頁面跳轉
+    const navigate = useNavigate(); // Use useNavigate for page navigation
 
-    // 獲取用戶資料
+    // Fetch user data
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -32,13 +32,13 @@ const UserManagement = () => {
         fetchUsers();
     }, []);
 
-    // 切換用戶角色
+    // Toggle a user's role
     const toggleRole = async (id, newRole) => {
         console.log('Current role:', role);
         if (role === 'ROLE_MANAGER') {
             try {
                 await axios.put(`http://localhost:8443/movie/api/manager/${id}/role`, null, {
-                    params: { role: newRole }, // 使用 query parameter 傳遞角色
+                    params: { role: newRole }, // Pass the role as a query parameter
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     }
@@ -54,13 +54,13 @@ const UserManagement = () => {
         }
     };
 
-    // 過濾搜尋條件
+    // Filter by search term
     const filteredUsers = users.filter(user =>
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // 分頁邏輯
+    // Pagination logic
     const startIndex = (currentPage - 1) * usersPerPage;
     const paginatedUsers = filteredUsers.slice(startIndex, startIndex + usersPerPage);
 
@@ -68,15 +68,15 @@ const UserManagement = () => {
         setCurrentPage(pageNumber);
     };
 
-    // 登入後處理
+    // Post-login processing
     const handleLoginResponse = (response) => {
-        const token = response.token; // 從後端返回的數據中提取 token
-        const roles = response.roles; // 從後端返回的數據中提取 roles
+        const token = response.token; // Extract the token from the backend response
+        const roles = response.roles; // Extract the roles from the backend response
 
-        // 存儲 JWT 到 localStorage
+        // Store the JWT in localStorage
         localStorage.setItem('token', token);
 
-        // 存儲角色信息到 localStorage
+        // Store the role information in localStorage
         localStorage.setItem('roles', JSON.stringify(roles));
         console.log(roles);
     };
@@ -85,17 +85,17 @@ const UserManagement = () => {
         <div>
             <div className={styles.headerST}>
                 <ul>
-                    <li><Link to="/schedule">檔期管理</Link></li>
-                    <li><Link to="/news">新聞管理</Link></li>
-                    <li><Link to="/user_management">用戶管理</Link></li>
-                    <li><Link to="/order">查詢訂單</Link></li>
+                    <li><Link to="/schedule">Schedule Management</Link></li>
+                    <li><Link to="/news">News Management</Link></li>
+                    <li><Link to="/user_management">User Management</Link></li>
+                    <li><Link to="/order">Search Orders</Link></li>
                 </ul>
             </div>
             <div className={styles.container}>
-                <h1>用戶管理</h1>
+                <h1>User Management</h1>
                 <input
                     type="text"
-                    placeholder="搜尋用戶名或郵箱"
+                    placeholder="Search by username or email"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchBox}
@@ -104,12 +104,12 @@ const UserManagement = () => {
                     <thead>
                         <tr>
                             <th>id</th>
-                            <th>用戶名</th>
-                            <th>郵箱</th>
-                            <th>生日</th>
-                            <th>性別</th>
-                            <th>創建時間</th>
-                            <th>角色</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Birth Date</th>
+                            <th>Gender</th>
+                            <th>Created Time</th>
+                            <th>Role</th>
                         </tr>
                     </thead>
                     <tbody>

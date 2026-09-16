@@ -1,20 +1,20 @@
-/* 設置整個部分的內邊距，讓內容與邊界保持一定距離 */
+/* Sets the inner padding of the whole section, keeping content away from the edges */
 .sectionPadding {
     padding: 4rem 4rem;
 }
 
-/* 設置頁腳的背景顏色 */
+/* Sets the footer background color */
 .footer {
     background-color: #2d2d32;
 }
 
-/* 設置頁腳內部的佈局為縱向排列，用於放置不同的區塊 */
+/* Sets the footer's internal layout to a vertical stack, for placing different sections */
 .sbFooter {
     display: flex;
     flex-direction: column;
 }
 
-/* 設置頁腳鏈接部分的佈局，讓各個鏈接區塊水平排列，並在小螢幕時自動換行 */
+/* Sets the layout of the footer links section, laying link blocks out horizontally and wrapping on small screens */
 .sbFooterLinks {
     display: flex;
     justify-content: space-between;
@@ -26,7 +26,7 @@
     margin-bottom: 2rem;
 }
 
-/* 設置每個鏈接區塊的樣式，使它們顯示為縱向排列的白色文字 */
+/* Sets the style of each link block, so they display as white text in a vertical stack */
 .sbFooterLinksDiv {
     width: 150px;
     margin: 1rem;
@@ -36,32 +36,32 @@
     color: white;
 }
 
-/* 設置鏈接的顏色及移除下劃線，使其看起來更為統一 */
+/* Sets the link color and removes the underline, for a more consistent look */
 .link {
     color: rgb(175, 175, 179);
     text-decoration: none;
 }
 
-/* 設置社交媒體圖標區塊的樣式，讓圖標水平排列 */
+/* Sets the style of the social media icon block, laying icons out horizontally */
 .socialMedia {
     display: flex;
     flex-direction: row;
 }
 
-/* 設置社交媒體圖標的大小 */
+/* Sets the size of the social media icons */
 .socialMedia img {
     width: 30px;
     margin: 5px;
 }
 
-/* 設置區塊標題的樣式，包括字體大小和行高 */
+/* Sets the style of the section heading, including font size and line height */
 .sbFooterLinksDiv h4 {
     font-size: 14px;
     line-height: 17px;
     margin-bottom: 0.9rem;
 }
 
-/* 設置鏈接文字的樣式，包括字體大小、行高和邊距 */
+/* Sets the style of link text, including font size, line height and margin */
 .sbFooterLinksDiv p {
     font-size: 12px;
     line-height: 15px;
@@ -69,7 +69,7 @@
     cursor: pointer;
 }
 
-/* 設置頁腳下方的佈局，讓內容左右對齊，並在小螢幕時縱向排列 */
+/* Sets the layout of the lower footer area, aligning content left/right and stacking vertically on small screens */
 .sbFooterBelow {
     display: flex;
     flex-direction: row;
@@ -77,13 +77,13 @@
     margin-top: 0.2rem;
 }
 
-/* 設置頁腳下方的鏈接區塊的樣式 */
+/* Sets the style of the link block at the bottom of the footer */
 .sbFooterBelowLinks {
     display: flex;
     flex-direction: row;
 }
 
-/* 設置頁腳下方鏈接的文字樣式，包括字體大小、行高和顏色 */
+/* Sets the text style of the bottom footer links, including font size, line height and color */
 .sbFooterBelowLinks p {
     font-size: 13px;
     line-height: 15px;
@@ -92,13 +92,13 @@
     font-weight: 600;
 }
 
-/* 設置頁腳中的水平分隔線顏色 */
+/* Sets the color of the horizontal divider in the footer */
 hr {
     color: white !important;
     width: 100%;
 }
 
-/* 設置版權信息文字的樣式 */
+/* Sets the style of the copyright text */
 .sbFooterCopyright p {
     font-size: 13px;
     line-height: 15px;
@@ -106,7 +106,7 @@ hr {
     font-weight: 600;
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 850px 的情況，調整標題字體大小 */
+/* Media query: for screen widths below 850px, adjust heading font size */
 @media screen and (max-width: 850px) {
     .sbFooterHeading h1 {
         font-size: 44px;
@@ -114,7 +114,7 @@ hr {
     }
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 550px 的情況，調整標題字體大小和頁腳佈局 */
+/* Media query: for screen widths below 550px, adjust heading font size and footer layout */
 @media screen and (max-width: 550px) {
     .sbFooterHeading h1 {
         font-size: 34px;
@@ -140,7 +140,7 @@ hr {
     }
 }
 
-/* 媒體查詢：適用於螢幕寬度小於 400px 的情況，進一步調整標題字體大小 */
+/* Media query: for screen widths below 400px, further adjust heading font size */
 @media screen and (max-width: 400px) {
     .sbFooterHeading h1 {
         font-size: 27px;

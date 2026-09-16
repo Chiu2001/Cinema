@@ -1,7 +1,7 @@
 // import React, { useContext } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { CartContext } from '../CartContext';
-// import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+// import styles from '../styles/Checkout.module.css'; // Import CSS module
 
 // export default function CheckOutIn() {
 //     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -28,50 +28,50 @@
 //             });
 
 //             if (!response.ok) {
-//                 throw new Error('網路響應錯誤');
+//                 throw new Error('Network response error');
 //             }
 
 //             const formHtml = await response.text();
-//             console.log('Received ECPay HTML:', formHtml); // 檢查返回的 HTML
+//             console.log('Received ECPay HTML:', formHtml); // Check the returned HTML
 //             navigate('/ecpay', { state: { ecpayHTML: formHtml } });
 //         } catch (error) {
-//             console.error('結帳時發生錯誤：', error);
+//             console.error('Error during checkout:', error);
 //         }
 //     };
 
 //     return (
 //         <div className={styles.pageWrapper}>
-//             <h1>您的購物車</h1>
+//             <h1>Your Cart</h1>
 
 //             {cartEmpty ? (
 //                 <div className={styles.emptyCartMessage}>
 //                     <Link to="/MovieList">
-//                         <a>購物車為空</a><br />
-//                         <a>前往購票吧</a>
+//                         <a>Your cart is empty</a><br />
+//                         <a>Go buy tickets</a>
 //                     </Link>
 //                 </div>
 //             ) : (
 //                 <div className={styles.cartContainer}>
 //                     <div id={styles.cartSection}>
-//                         {/* 產品列表 */}
+//                         {/* Product list */}
 //                         {cartItems.map(item => (
 //                             <div className={styles.cartItemCard} key={item.movie.id}>
 //                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
 //                                 <div className={styles.textContent}>
-//                                     <p>電影名稱: {item.movie.title}</p>
-//                                     <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-//                                     <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
-//                                     <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-//                                     <p>價格: {item.hall.price}</p>
-//                                     <p>數量: {item.quantity}</p>
-//                                     <p>座位: {item.seatNumbers.join(', ')}</p>
+//                                     <p>Movie title: {item.movie.title}</p>
+//                                     <p>Showing date: {item.showDate ? item.showDate : 'Not specified'}</p>
+//                                     <p>Showtime: {item.showtime ? item.showtime : 'Not specified'}</p>
+//                                     <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+//                                     <p>Price: {item.hall.price}</p>
+//                                     <p>Quantity: {item.quantity}</p>
+//                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
 //                                 </div>
 //                                 <div className={styles.deleteButtonContainer}>
 //                                     <button
 //                                         className={styles.deleteButton}
-//                                         onClick={() => removeCartItem(item.movie.id)} // 調用 removeCartItem 函數
+//                                         onClick={() => removeCartItem(item.movie.id)} // Call removeCartItem function
 //                                     >
-//                                         刪除
+//                                         Delete
 //                                     </button>
 //                                 </div>
 //                             </div>
@@ -79,16 +79,16 @@
 //                     </div>
 
 //                     <div id={styles.checkoutSection}>
-//                         <div>總價一共：{grandTotal}元</div>
+//                         <div>Grand total: {grandTotal}</div>
 //                         {grandTotal >= freeFood ? (
-//                             <div>滿${freeFood}贈送免費爆米花</div>
+//                             <div>Spend ${freeFood} to get free popcorn</div>
 //                         ) : (
 //                             <div>
-//                                 滿${freeFood}贈送免費爆米花<br />
-//                                 還差${freeFood - grandTotal}
+//                                 Spend ${freeFood} to get free popcorn<br />
+//                                 ${freeFood - grandTotal} to go
 //                             </div>
 //                         )}
-//                         <button className={styles.checkoutButton} onClick={payment}>結帳</button>
+//                         <button className={styles.checkoutButton} onClick={payment}>Checkout</button>
 //                     </div>
 //                 </div>
 //             )}
@@ -101,7 +101,7 @@ import React, { useContext, useState } from 'react';
 import Titles from './Titles'
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
-import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+import styles from '../styles/Checkout.module.css'; // Import CSS module
 
 export default function CheckOutIn() {
     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -113,7 +113,7 @@ export default function CheckOutIn() {
     const freeFood = 350;
     const orderNumber = `ORD-${new Date().getTime()}`;
 
-    // 使用 useState 管理 savedOrderId 和顯示 LinePay 按鈕的狀態
+    // Use useState to manage savedOrderId and whether the LinePay button is shown
     const [savedOrderId, setSavedOrderId] = useState(null);
     const [showLinePayButton, setShowLinePayButton] = useState(false);
 
@@ -121,11 +121,11 @@ export default function CheckOutIn() {
 
         const token = localStorage.getItem('token');
 
-        // 檢查是否已登入
+        // Check whether the user is logged in
         if (!token) {
-            alert('請先登入!');
-            navigate('/login'); // 跳轉到登入頁面
-            return; // 停止執行結帳邏輯
+            alert('Please log in first!');
+            navigate('/login'); // Redirect to the login page
+            return; // Stop the checkout process
         }
 
         const totalAmount = cartItems.reduce((total, item) => {
@@ -133,25 +133,25 @@ export default function CheckOutIn() {
         }, 0);
 
         const packages = cartItems.map(item => ({
-            name: item.movie.title,  // 存進 productPackageForm 的 name
-            amount: item.hall.price * item.quantity,  // 存進 productPackageForm 的 amount
+            name: item.movie.title,  // Stored as the name field of productPackageForm
+            amount: item.hall.price * item.quantity,  // Stored as the amount field of productPackageForm
             products: item.seatNumbers.map(seat => ({
-                name: seat,  // 存進 productForm 的 name
-                quantity: item.quantity,  // 存進 productForm 的 quantity
-                price: item.hall.price  // 存進 productForm 的 price
+                name: seat,  // Stored as the name field of productForm
+                quantity: item.quantity,  // Stored as the quantity field of productForm
+                price: item.hall.price  // Stored as the price field of productForm
             }))
         }));
 
         const checkoutRequest = {
-            amount: totalAmount,  // 存進 checkoutPaymentRequestForm 的 amount
-            orderId: orderNumber,  // 存進 checkoutPaymentRequestForm 的 orderId
-            currency: 'TWD',  // 假設是台幣
-            confirmUrl: "https://www.google.com.tw", //先暫設為google
+            amount: totalAmount,  // Stored as the amount field of checkoutPaymentRequestForm
+            orderId: orderNumber,  // Stored as the orderId field of checkoutPaymentRequestForm
+            currency: 'TWD',  // Assumed to be New Taiwan Dollars
+            confirmUrl: "https://www.google.com.tw", // Temporarily set to Google
             // confirmUrl: "http://localhost:3000/LinepayPaymentResult",
             packages: packages
         };
 
-        // 發送 POST 請求到後端
+        // Send a POST request to the backend
         fetch('http://localhost:8443/movie/checkout/save', {
             method: 'POST',
             headers: {
@@ -161,24 +161,24 @@ export default function CheckOutIn() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('訂單保存成功:', data);
-                setSavedOrderId(data.orderId);  // 使用 useState 更新 orderId
-                setShowLinePayButton(true);  // 顯示 LinePay 按鈕
-                alert(`訂單已生成，訂單編號：${data.orderId}`);
+                console.log('Order saved successfully:', data);
+                setSavedOrderId(data.orderId);  // Update orderId via useState
+                setShowLinePayButton(true);  // Show the LinePay button
+                alert(`Order created, order number: ${data.orderId}`);
             })
             .catch((error) => {
-                console.error('錯誤:', error);
+                console.error('Error:', error);
             });
     };
 
-    // 資料發送到LinePay
+    // Send data to LinePay
     const LinePayHandleCheckout = () => {
         if (!savedOrderId) {
-            alert('請先確認結帳！');
+            alert('Please confirm checkout first!');
             return;
         }
 
-        // 第一步：取得結帳細節
+        // Step 1: get checkout details
         fetch(`http://localhost:8443/movie/checkout/details/${savedOrderId}`, {
             method: 'GET',
             headers: {
@@ -187,47 +187,47 @@ export default function CheckOutIn() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('取得結帳細節:', data)
+                console.log('Retrieved checkout details:', data)
 
-                // 第二步：把取得的資料送到 LinePay 進行付款
+                // Step 2: send the retrieved data to LinePay for payment
                 return fetch('http://localhost:8443/movie/checkout/payment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data),  // 將取得的結帳資料發送到付款API
+                    body: JSON.stringify(data),  // Send the retrieved checkout data to the payment API
                 });
             })
             .then(response => response.json())
             .then(paymentData => {
-                console.log('LinePay 付款處理結果:', paymentData);
+                console.log('LinePay payment processing result:', paymentData);
 
-                // 將 response 字串解析為 JSON 物件
+                // Parse the response string into a JSON object
                 const responseInfo = JSON.parse(paymentData.response);
 
-                // 根據解析後的資料進行跳轉或其他動作
+                // Redirect or perform another action based on the parsed data
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    window.location.href = responseInfo.info.paymentUrl.web;  // 跳轉到 LinePay 支付頁面
+                    window.location.href = responseInfo.info.paymentUrl.web;  // Redirect to the LinePay payment page
                 } else {
-                    alert('付款失敗');
+                    alert('Payment failed');
                 }
             })
             .catch(error => {
-                console.error('錯誤:', error);
+                console.error('Error:', error);
             });
 
     }
 
     return (
         <div className={styles.checkoutPageWrapper}>
-            <Titles mainTitle={"您的購物車"} />
+            <Titles mainTitle={"Your Cart"} />
 
             {
                 cartEmpty &&
                 <div className={styles.checkoutEmptyCartMessage}>
                     <Link to="/">
-                        <a>購物車為空</a><br />
-                        <a>前往購票吧</a>
+                        <a>Your cart is empty</a><br />
+                        <a>Go buy tickets</a>
                     </Link>
                 </div>
             }
@@ -236,40 +236,40 @@ export default function CheckOutIn() {
                 !cartEmpty &&
                 <div className={styles.checkoutCartContainer}>
                     <div id={styles.checkoutCartSection}>
-                        {/* 產品列表 */}
+                        {/* Product list */}
                         {cartItems.map(item => (
                             <div className={styles.checkoutCartItemCard} key={item.movie.movie_id}>
                                 <img className={styles.checkoutImg} src={process.env.PUBLIC_URL + "/image/" + item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.checkoutTextContent}>
-                                    <p>電影名稱: {item.movie.title}</p>
-                                    {/* 確認 showDate 存在後再顯示日期 */}
-                                    <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-                                    <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p> {/* 如果需要顯示場次時間 */}
-                                    <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
-                                    <p>價格: {item.hall.price}</p>
-                                    <p>數量: {item.quantity}</p>
-                                    <p>座位: {item.seatNumbers.join(', ')}</p> {/* 顯示座位號 */}
+                                    <p>Movie title: {item.movie.title}</p>
+                                    {/* Show the date only after confirming showDate exists */}
+                                    <p>Showing date: {item.showDate ? item.showDate : 'Not specified'}</p>
+                                    <p>Showtime: {item.showtime ? item.showtime : 'Not specified'}</p> {/* Shown if the showtime needs to be displayed */}
+                                    <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
+                                    <p>Price: {item.hall.price}</p>
+                                    <p>Quantity: {item.quantity}</p>
+                                    <p>Seats: {item.seatNumbers.join(', ')}</p> {/* Show seat numbers */}
                                 </div>
                             </div>
                         ))}
                     </div>
 
                     <div id={styles.checkoutCheckoutSection}>
-                        {/* 價錢總數 */}
-                        <div>總價一共：{grandTotal}元</div>
+                        {/* Total price */}
+                        <div>Grand total: {grandTotal}</div>
                         {
-                            /* 免費送爆米花 */
+                            /* Free popcorn */
                             grandTotal >= freeFood ?
-                                <div>滿${freeFood}贈送免費爆米花</div> :
+                                <div>Spend ${freeFood} to get free popcorn</div> :
                                 <div>
-                                    滿${freeFood}贈送免費爆米花<br />
-                                    還差${freeFood - grandTotal}</div>
+                                    Spend ${freeFood} to get free popcorn<br />
+                                    ${freeFood - grandTotal} to go</div>
                         }
-                        <button className={styles.checkoutCheckoutButton} onClick={handleCheckout}>確認結帳</button>
+                        <button className={styles.checkoutCheckoutButton} onClick={handleCheckout}>Confirm Checkout</button>
 
-                        {/* 只有當 showLinePayButton 為 true 時顯示 LinePay 按鈕 */}
+                        {/* Only show the LinePay button when showLinePayButton is true */}
                         {showLinePayButton && (
-                            <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay結帳</button>
+                            <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay Checkout</button>
                         )}
                     </div>
                 </div>

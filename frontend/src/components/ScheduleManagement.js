@@ -21,11 +21,11 @@ const ScheduleManagement = () => {
     const [file, setFile] = useState(null);
     const [tempStatus, setTempStatus] = useState('FALSE');
 
-    // 從後端獲取電影數據
+    // Fetch movie data from the backend
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登錄');
+            alert('Please log in first');
             window.location.href = '/login';
             return;
         }
@@ -41,14 +41,14 @@ const ScheduleManagement = () => {
             .catch(error => {
                 console.error('Error fetching movies:', error);
                 if (error.response && error.response.status === 401) {
-                    alert('Token 已過期或無效，請重新登錄');
+                    alert('Token has expired or is invalid, please log in again');
                     localStorage.removeItem('token');
                     window.location.href = '/login';
                 }
             });
     }, []);
 
-    // 顯示模態框並填充選定電影的信息
+    // Show the modal and populate it with the selected movie's data
     const handleCardClick = (movie) => {
         setSelectedMovie(movie);
         setNewMovie({
@@ -67,13 +67,13 @@ const ScheduleManagement = () => {
 
     
 
-    // 處理輸入字段的更改
+    // Handle changes to input fields
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewMovie({ ...newMovie, [name]: value });
     };
 
-    // 處理圖像文件的上傳
+    // Handle image file upload
     const handleImageUpload = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
@@ -84,10 +84,10 @@ const ScheduleManagement = () => {
         reader.readAsDataURL(selectedFile);
     };
 
-    // 保存更新後的電影信息
+    // Save the updated movie info
     const saveUpdatedMovie = () => {
         if (!newMovie.title || !newMovie.director || !newMovie.actor || !newMovie.description || !newMovie.genre || !newMovie.duration || !newMovie.date) {
-            alert('請確保所有字段都已填寫');
+            alert('Please make sure all fields are filled in');
             return;
         }
     
@@ -106,11 +106,11 @@ const ScheduleManagement = () => {
     
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登錄');
+            alert('Please log in first');
             window.location.href = '/login';
             return;
         }
-    
+
         const url = selectedMovie ? `http://localhost:8443/movie/api/admin/movie/${selectedMovie.id}/update` : 'http://localhost:8443/movie/api/admin/add-movie';
         const method = selectedMovie ? 'put' : 'post';
     
@@ -136,62 +136,62 @@ const ScheduleManagement = () => {
         .catch(error => {
             console.error('Error updating or adding movie:', error);
             if (error.response && error.response.status === 401) {
-                alert('Token 已過期或無效，請重新登錄');
+                alert('Token has expired or is invalid, please log in again');
                 localStorage.removeItem('token');
                 window.location.href = '/login';
             }
         });
     };
-    
+
     return (
         <div>
-            {/* 頂部導航欄 */}
+            {/* Top navigation bar */}
             <div className={styles.headerST}>
                 <ul>
-                    <li><Link to="/schedule">檔期管理</Link></li>
-                    <li><Link to="/news">新聞管理</Link></li>
-                    <li><Link to="/user_management">用戶管理</Link></li>
-                    <li><Link to="/order">查詢訂單</Link></li>
+                    <li><Link to="/schedule">Schedule Management</Link></li>
+                    <li><Link to="/news">News Management</Link></li>
+                    <li><Link to="/user_management">User Management</Link></li>
+                    <li><Link to="/order">Search Orders</Link></li>
                 </ul>
             </div>
 
-            {/* 主要內容區域 */}
+            {/* Main content area */}
             <div className={styles.container}>
-                <h1>檔期管理</h1>
+                <h1>Schedule Management</h1>
                 <div className={styles.cardGrid}>
-                    {/* 顯示電影卡片 */}
+                    {/* Display movie cards */}
                     {movies.map(movie => (
                         <div key={movie.id} className={styles.card} onClick={() => handleCardClick(movie)}>
                             <img src={movie.img} alt={movie.title} />
                             <h3>{movie.title}</h3>
-                            <p>上映日期: {movie.date}</p>
-                            <p>{movie.status ? '上架電影' : '下架電影'}</p>
+                            <p>Release Date: {movie.date}</p>
+                            <p>{movie.status ? 'Now Showing' : 'Not Showing'}</p>
                         </div>
                     ))}
                 </div>
 
-                {/* 新增電影按鈕 */}
-                <button onClick={() => setSelectedMovie(null) || setShowModal(true)} className={styles.addButton}>新增</button>
+                {/* Add movie button */}
+                <button onClick={() => setSelectedMovie(null) || setShowModal(true)} className={styles.addButton}>Add</button>
 
-                {/* 模態框顯示區域 */}
+                {/* Modal display area */}
                 {showModal && (
                     <div className={styles.modalOverlay}>
                         <div className={styles.modal}>
-                            <h2>{selectedMovie ? '電影詳細資訊' : '新增電影'}</h2>
-                            <input type="text" name="title" placeholder="標題" value={newMovie.title} onChange={handleInputChange} />
-                            <input type="text" name="director" placeholder="導演" value={newMovie.director} onChange={handleInputChange} />
-                            <input type="text" name="actor" placeholder="演員" value={newMovie.actor} onChange={handleInputChange} />
-                            <textarea name="description" placeholder="電影簡介" value={newMovie.description} onChange={handleInputChange} />
-                            <input type="text" name="genre" placeholder="類別" value={newMovie.genre} onChange={handleInputChange} />
-                            <input type="text" name="duration" placeholder="時長" value={newMovie.duration} onChange={handleInputChange} />
+                            <h2>{selectedMovie ? 'Movie Details' : 'Add Movie'}</h2>
+                            <input type="text" name="title" placeholder="Title" value={newMovie.title} onChange={handleInputChange} />
+                            <input type="text" name="director" placeholder="Director" value={newMovie.director} onChange={handleInputChange} />
+                            <input type="text" name="actor" placeholder="Actor" value={newMovie.actor} onChange={handleInputChange} />
+                            <textarea name="description" placeholder="Movie description" value={newMovie.description} onChange={handleInputChange} />
+                            <input type="text" name="genre" placeholder="Genre" value={newMovie.genre} onChange={handleInputChange} />
+                            <input type="text" name="duration" placeholder="Duration" value={newMovie.duration} onChange={handleInputChange} />
                             <input type="date" name="date" value={newMovie.date} onChange={handleInputChange} />
                             <input type="file" onChange={handleImageUpload} />
                             <select name="status" value={newMovie.status} onChange={handleInputChange}>
-                                <option value="TRUE">上架電影</option>
-                                <option value="FALSE">下架電影</option>
+                                <option value="TRUE">Now Showing</option>
+                                <option value="FALSE">Not Showing</option>
                             </select>
-                            <button onClick={saveUpdatedMovie}>保存</button>
-                            <button onClick={() => setShowModal(false)}>關閉</button>
+                            <button onClick={saveUpdatedMovie}>Save</button>
+                            <button onClick={() => setShowModal(false)}>Close</button>
                         </div>
                     </div>
                 )}

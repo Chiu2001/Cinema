@@ -72,52 +72,52 @@
     background-color: #0056b3;
 }
 
-/* 卡片样式 */
+/* Card styling */
 .checkoutCartItemCard {
     display: flex;
-    align-items: center; /* 垂直居中对齐图片和文字 */
+    align-items: center; /* vertically align image and text */
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    gap: 16px; /* 图片和文字之间的间距 */
-    width: 100%; /* 确保卡片宽度可以调整 */
+    gap: 16px; /* spacing between image and text */
+    width: 100%; /* ensures the card width can adjust */
 }
 
-/* 图片样式，适应卡片大小 */
+/* Image styling, fits the card size */
 .checkoutCartItemCard img {
-    width: 200px; /* 固定图片宽度 */
-    height: 200px; /* 固定图片高度 */
-    object-fit: contain; /* 保持图片比例，填满容器 */
+    width: 200px; /* fixed image width */
+    height: 200px; /* fixed image height */
+    object-fit: contain; /* keep image aspect ratio, fill the container */
     border-radius: 4px;
 }
 
-/* 文字样式 */
+/* Text styling */
 .checkoutTextContent {
     display: flex;
-    flex-direction: column; /* 文字从上到下排列 */
-    justify-content: center; /* 垂直居中对齐文字 */
+    flex-direction: column; /* stack text top to bottom */
+    justify-content: center; /* vertically center text */
 }
 
 .checkoutTextContent p {
     margin: 8px 0;
     font-size: 20px;
-    width: 100%; /* 确保文本占满整行 */
-    text-align: left; /* 文本左对齐 */
+    width: 100%; /* ensures text fills the full line */
+    text-align: left; /* left-align text */
 }
 
 .checkoutLinePaycheckoutButton {
-    background-color: #4CAF50; /* 草地綠色 */
-    color: white; /* 白色文字 */
-    padding: 10px 20px; /* 增加一些內邊距 */
-    border: none; /* 移除邊框 */
-    border-radius: 5px; /* 稍微圓角 */
-    font-size: 16px; /* 適當的字體大小 */
-    cursor: pointer; /* 滑鼠懸停時顯示指針 */
-    transition: background-color 0.3s; /* 平滑的顏色過渡效果 */
+    background-color: #4CAF50; /* grass green */
+    color: white; /* white text */
+    padding: 10px 20px; /* extra inner padding */
+    border: none; /* remove border */
+    border-radius: 5px; /* slightly rounded corners */
+    font-size: 16px; /* appropriate font size */
+    cursor: pointer; /* show pointer cursor on hover */
+    transition: background-color 0.3s; /* smooth color transition */
 }
 
 .checkoutLinePaycheckoutButton:hover {
-    background-color: #45a049; /* 懸停時稍微深一點的綠色 */
+    background-color: #45a049; /* slightly darker green on hover */
 }

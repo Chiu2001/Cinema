@@ -16,7 +16,7 @@ public class SeatDTO {
         this.hallId = hallId;
     }
 
-    // seatNumber、seatAvailability兩個參數的建構子
+    // Constructor with two parameters: seatNumber and seatAvailability
     public SeatDTO(String seatNumber, Boolean seatAvailability) {
         this.seatNumber = seatNumber;
         this.seatAvailability = seatAvailability;

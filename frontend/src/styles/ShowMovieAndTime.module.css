@@ -11,7 +11,7 @@
     border: 1px solid #A020F0;
     color: #A020F0;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; /* 增加过渡效果 */
+    transition: background-color 0.3s, color 0.3s; /* add transition effect */
 }
 
 .cinema-buttons button:hover {
@@ -48,22 +48,22 @@
 .showtime-group {
     display: flex;
     flex-direction: column;
-    /* flex-wrap: wrap; 如果内容溢出，允许换行 */
-    /* gap: 10px; 控制元素之间的间距 */
-    margin-bottom: 20px; /* 控制每组之间的间距 */
-    border: 1px solid #ddd; /* 为每个组添加边框以区分 */
-    padding: 10px; /* 为每个组添加内边距 */
-    background-color: #f9f9f9; /* 为每个组添加背景色 */
-    border-radius: 5px; /* 添加圆角 */
+    /* flex-wrap: wrap; allow wrapping if content overflows */
+    /* gap: 10px; controls spacing between elements */
+    margin-bottom: 20px; /* controls spacing between each group */
+    border: 1px solid #ddd; /* add a border to each group to set it apart */
+    padding: 10px; /* add inner padding to each group */
+    background-color: #f9f9f9; /* add a background color to each group */
+    border-radius: 5px; /* add rounded corners */
     width: 650px;
 }
 
 .hall-info {
-    
+
     display: flex;
     justify-content: space-between;
-    /* align-items: center; 垂直居中对齐 */
-    gap: 10px; /* 控制元素之间的间距 */
+    /* align-items: center; vertically center align */
+    gap: 10px; /* controls spacing between elements */
     padding: 5px;
 }
 
@@ -76,19 +76,19 @@
 .showtimes-list {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; /* 如果内容溢出，允许换行 */
-    gap: 10px; /* 控制按钮之间的间距 */
+    flex-wrap: wrap; /* allow wrapping if content overflows */
+    gap: 10px; /* controls spacing between buttons */
 }
 
 .showtime-item {
     display: flex;
     align-items: center;
-    justify-content: center; /* 居中对齐 */
+    justify-content: center; /* center align */
     padding: 10px;
     border: 1px solid #A020F0;
     background-color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; /* 增加过渡效果 */
+    transition: background-color 0.3s, color 0.3s; /* add transition effect */
 }
 
 .showtime-item:hover {
@@ -104,7 +104,7 @@
 }
 
 .showtimes-list {
-    flex-basis: 70%; /* 控制放映时间的宽度 */
+    flex-basis: 70%; /* controls the width of the showtimes */
     display: flex;
     gap: 10px;
 }

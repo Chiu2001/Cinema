@@ -10,9 +10,9 @@ import com.example.backend.Entity.Showtime;
 
 public interface ShowtimeRepo extends JpaRepository<Showtime, Integer> {
 
-    // 查找特定影院的所有唯一放映日期
+    // Find all unique showing dates for a specific cinema
     List<Showtime> findDistinctBycinema(Cinema cinema);
 
-    // 查找特定影院和日期的所有放映时间
+    // Find all showtimes for a specific cinema and date
     List<Showtime> findByCinemaAndShowDate(Cinema cinema, Showdate showDateId);
 }

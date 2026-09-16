@@ -54,10 +54,10 @@ public class UserImpl implements UserService {
     @Transactional
     public int saveOrUpdateUser(UserDTO userDTO) throws Exception {
         
-    	// 檢查用戶名或電子郵件是否已存在
+    	// Check whether the username or email already exists
         boolean userExists = userRepo.existsByUsernameOrEmail(userDTO.getUsername(), userDTO.getEmail());
         if (userExists) {
-            throw new Exception("使用者或E-mail已存在");
+            throw new Exception("Username or email already exists");
         }
 
         User user = new User();
@@ -73,12 +73,12 @@ public class UserImpl implements UserService {
         BeanUtils.copyProperties(userDTO, user);
         user.setCreatedTime(LocalDateTime.now());
 
-        // 加密密碼
+        // Encrypt the password
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         user.setPassword(encodedPassword);
 
-        // 設置性別
+        // Set gender
         if (Gender.Male.toString().equals(userDTO.getGender())) {
             user.setGender(Gender.Male);
         } else if (Gender.Female.toString().equals(userDTO.getGender())) {
@@ -123,7 +123,7 @@ public class UserImpl implements UserService {
         CustomUserDetails userDetails = new CustomUserDetails(user);
         String jwtToken = jwtService.generateToken(userDetails);
 
-        // 获取用户角色信息
+        // Get the user's role information
         List<String> roles = userDetails.getAuthorities()
             .stream()
             .map(GrantedAuthority::getAuthority)

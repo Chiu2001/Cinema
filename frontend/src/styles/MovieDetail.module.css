@@ -1,11 +1,11 @@
-/* 电影详细内容的包装器 */
+/* Wrapper for the movie detail content */
 .movieDetailWrapper {
-    max-width: 1200px; /* 最大宽度 */
-    margin: 0 auto; /* 居中对齐 */
-    padding: 20px; /* 内边距 */
+    max-width: 1200px; /* max width */
+    margin: 0 auto; /* center align */
+    padding: 20px; /* inner padding */
 }
 
-/* 电影详细内容卡片 */
+/* Movie detail content card */
 .movieDetailContainer {
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@
     margin: 0 auto;
 }
 
-/* 电影详细内容布局 */
+/* Movie detail content layout */
 .movieDetailContent {
     display: flex;
     flex-direction: row;
@@ -25,13 +25,13 @@
     align-items: flex-start;
     margin-bottom: 30px;
     width: 100%;
-    max-width: 100%; /* 自适应宽度 */
+    max-width: 100%; /* responsive width */
     padding: 20px;
     border-radius: 8px;
     background-color: #fff;
 }
 
-/* 图片样式 */
+/* Image style */
 .imgMovieDetail {
     width: 400px;
     height: 400px;
@@ -39,7 +39,7 @@
     border-radius: 4px;
 }
 
-/* 电影信息样式 */
+/* Movie info style */
 .movieInfo {
     display: flex;
     flex-direction: column;
@@ -47,18 +47,18 @@
     text-align: left;
 }
 
-/* 电影详细信息项 */
+/* Movie detail item */
 .movieDetailItem {
-    margin: 5px 0; /* 上下外边距为 5 像素，左右外边距为 0 */
-    font-size: 20px; /* 字体大小为 20 像素 */
-    width: 100%; /* 宽度占满父容器的 100% */
-    max-width: 100%; /* 最大宽度为父容器的 100% */
-    white-space: normal; /* 允许文本正常换行 */
-    overflow-wrap: break-word; /* 确保长单词在边界处断行 */
-    line-height: 1.5; /* 行高设置为 1.5，提高文本的可读性 */
+    margin: 5px 0; /* 5px top/bottom margin, 0 left/right margin */
+    font-size: 20px; /* font size 20px */
+    width: 100%; /* width fills 100% of the parent container */
+    max-width: 100%; /* max width is 100% of the parent container */
+    white-space: normal; /* allow normal text wrapping */
+    overflow-wrap: break-word; /* ensure long words break at the boundary */
+    line-height: 1.5; /* line height 1.5, improves text readability */
 }
 
-/* 返回链接样式 */
+/* Back link style */
 .backLink {
     margin-top: 20px;
     color: #007bff;
@@ -69,7 +69,7 @@
     text-decoration: underline;
 }
 
-/* 响应式设计 */
+/* Responsive design */
 @media (max-width: 768px) {
     .movieDetailContent {
         flex-direction: column;

@@ -18,19 +18,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-	    OAuth2User oAuth2User = super.loadUser(userRequest); // 獲取默認的 OAuth2User
+	    OAuth2User oAuth2User = super.loadUser(userRequest); // Get the default OAuth2User
 	    Map<String, Object> attributes = oAuth2User.getAttributes();
 
-	    // 從 attributes 中提取角色（如果提供者有返回這些數據）
+	    // Extract roles from the attributes (if the provider returns this data)
 	    @SuppressWarnings("unchecked")
-	    List<String> roles = (List<String>) attributes.getOrDefault("roles", List.of("USER")); // 默認 USER 角色
+	    List<String> roles = (List<String>) attributes.getOrDefault("roles", List.of("USER")); // Default to the USER role
 
-	    // 設置權限
+	    // Set the authorities
 	    List<GrantedAuthority> authorities = roles.stream()
 	        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
 	        .collect(Collectors.toList());
 
-	    return new DefaultOAuth2User(authorities, attributes, "email"); // 使用 email 作為主識別
+	    return new DefaultOAuth2User(authorities, attributes, "email"); // Use email as the primary identifier
 	}
 
 }

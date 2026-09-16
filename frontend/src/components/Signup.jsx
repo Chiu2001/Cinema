@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '../styles/Signup.module.css'; // 使用命名空間導入你的CSS文件
+import styles from '../styles/Signup.module.css'; // Import your CSS file using namespacing
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -22,9 +22,9 @@ const RegisterForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 檢查密碼和確認密碼是否一致
+        // Check that the password and confirm password match
         if (formData.password !== formData.confirmPassword) {
-            alert('密碼和確認密碼不一致');
+            alert('Password and confirm password do not match');
             return;
         }
 
@@ -40,7 +40,7 @@ const RegisterForm = () => {
             if (data.error) {
                 alert(data.error);
             } else {
-                alert('完成註冊');
+                alert('Registration complete');
                 setFormData({
                     username: '',
                     email: '',
@@ -53,68 +53,68 @@ const RegisterForm = () => {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('註冊失敗');
+            alert('Registration failed');
         });
     };
 
     return (
-        <div className={styles.body}> {/* 使用CSS模組命名空間 */}
-            <div className={styles.formContainer}> {/* 使用CSS模組命名空間 */}
-                <h2>建立帳號</h2>
+        <div className={styles.body}> {/* Use CSS module namespacing */}
+            <div className={styles.formContainer}> {/* Use CSS module namespacing */}
+                <h2>Create Account</h2>
                 <form onSubmit={handleSubmit}>
-                    <input 
-                        type="text" 
-                        name="username" 
-                        placeholder="使用者名稱" 
-                        value={formData.username} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        required
                     />
-                    <input 
-                        type="email" 
-                        name="email" 
-                        placeholder="Email" 
-                        value={formData.email} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
                     />
-                    <input 
-                        type="password" 
-                        name="password" 
-                        placeholder="密碼" 
-                        value={formData.password} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
                     />
-                    <input 
-                        type="password" 
-                        name="confirmPassword" 
-                        placeholder="確認密碼" 
-                        value={formData.confirmPassword} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm Password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
                     />
-                    <input 
-                        type="date" 
-                        name="birthDate" 
-                        placeholder="出生年月日" 
-                        value={formData.birthDate} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="date"
+                        name="birthDate"
+                        placeholder="Date of Birth"
+                        value={formData.birthDate}
+                        onChange={handleChange}
+                        required
                     />
-                    <select 
-                        name="gender" 
-                        value={formData.gender} 
-                        onChange={handleChange} 
+                    <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
                         required
                     >
-                        <option value="" disabled>生理性别</option>
-                        <option value="Male">男</option>
-                        <option value="Female">女</option>
-                        <option value="Other">其他</option>
+                        <option value="" disabled>Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
                     </select>
-                    
-                    <button type="submit">註冊</button>
+
+                    <button type="submit">Sign Up</button>
                 </form>
             </div>
         </div>

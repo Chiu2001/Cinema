@@ -1,4 +1,4 @@
-/* 主體區域樣式 */
+/* Main content area style */
 .bodyDiv {
     min-height: 700px;
     background-color: #fff;
@@ -11,7 +11,7 @@
     margin-bottom: 40px;
 }
 
-/* 最新消息區塊 */
+/* Latest news section */
 .newsSection h2, .movieSection h2 {
     color: #333;
     text-align: center;
@@ -19,13 +19,13 @@
     font-size: 28px;
 }
 
-/* 輪播樣式 */
+/* Carousel style */
 .newsSlider, .movieSlider {
     max-width: 80%;
     margin: 0 auto;
 }
 
-/* 最新消息項目 */
+/* Latest news item */
 .newsItem {
     position: relative;
     overflow: hidden;
@@ -39,7 +39,7 @@
     border-radius: 10px;
 }
 
-/* 懸停效果 */
+/* Hover effect */
 .newsItem:hover {
     transform: scale(1.05);
 }
@@ -63,7 +63,7 @@
     opacity: 1;
 }
 
-/* 現正熱映電影 */
+/* Now showing movies */
 .movieItem {
     text-align: center;
 }
@@ -81,7 +81,7 @@
     font-size: 18px;
 }
 
-/* 調整輪播箭頭 */
+/* Adjust carousel arrows */
 .slick-next, .slick-prev {
     z-index: 1;
 }
@@ -94,7 +94,7 @@
     left: 10px;
 }
 
-/* 媒體查詢 */
+/* Media query */
 @media screen and (max-width: 850px) {
     .movieItem img {
         height: 300px;

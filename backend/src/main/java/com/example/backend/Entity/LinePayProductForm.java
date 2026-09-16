@@ -45,14 +45,14 @@ public class LinePayProductForm {
     // @JoinColumn(name = "hall_id", referencedColumnName = "hall_id", nullable = false)
     // private Halls hall;
 
-	// // 將 Movie 的 quantity 轉換為 BigDecimal 並設置到 LinePayProductForm 的 quantity
+	// // Convert Movie's quantity to BigDecimal and set it on LinePayProductForm's quantity
     // public void setQuantityFromMovie() {
     //     if (movie != null) {
     //         this.price = new BigDecimal(movie.getQuantity());
     //     }
     // }
 
-	// // 將 Halls 的 price 轉換為 BigDecimal 並設置到 LinePayProductForm 的 price
+	// // Convert Halls' price to BigDecimal and set it on LinePayProductForm's price
     // public void setPriceFromHall() {
     //     if (hall != null) {
     //         this.price = new BigDecimal(hall.getPrice());

@@ -1,37 +1,37 @@
-/* 按钮样式 */
+/* Button style */
 .button {
-    display: inline-block; /* 使按钮可以设置宽度和内边距 */
-    padding: 10px 20px; /* 按钮内边距 */
-    font-size: 16px; /* 字体大小 */
-    font-weight: bold; /* 字体加粗 */
-    color: #fff; /* 字体颜色 */
-    background-color: #007bff; /* 背景颜色 */
-    border: none; /* 去掉边框 */
-    border-radius: 4px; /* 圆角 */
-    text-align: center; /* 文本居中 */
-    cursor: pointer; /* 鼠标悬停时显示为手型 */
-    text-decoration: none; /* 去掉下划线 */
-    transition: background-color 0.3s ease; /* 背景颜色过渡效果 */
+    display: inline-block; /* allows the button to have width and padding set */
+    padding: 10px 20px; /* button inner padding */
+    font-size: 16px; /* font size */
+    font-weight: bold; /* bold font */
+    color: #fff; /* font color */
+    background-color: #007bff; /* background color */
+    border: none; /* remove border */
+    border-radius: 4px; /* rounded corners */
+    text-align: center; /* center text */
+    cursor: pointer; /* show pointer cursor on hover */
+    text-decoration: none; /* remove underline */
+    transition: background-color 0.3s ease; /* background color transition effect */
 }
 
 .button:hover {
-    background-color: #0056b3; /* 鼠标悬停时背景颜色 */
+    background-color: #0056b3; /* background color on hover */
 }
 
 .button:active {
-    background-color: #004080; /* 按钮被点击时背景颜色 */
+    background-color: #004080; /* background color when the button is clicked */
 }
 
-/* 控制按钮容器样式 */
+/* Control button container style */
 .quantityBtnContainer {
     display: flex;
     align-items: center;
-    gap: 10px; /* 按钮之间的间距 */
+    gap: 10px; /* spacing between buttons */
 }
 
-/* 数量控制样式 */
+/* Quantity control style */
 .quantityControl {
     display: flex;
     align-items: center;
-    gap: 10px; /* 按钮之间的间距 */
+    gap: 10px; /* spacing between buttons */
 }

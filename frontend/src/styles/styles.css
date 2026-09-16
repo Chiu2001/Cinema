@@ -1,36 +1,36 @@
-/* 全局樣式 */
+/* Global styles */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
   }
-  
-  /* 父容器 */
+
+  /* Parent container */
   .container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* 使頁面高度至少覆蓋整個瀏覽器視窗 */
+    min-height: 100vh; /* ensures the page height covers at least the full browser window */
   }
-  
-  /* 頁頭、頁尾、主體區塊 */
+
+  /* Header, footer, and main content blocks */
   header, footer, main {
     padding: 20px;
     text-align: center;
   }
-  
-  /* 頁頭樣式 */
+
+  /* Header style */
   header {
     background-color: #f8f9fa;
   }
-  
-  /* 主體區域擴展，佔據剩餘空間 */
+
+  /* Main content area expands to fill the remaining space */
   main {
     flex-grow: 1;
     background-color: #e9ecef;
   }
-  
-  /* 頁尾樣式 */
+
+  /* Footer style */
   footer {
     background-color: #f8f9fa;
   }

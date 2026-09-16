@@ -94,9 +94,9 @@ public class CinemaController {
 	private CustomUserDetailsService customUserDetailsService;
 
 	/**
-	 * 获取所有电影
-	 * 
-	 * @return 电影列表
+	 * Get all movies
+	 *
+	 * @return the list of movies
 	 */
 	@GetMapping("/movies")
 	public List<Movie> getMovies() {
@@ -141,23 +141,23 @@ public class CinemaController {
 			@PathVariable String seatNumber,
 			@RequestBody SeatDTO seatDTO) {
 		try {
-			// 檢查 SeatDto 是否非空
+			// Check whether SeatDto is non-null
 			if (seatDTO == null) {
 				return ResponseEntity.badRequest().body("SeatDto cannot be null");
 			}
 
-			// 設置 DTO 的相關資訊
+			// Set the DTO's related information
 			seatDTO.setShowtimeId(showtimeId);
 			seatDTO.setSeatNumber(seatNumber);
 
-			// 調用 SeatService 的 saveSeatInfo 函數來保存座位資訊，其他外鍵由後端查詢
+			// Call SeatService's addSeat function to save the seat information; other foreign keys are looked up by the backend
 			seatService.addSeat(seatDTO);
 
-			// 返回成功響應
+			// Return a success response
 			return ResponseEntity.ok("Seat information saved successfully");
 
 		} catch (Exception e) {
-			// 捕獲並處理異常，返回 500 狀態碼和錯誤訊息
+			// Catch and handle the exception, returning a 500 status code and an error message
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error saving seat information: " + e.getMessage());
 		}
@@ -171,32 +171,32 @@ public class CinemaController {
 			@PathVariable String showDate) {
 
 		try {
-			// 調用 service 層的方法來獲取座位信息
+			// Call the service layer method to get the seat information
 			List<SeatDTO> seats = seatService.getSeatsByShowtimeCinemaAndHallAndDate(showtimeId, cinemaId, hallId,
 					showDate);
 
-			// 返回成功響應和座位信息
+			// Return a success response with the seat information
 			return ResponseEntity.ok(seats);
 
 		} catch (Exception e) {
-			// 捕獲並處理異常，返回 500 狀態碼和錯誤訊息
+			// Catch and handle the exception, returning a 500 status code and an error message
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Collections.emptyList()); // 返回空的列表，表示沒有數據
+					.body(Collections.emptyList()); // Return an empty list to indicate no data
 		}
 	}
 
 	@GetMapping("/seatsResearch/{showtimeId}")
 	public ResponseEntity<List<SeatDTO>> getSeatsByShowtimeId(@PathVariable Integer showtimeId) {
 		try {
-			// 根據 showtimeId 查詢相關的 cinemaId, hallId 和 showDate
+			// Look up the related cinemaId, hallId, and showDate by showtimeId
 			List<SeatDTO> seats = seatService.getSeatsByShowtimeId(showtimeId);
 
-			// 返回座位信息
+			// Return the seat information
 			return ResponseEntity.ok(seats);
 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Collections.emptyList()); // 返回空列表表示沒有數據
+					.body(Collections.emptyList()); // Return an empty list to indicate no data
 		}
 	}
 
@@ -237,7 +237,7 @@ public class CinemaController {
 		}
 	}
 
-	// 從 showtime_id 打數據至前端
+	// Send data to the frontend based on showtime_id
 	@GetMapping("/area/{showtimeId}")
 	public ResponseEntity<Showtime> getShowtimeById(@PathVariable Integer showtimeId) {
 		Showtime showtime = showtimeService.getShowtimeById(showtimeId);
@@ -249,10 +249,10 @@ public class CinemaController {
 	}
 
 	/**
-	 * 根据标题或导演搜索电影
-	 * 
-	 * @param keyword 搜索关键字
-	 * @return 电影列表
+	 * Search movies by title or director
+	 *
+	 * @param keyword the search keyword
+	 * @return the list of movies
 	 */
 	@GetMapping("/search")
 	public List<Movie> searchByTitleOrDirector(@RequestParam String keyword) {
@@ -260,10 +260,10 @@ public class CinemaController {
 	}
 
 	/**
-	 * 用户注册
-	 * 
-	 * @param user 用户数据传输对象
-	 * @return 响应消息
+	 * User registration
+	 *
+	 * @param user the user data transfer object
+	 * @return the response message
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<Map<String, String>> saveUser(@RequestBody UserDTO user) {
@@ -275,15 +275,15 @@ public class CinemaController {
 			return ResponseEntity.status(201).body(response);
 		} catch (Exception e) {
 			response.put("error", e.getMessage());
-			return ResponseEntity.status(400).body(response); // 返回400狀態碼以表示請求錯誤
+			return ResponseEntity.status(400).body(response); // Return a 400 status code to indicate a bad request
 		}
 	}
 
 	/**
-	 * 用户登录
-	 * 
-	 * @param loginDTO 登录数据传输对象
-	 * @return 令牌数据传输对象
+	 * User login
+	 *
+	 * @param loginDTO the login data transfer object
+	 * @return the token data transfer object
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
@@ -335,7 +335,7 @@ public class CinemaController {
 				   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid Google token"));
 			   }
 		   } catch (Exception e) {
-			   // 捕獲所有異常並返回詳細的錯誤訊息
+			   // Catch all exceptions and return a detailed error message
 			   return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Google login error: " + e.getMessage()));
 		   }
 		   
