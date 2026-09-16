@@ -1,28 +1,28 @@
 package com.example.backend.Exception;
 
 /**
- * 自訂異常類別，表示無效的 JWT 令牌。
+ * Custom exception class representing an invalid JWT token.
  */
 public class InvalidTokenException extends RuntimeException {
-    // 序列化版本 ID，用於序列化過程中的版本控制
+    // Serialization version ID, used for version control during serialization
     private static final long serialVersionUID = 1L;
 
     /**
-     * 使用指定的錯誤訊息建立一個 InvalidTokenException 例外。
-     * 
-     * @param message 錯誤訊息，用於描述異常的詳細信息
+     * Creates an InvalidTokenException with the specified error message.
+     *
+     * @param message the error message describing the exception details
      */
     public InvalidTokenException(String message) {
-        super(message); // 呼叫父類別的建構子來設定錯誤訊息
+        super(message); // Call the superclass constructor to set the error message
     }
 
     /**
-     * 使用指定的錯誤訊息和根本原因建立一個 InvalidTokenException 例外。
-     * 
-     * @param message 錯誤訊息，用於描述異常的詳細信息
-     * @param cause 原始的錯誤原因，通常是另一個異常
+     * Creates an InvalidTokenException with the specified error message and root cause.
+     *
+     * @param message the error message describing the exception details
+     * @param cause the original cause of the error, usually another exception
      */
     public InvalidTokenException(String message, Throwable cause) {
-        super(message, cause); // 呼叫父類別的建構子來設定錯誤訊息和原因
+        super(message, cause); // Call the superclass constructor to set the error message and cause
     }
 }

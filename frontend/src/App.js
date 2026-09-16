@@ -33,8 +33,8 @@ function App() {
     const [cartItems, setCartItems] = useState([]);
 
     const removeCartItem = (cartItemId) => {
-        console.log('嘗試移除的 cartItemId:', cartItemId);
-        console.log('目前購物車內容:', cartItems);
+        console.log('Attempting to remove cartItemId:', cartItemId);
+        console.log('Current cart contents:', cartItems);
         setCartItems(prevItems => prevItems.filter(item => item.cartItemId !== cartItemId));
     };
 
@@ -71,7 +71,7 @@ function App() {
                         <Route path="/area/:showtime_id" element={<Area />} />
                         <Route path="/EcpayPage" element={<PrivateRoute element={<EcpayPage />} />} />
                         <Route path="/PaymentResultPage" element={<PrivateRoute element={<PaymentResultPage />} />} />
-                        <Route path="*" element={<h1>找不到頁面</h1>} />
+                        <Route path="*" element={<h1>Page Not Found</h1>} />
                     </Routes>
                 </CartContext.Provider>
             </Router>

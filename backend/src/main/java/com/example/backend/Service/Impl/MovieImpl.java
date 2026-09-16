@@ -46,16 +46,16 @@ public class MovieImpl implements MovieService{
 	        return "Please select a file!";
 	    }
 
-	    // 获取文件名
+	    // Get the file name
 	    String fileName = file.getOriginalFilename();
 	    if (fileName == null || fileName.isEmpty()) {
 	        return "Invalid file name!";
 	    }
 
-	    // 创建目标路径
+	    // Build the target path
 	    Path targetPath = Paths.get(uploadPath).resolve(fileName);
 
-	    // 确保目标目录存在
+	    // Ensure the target directory exists
 	    try {
 	        Files.createDirectories(targetPath.getParent());
 	    } catch (IOException e) {
@@ -63,7 +63,7 @@ public class MovieImpl implements MovieService{
 	        return "Error creating directories: " + e.getMessage();
 	    }
 
-	    // 保存文件
+	    // Save the file
 	    try (InputStream inputStream = file.getInputStream()) {
 	        Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
 	    } catch (Exception e) {
@@ -71,14 +71,14 @@ public class MovieImpl implements MovieService{
 	        return "Error saving file: " + e.getMessage();
 	    }
 
-	    // 创建电影对象并保存到数据库
+	    // Create the movie object and save it to the database
 	    Movie movie = new Movie();
 	    BeanUtils.copyProperties(movieDTO, movie);
 	    movie.setCreatedTime(LocalDateTime.now());
 
-	    // 创建完整的 URL
-	    String fileUrl = baseUrl + "/img/" + fileName;  // 完整的 URL
-	    movie.setImg(fileUrl);  // 保存完整的图片 URL
+	    // Build the full URL
+	    String fileUrl = baseUrl + "/img/" + fileName;  // The full URL
+	    movie.setImg(fileUrl);  // Save the full image URL
 	    movieRepo.save(movie);
 
 	    return "Movie added successfully!";
@@ -88,7 +88,7 @@ public class MovieImpl implements MovieService{
 	public Movie updateMovie(Integer id, MovieDTO movieDTO, MultipartFile file) throws IOException {
 	     Movie movie = movieRepo.findById(id).orElseThrow(() -> new RuntimeException("Movie not found"));
 
-	     // 更新电影信
+	     // Update the movie information
 	     movie.setTitle(movieDTO.getTitle());
 	     movie.setDescription(movieDTO.getDescription());
 	     movie.setDuration(movieDTO.getDuration());
@@ -100,9 +100,9 @@ public class MovieImpl implements MovieService{
 
 	     
 
-	     // 处理图片
+	     // Handle the image
 	     if (file != null && !file.isEmpty()) {
-	         // 删除旧图片文件
+	         // Delete the old image file
 	         if (movie.getImg() != null) {
 	             String oldFileName = movie.getImg().substring(movie.getImg().lastIndexOf("/") + 1);
 	             Path oldFilePath = Paths.get(uploadPath).resolve(oldFileName);
@@ -110,11 +110,11 @@ public class MovieImpl implements MovieService{
 	                 Files.deleteIfExists(oldFilePath);
 	             } catch (IOException e) {
 	                 e.printStackTrace();
-	                 // 处理删除文件异常
+	                 // Handle file deletion errors
 	             }
 	         }
 
-	         // 上传新图片
+	         // Upload the new image
 	         String fileName = file.getOriginalFilename();
 	         Path targetPath = Paths.get(uploadPath).resolve(fileName);
 	         try {
@@ -124,23 +124,23 @@ public class MovieImpl implements MovieService{
 	             }
 	         } catch (IOException e) {
 	             e.printStackTrace();
-	             // 处理上传文件异常
+	             // Handle file upload errors
 	         }
 
-	         // 更新图片 URL
+	         // Update the image URL
 	         String fileUrl = baseUrl + "/img/" + fileName;
 	         movie.setImg(fileUrl);
 	     } else {
-	         // 图片未更新时保留原图片
+	         // Keep the original image if it was not updated
 	         movie.setImg(movieDTO.getImg());
 	     }
 	     System.out.println(movieDTO.getStatus());
-	     // 更新状态
+	     // Update the status
 	     Status status = Status.valueOf(movieDTO.getStatus());
-	     
+
 	     movie.setStatus(status);
 
-	     // 保存并返回更新后的电影对象
+	     // Save and return the updated movie object
 	     return movieRepo.save(movie);
 	 }
 }

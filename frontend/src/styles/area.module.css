@@ -7,7 +7,7 @@
   min-height: 100vh;
   padding: 20px 0;
   background-color: #f0f0f0;
-  overflow-y: auto; /* 允許網頁滾動 */
+  overflow-y: auto; /* Allow the page to scroll */
 }
 
 .area-seating-chart {

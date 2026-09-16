@@ -11,7 +11,7 @@ const OrderManagement = () => {
     const ordersPerPage = 10;
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/api/admin/tickets`)  // 更新為後端新的 API 端點
+        axios.get(`${API_BASE_URL}/api/admin/tickets`)  // Updated to the backend's new API endpoint
             .then(response => {
                 setOrders(response.data);
             })
@@ -38,29 +38,29 @@ const OrderManagement = () => {
         <div>
         <div className={styles.headerST}>
             <ul>
-                <li><Link to="/schedule">檔期管理</Link></li>
-                <li><Link to="/news">新聞管理</Link></li>
-                <li><Link to="/user_management">用戶管理</Link></li>
-                <li><Link to="/order">查詢訂單</Link></li>
+                <li><Link to="/schedule">Schedule Management</Link></li>
+                <li><Link to="/news">News Management</Link></li>
+                <li><Link to="/user_management">User Management</Link></li>
+                <li><Link to="/order">Order Lookup</Link></li>
             </ul>
             </div>
             <div className={styles.container}>
-                <h1>查詢訂單</h1>
+                <h1>Order Lookup</h1>
                 <input
                     type="text"
-                    placeholder="搜尋訂單編號、票券編號、座位編號或放映時間編號"
+                    placeholder="Search by order number, ticket number, seat number, or showtime number"
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchBox}
                 />
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>訂單編號</th>
-                            <th>票券編號</th>
-                            <th>價格</th>
-                            <th>購買時間</th>
-                            <th>座位編號</th>
-                            <th>放映時間編號</th>
+                            <th>Order Number</th>
+                            <th>Ticket Number</th>
+                            <th>Price</th>
+                            <th>Purchase Time</th>
+                            <th>Seat Number</th>
+                            <th>Showtime Number</th>
                         </tr>
                     </thead>
                     <tbody>

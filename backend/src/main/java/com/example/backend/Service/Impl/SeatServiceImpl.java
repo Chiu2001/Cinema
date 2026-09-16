@@ -32,22 +32,22 @@ public class SeatServiceImpl implements SeatService{
 	@Autowired
 	private HallRepo hallRepo;
 	
-	// 將 DTO 轉換為實體並保存到資料庫
+	// Convert the DTO into an entity and save it to the database
 	public void addSeat(SeatDTO seatDTO) {
-		// 根據 showtimeId 取得 Showtimes 資料
+		// Look up the Showtime by showtimeId
 		Showtime showtime = showtimeRepo.findById(seatDTO.getShowtimeId())
 				.orElseThrow(() -> new RuntimeException("Showtime not found"));
 
-		// 根據 showtime 自動取得相關的 Cinema 和 Halls 資訊
+		// Derive the related Cinema and Hall from the showtime
 		Cinema cinema = showtime.getCinema();
 		Hall hall = showtime.getHall();
 
-		// 檢查該座位是否已存在
+		// Check whether this seat already exists
 		Seat seat = seatRepo.findByShowtimeIdAndCinemaIdAndHallIdAndSeatNumber(showtime,
 				cinema, hall, seatDTO.getSeatNumber());
 
 		if (seat == null) {
-			// 如果座位不存在，則創建新的 SeatEntity
+			// If the seat does not exist, create a new Seat entity
 			seat = new Seat();
 			seat.setSeatNumber(seatDTO.getSeatNumber());
 			seat.setSeatAvailability(seatDTO.getSeatAvailability());
@@ -55,21 +55,21 @@ public class SeatServiceImpl implements SeatService{
 			seat.setCinemaId(cinema);
 			seat.setHallId(hall);
 		} else {
-			// 如果座位已存在，則更新座位狀態
+			// If the seat already exists, update its status
 			seat.setSeatAvailability(false);
 		}
 
-		seatRepo.save(seat); // 保存到資料庫
+		seatRepo.save(seat); // Save to the database
 	}
-	
-	// 獲取特定場次、影院、日期和廳的座位信息
+
+	// Get seat information for a specific showtime, cinema, hall, and date
 	public List<SeatDTO> getSeatsByShowtimeCinemaAndHallAndDate(Integer showtimeId, Integer cinemaId, Integer hallId,
 			String showDate) {
 
 		List<Seat> seatEntities = seatRepo.findByShowtimeCinemaHallAndDate(showtimeId, cinemaId,
 				hallId, showDate);
 
-		// 將查詢結果轉換為 SeatDto
+		// Convert the query results into SeatDto objects
 		List<SeatDTO> seatDtos = seatEntities.stream()
 				.map(entity -> new SeatDTO(entity.getSeatNumber(), entity.getSeatAvailability(),
 						entity.getShowtimeId().getShowtime_id(), entity.getCinemaId().getCinema_id(),
@@ -79,19 +79,19 @@ public class SeatServiceImpl implements SeatService{
 
 		return seatDtos;
 	}
-	
-    // 根據 showtimeId 查詢相關信息
+
+    // Look up related information by showtimeId
     public List<SeatDTO> getSeatsByShowtimeId(Integer showtimeId) {
-        // 查詢 showtimeId 對應的 Showtimes 實體
+        // Look up the Showtime entity for this showtimeId
         Showtime showtime = showtimeRepo.findById(showtimeId)
             .orElseThrow(() -> new RuntimeException("Showtime not found"));
 
-        // 從 Showtimes 實體中提取外鍵資訊
-        Integer cinemaId = showtime.getCinema().getCinema_id();  // 獲取 cinemaId
-        Integer hallId = showtime.getHall().getHall_id();  // 獲取 hallId
-        String showDate = showtime.getShowDate().getShow_date();  // 獲取 showDate
+        // Extract the foreign key info from the Showtime entity
+        Integer cinemaId = showtime.getCinema().getCinema_id();  // Get cinemaId
+        Integer hallId = showtime.getHall().getHall_id();  // Get hallId
+        String showDate = showtime.getShowDate().getShow_date();  // Get showDate
 
-        // 根據提取的資訊查詢座位
+        // Query the seats using the extracted information
         List<Seat> seatEntities = seatRepo.findSeatsByCinemaIdAndHallIdAndShowDate(cinemaId, hallId, showDate);
         return seatEntities.stream()
         .map(seatEntity -> new SeatDTO(

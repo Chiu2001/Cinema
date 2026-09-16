@@ -90,7 +90,7 @@ const Home = () => {
         <div className={styles.bodyDiv}>
             {/* News Section */}
             <div className={styles.newsSection}>
-                <h2>最新消息</h2>
+                <h2>Latest News</h2>
                 <Slider {...settings1} className={styles.newsSlider}>
                     {news.map((item, index) => (
                         <div key={index} className={styles.newsItem}>
@@ -105,12 +105,12 @@ const Home = () => {
 
             {/* Movies Section */}
             <div className={styles.movieSection}>
-                <h2>現正熱映</h2>
+                <h2>Now Showing</h2>
                 <Slider {...settings} className={styles.movieSlider}>
                     {movies.map((movie, index) => (
                         <div key={index} className={styles.movieItem}>
                             <a href={movie.url} target="_blank" rel="noopener noreferrer">
-                                <img src={movie.img} alt={`${movie.title} 電影`} />
+                                <img src={movie.img} alt={`${movie.title} movie`} />
                                 <h3>{movie.title}</h3>
                             </a>
                         </div>

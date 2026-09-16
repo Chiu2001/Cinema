@@ -33,10 +33,10 @@ public class Order {
     @Column(name = "is_paid")
     private Boolean isPaid;
 
-    // 默认构造方法
+    // Default constructor
     public Order() {}
 
-    // 带参数的构造方法
+    // Parameterized constructor
     public Order(Integer orderNumber, Integer userId, LocalDateTime createdDate, Integer amount, String description, String itemName, Boolean isPaid) {
         this.orderNumber = orderNumber;
         this.userId = userId;
@@ -47,7 +47,7 @@ public class Order {
         this.isPaid = isPaid;
     }
 
-    // Getter 和 Setter 方法
+    // Getter and setter methods
     public Integer getOrderNumber() {
         return orderNumber;
     }

@@ -35,7 +35,7 @@ const UserList = ({ userId }) => {
 
     return (
         <div className={styles.UserList_container}>
-            <h2 className={styles.UserList_h2}>會員中心</h2>
+            <h2 className={styles.UserList_h2}>Member Center</h2>
             <div className={styles.UserList_field}>
                 <span>Username: {editableField === 'username' ?
                     <input
@@ -45,7 +45,7 @@ const UserList = ({ userId }) => {
                         onChange={(e) => handleChange('username', e.target.value)}
                     /> : user.username}
                 </span>
-                <button className={styles.UserList_button} onClick={() => handleEdit('username')}>更改</button>
+                <button className={styles.UserList_button} onClick={() => handleEdit('username')}>Change</button>
             </div>
             <div className={styles.UserList_field}>
                 <span>Gender: {editableField === 'gender' ?
@@ -54,11 +54,11 @@ const UserList = ({ userId }) => {
                         value={updatedUser.gender}
                         onChange={(e) => handleChange('gender', e.target.value)}
                     >
-                        <option value="male">男</option>
-                        <option value="female">女</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
                     </select> : user.gender}
                 </span>
-                <button className={styles.UserList_button} onClick={() => handleEdit('gender')}>更改</button>
+                <button className={styles.UserList_button} onClick={() => handleEdit('gender')}>Change</button>
             </div>
             <div className={styles.UserList_field}>
                 <span>Email: {editableField === 'email' ?
@@ -69,12 +69,12 @@ const UserList = ({ userId }) => {
                         onChange={(e) => handleChange('email', e.target.value)}
                     /> : user.email}
                 </span>
-                <button className={styles.UserList_button} onClick={() => handleEdit('email')}>更改</button>
+                <button className={styles.UserList_button} onClick={() => handleEdit('email')}>Change</button>
             </div>
             <div className={styles.UserList_field}>
                 <span>Created Time: {user.createdTime}</span>
             </div>
-            {editableField && <button className={styles.UserList_button} onClick={handleUpdate}>保存更改</button>}
+            {editableField && <button className={styles.UserList_button} onClick={handleUpdate}>Save Changes</button>}
         </div>
     );
 

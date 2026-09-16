@@ -53,8 +53,8 @@ public class AdminController {
     private  MovieService movieService;
 
     /**
-     * 获取所有票务
-     * @return 票务列表
+     * Get all tickets
+     * @return the list of tickets
      */
     @GetMapping("/tickets")
     public ResponseEntity<List<Ticket>> getTickets() {
@@ -63,8 +63,8 @@ public class AdminController {
     }
 
     /**
-     * 获取所有用户
-     * @return 用户列表
+     * Get all users
+     * @return the list of users
      */
     @GetMapping("/getusers")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -121,7 +121,7 @@ public class AdminController {
 	}
     @GetMapping("/movies")
     public List<Movie> getAllMovies() {
-        return movieRepo.findAll();  // 查詢並返回所有電影
+        return movieRepo.findAll();  // Query and return all movies
     }
 
 }

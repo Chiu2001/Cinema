@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import styles from '../styles/MovieList.module.css'; // 引入模組樣式
+import styles from '../styles/MovieList.module.css'; // Import module styles
 import { API_BASE_URL } from '../apiConfig';
 
 export default function MovieList() {
@@ -15,7 +15,7 @@ export default function MovieList() {
 
     return (
         <div className={styles.pageContainer}>
-            <h1 className={styles.pageTitle}>現正熱映</h1>
+            <h1 className={styles.pageTitle}>Now Showing</h1>
             <div className={styles.movieContainer}>
                 {movieList.map(movie => (
                     <div className={styles.movieBorder} key={movie.id}>
@@ -24,10 +24,10 @@ export default function MovieList() {
                         </Link>
                         <div className={styles.movieInfo}>
                             <p>{movie.title}</p>
-                            <p>上映日期：{movie.released_date}</p>
+                            <p>Release Date: {movie.released_date}</p>
                         </div>
                         <Link to={'/MovieDetail/' + movie.id}>
-                            <button className={styles.btn}>詳細資訊</button>
+                            <button className={styles.btn}>Details</button>
                         </Link>
                     </div>
                 ))}

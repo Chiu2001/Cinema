@@ -16,11 +16,11 @@ const NewsManagement = () => {
     const [file, setFile] = useState(null);
     const navigate = useNavigate();
 
-    // 從後端獲取消息數據
+    // Fetch news data from the backend
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登錄');
+            alert('Please log in first');
             navigate('/login');
             return;
         }
@@ -38,17 +38,17 @@ const NewsManagement = () => {
         });
     }, []);
 
-    // 處理 API 錯誤
+    // Handle API errors
     const handleErrorResponse = (error) => {
         console.error('Error:', error);
         if (error.response && error.response.status === 401) {
-            alert('Token 已過期或無效，請重新登錄');
+            alert('Token has expired or is invalid, please log in again');
             localStorage.removeItem('token');
             navigate('/login');
         }
     };
 
-    // 顯示模態框並填充選定消息的信息
+    // Show the modal and populate it with the selected news item's info
     const handleCardClick = (newsItem) => {
         setSelectedNews(newsItem);
         setNewNews({
@@ -59,22 +59,22 @@ const NewsManagement = () => {
         setShowModal(true);
     };
 
-    // 處理輸入字段的更改
+    // Handle input field changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewNews({ ...newNews, [name]: value });
     };
 
-    // 處理圖像文件的上傳
+    // Handle image file uploads
     const handleImageUpload = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
     };
 
-    // 保存更新後的消息信息
+    // Save the updated news info
     const saveUpdatedNews = () => {
         if (!newNews.text) {
-            alert('請確保所有字段都已填寫');
+            alert('Please make sure all fields are filled in');
             return;
         }
 
@@ -87,12 +87,12 @@ const NewsManagement = () => {
 
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('請先登錄');
+            alert('Please log in first');
             navigate('/login');
             return;
         }
 
-        const url = selectedNews 
+        const url = selectedNews
             ? `${API_BASE_URL}/api/admin/news/${selectedNews.id}/update` 
             : `${API_BASE_URL}/api/admin/add-news`;
         const method = selectedNews ? 'put' : 'post';
@@ -123,21 +123,21 @@ const NewsManagement = () => {
 
     return (
         <div>
-            {/* 頂部導航欄 */}
+            {/* Top navigation bar */}
             <div className={styles.headerST}>
                 <ul>
-                    <li><Link to="/schedule">檔期管理</Link></li>
-                    <li><Link to="/news">消息管理</Link></li>
-                    <li><Link to="/user_management">用戶管理</Link></li>
-                    <li><Link to="/order">查詢訂單</Link></li>
+                    <li><Link to="/schedule">Schedule Management</Link></li>
+                    <li><Link to="/news">News Management</Link></li>
+                    <li><Link to="/user_management">User Management</Link></li>
+                    <li><Link to="/order">Order Lookup</Link></li>
                 </ul>
             </div>
 
-            {/* 主要內容區域 */}
+            {/* Main content area */}
             <div className={styles.container}>
-                <h1>消息管理</h1>
+                <h1>News Management</h1>
                 <div className={styles.cardGrid}>
-                    {/* 顯示消息卡片 */}
+                    {/* Display news cards */}
                     {news.map(newsItem => (
                         <div key={newsItem.id} className={styles.card} onClick={() => handleCardClick(newsItem)}>
                             <img src={newsItem.img} alt={newsItem.text} />
@@ -146,14 +146,14 @@ const NewsManagement = () => {
                     ))}
                 </div>
 
-                {/* 新增消息按鈕 */}
-                <button onClick={() => setSelectedNews(null) || setShowModal(true)} className={styles.addButton}>新增</button>
+                {/* Add news button */}
+                <button onClick={() => setSelectedNews(null) || setShowModal(true)} className={styles.addButton}>Add</button>
 
-                {/* 模態框顯示區域 */}
+                {/* Modal display area */}
                 {showModal && (
                     <div className={styles.modalOverlay}>
                         <div className={styles.modal}>
-                            <h2>{selectedNews ? '編輯消息' : '新增消息'}</h2>
+                            <h2>{selectedNews ? 'Edit News' : 'Add News'}</h2>
                             <input
                                 type="file"
                                 onChange={handleImageUpload}
@@ -162,11 +162,11 @@ const NewsManagement = () => {
                                 name="text"
                                 value={newNews.text}
                                 onChange={handleInputChange}
-                                placeholder="消息內容"
+                                placeholder="News content"
                             ></textarea>
                             <div className={styles.modalButtons}>
-                                <button onClick={saveUpdatedNews} className={styles.confirmButton}>保存</button>
-                                <button onClick={() => setShowModal(false)} className={styles.cancelButton}>取消</button>
+                                <button onClick={saveUpdatedNews} className={styles.confirmButton}>Save</button>
+                                <button onClick={() => setShowModal(false)} className={styles.cancelButton}>Cancel</button>
                             </div>
                         </div>
                     </div>
