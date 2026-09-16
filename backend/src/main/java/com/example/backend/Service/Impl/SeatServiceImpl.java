@@ -32,22 +32,22 @@ public class SeatServiceImpl implements SeatService{
 	@Autowired
 	private HallRepo hallRepo;
 	
-	// 將 DTO 轉換為實體並保存到資料庫
+	// Convert the DTO to an entity and save it to the database
 	public void addSeat(SeatDTO seatDTO) {
-		// 根據 showtimeId 取得 Showtimes 資料
+		// Look up the Showtime record by showtimeId
 		Showtime showtime = showtimeRepo.findById(seatDTO.getShowtimeId())
 				.orElseThrow(() -> new RuntimeException("Showtime not found"));
 
-		// 根據 showtime 自動取得相關的 Cinema 和 Halls 資訊
+		// Automatically resolve the related Cinema and Hall from the showtime
 		Cinema cinema = showtime.getCinema();
 		Hall hall = showtime.getHall();
 
-		// 檢查該座位是否已存在
+		// Check whether this seat already exists
 		Seat seat = seatRepo.findByShowtimeIdAndCinemaIdAndHallIdAndSeatNumber(showtime,
 				cinema, hall, seatDTO.getSeatNumber());
 
 		if (seat == null) {
-			// 如果座位不存在，則創建新的 SeatEntity
+			// Create a new Seat entity if it does not exist yet
 			seat = new Seat();
 			seat.setSeatNumber(seatDTO.getSeatNumber());
 			seat.setSeatAvailability(seatDTO.getSeatAvailability());
@@ -55,21 +55,21 @@ public class SeatServiceImpl implements SeatService{
 			seat.setCinemaId(cinema);
 			seat.setHallId(hall);
 		} else {
-			// 如果座位已存在，則更新座位狀態
+			// Update the seat status if it already exists
 			seat.setSeatAvailability(false);
 		}
 
-		seatRepo.save(seat); // 保存到資料庫
+		seatRepo.save(seat); // Save to the database
 	}
-	
-	// 獲取特定場次、影院、日期和廳的座位信息
+
+	// Get seat information for a specific showtime, cinema, date, and hall
 	public List<SeatDTO> getSeatsByShowtimeCinemaAndHallAndDate(Integer showtimeId, Integer cinemaId, Integer hallId,
 			String showDate) {
 
 		List<Seat> seatEntities = seatRepo.findByShowtimeCinemaHallAndDate(showtimeId, cinemaId,
 				hallId, showDate);
 
-		// 將查詢結果轉換為 SeatDto
+		// Convert the query results to SeatDto
 		List<SeatDTO> seatDtos = seatEntities.stream()
 				.map(entity -> new SeatDTO(entity.getSeatNumber(), entity.getSeatAvailability(),
 						entity.getShowtimeId().getShowtime_id(), entity.getCinemaId().getCinema_id(),

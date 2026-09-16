@@ -4,25 +4,25 @@ import styles from '../styles/AboutPage.module.css';
 const AboutPage = () => {
     return (
         <div className={styles.aboutContainer}>
-            <h3>關於我們</h3>
-            <p>營業人名稱：華盛頓影城股份有限公司台北分公司</p>
-            <p>統一編號：80412345</p>
-            <p>地址：台北市大安區建國南路二段231號</p>
-            <p>電話：(02)2720-5678</p>
-            <p>廳數：1廳</p>
-            <p>座位數：1360席</p>
+            <h3>About Us</h3>
+            <p>Business name: Washington Cinemas Co., Ltd., Taipei Branch</p>
+            <p>Business registration number: 80412345</p>
+            <p>Address: No. 231, Sec. 2, Jianguo S. Rd., Da'an Dist., Taipei City</p>
+            <p>Phone: (02)2720-5678</p>
+            <p>Number of halls: 1 hall</p>
+            <p>Number of seats: 1360 seats</p>
             <p>
-                影城內12座影廳經過全新改造，包含了：全景式銀幕、4K高畫質放映設備、Dolby Atmos音效系統、Bose全方位環繞喇叭，以及1:2.35黃金比例影廳，為觀眾打造無與倫比的視聽饗宴。
+                The cinema's 12 halls have been completely renovated, featuring panoramic screens, 4K high-definition projection equipment, a Dolby Atmos sound system, Bose surround-sound speakers, and halls with a 1:2.35 golden-ratio aspect, delivering an unparalleled audiovisual experience for every audience.
             </p>
             <p>
-                座椅方面則採用歐美風格雙扶手設計，配有商務艙等級的寬大座椅，並搭配符合人體工學的包覆式椅背，極大地提升了觀影的舒適度，讓每一位觀眾都能享受最頂級的電影體驗。
+                The seating uses a European-American style dual-armrest design with business-class-level spacious seats, paired with ergonomic wraparound seat backs, greatly enhancing viewing comfort so every guest can enjoy the finest movie-going experience.
             </p>
 
-            <h3>紐約電影城</h3>
+            <h3>New York Cinema</h3>
             <div className={styles.theaterInfo}>
                 <div className={styles.locationInfo}>
-                    <h4>交通位置</h4>
-                    <p>地址：台北市大安區建國南路二段231號</p>
+                    <h4>Location</h4>
+                    <p>Address: No. 231, Sec. 2, Jianguo S. Rd., Da'an Dist., Taipei City</p>
                     <div className={styles.mapContainer}>
                         <iframe
                             title="Google Maps"

@@ -44,16 +44,16 @@ public class NewsImpl implements NewsService{
 	        return "Please select a file!";
 	    }
 
-	    // 获取文件名
+	    // Get the file name
 	    String fileName = file.getOriginalFilename();
 	    if (fileName == null || fileName.isEmpty()) {
 	        return "Invalid file name!";
 	    }
 
-	    // 创建目标路径
+	    // Build the target path
 	    Path targetPath = Paths.get(uploadPath).resolve(fileName);
 
-	    // 确保目标目录存在
+	    // Ensure the target directory exists
 	    try {
 	        Files.createDirectories(targetPath.getParent());
 	    } catch (IOException e) {
@@ -61,7 +61,7 @@ public class NewsImpl implements NewsService{
 	        return "Error creating directories: " + e.getMessage();
 	    }
 
-	    // 保存文件
+	    // Save the file
 	    try (InputStream inputStream = file.getInputStream()) {
 	        Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
 	    } catch (Exception e) {
@@ -74,9 +74,9 @@ public class NewsImpl implements NewsService{
 	    BeanUtils.copyProperties(newsDTO, news);
 	    news.setCreatedTime(LocalDateTime.now());
 
-	    // 创建完整的 URL
-	    String fileUrl = baseUrl  + "/news/" + fileName;  // 完整的 URL
-	    news.setImg(fileUrl);  // 保存完整的图片 URL
+	    // Build the full URL
+	    String fileUrl = baseUrl  + "/news/" + fileName;  // Full URL
+	    news.setImg(fileUrl);  // Save the full image URL
 	    newsRepo.save(news);
 
 	    return "News added successfully!";
@@ -86,15 +86,15 @@ public class NewsImpl implements NewsService{
 	public News updateNews(Integer id, NewsDTO newsDTO, MultipartFile file) throws IOException {
 	     News news = newsRepo.findById(id).orElseThrow(() -> new RuntimeException("News not found"));
 
-	     // 更新电影信
+	     // Update the news information
 	     news.setText(newsDTO.getText());
 	     news.setCreatedTime(LocalDateTime.now());
 
-	     
 
-	     // 处理图片
+
+	     // Handle the image
 	     if (file != null && !file.isEmpty()) {
-	         // 删除旧图片文件
+	         // Delete the old image file
 	         if (news.getImg() != null) {
 	             String oldFileName = news.getImg().substring(news.getImg().lastIndexOf("/") + 1);
 	             Path oldFilePath = Paths.get(uploadPath).resolve(oldFileName);
@@ -102,11 +102,11 @@ public class NewsImpl implements NewsService{
 	                 Files.deleteIfExists(oldFilePath);
 	             } catch (IOException e) {
 	                 e.printStackTrace();
-	                 // 处理删除文件异常
+	                 // Handle file deletion exception
 	             }
 	         }
 
-	         // 上传新图片
+	         // Upload the new image
 	         String fileName = file.getOriginalFilename();
 	         Path targetPath = Paths.get(uploadPath).resolve(fileName);
 	         try {
@@ -116,14 +116,14 @@ public class NewsImpl implements NewsService{
 	             }
 	         } catch (IOException e) {
 	             e.printStackTrace();
-	             // 处理上传文件异常
+	             // Handle file upload exception
 	         }
 
-	         // 更新图片 URL
+	         // Update the image URL
 	         String fileUrl = baseUrl + "/img/" + fileName;
 	         news.setImg(fileUrl);
 	     } else {
-	         // 图片未更新时保留原图片
+	         // Keep the original image when it is not updated
 	         news.setImg(newsDTO.getImg());
 	     }
 	     return newsRepo.save(news);

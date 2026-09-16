@@ -1,7 +1,7 @@
 // import React, { useContext } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
 // import { CartContext } from '../CartContext';
-// import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
+// import styles from '../styles/Checkout.module.css'; // Import CSS module
 
 // export default function CheckOut() {
 //     const { cartItems, removeCartItem } = useContext(CartContext);
