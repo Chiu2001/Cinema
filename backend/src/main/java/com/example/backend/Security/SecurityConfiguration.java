@@ -59,7 +59,7 @@ public class SecurityConfiguration {
 		}))
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authz -> authz.requestMatchers("/api/movie/**").permitAll()
-						.requestMatchers("/img/**", "/news/**", "/ecpay/**", "/checkout/**").permitAll()
+						.requestMatchers("/img/**", "/news/**", "/ecpay/**", "/checkout/**", "/api/stripe/**").permitAll()
 						.requestMatchers("/api/orders/**")
 						.permitAll().requestMatchers("/api/manager/**").hasRole("MANAGER")
 						.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "MANAGER").requestMatchers("/api/user/**")

@@ -29,32 +29,31 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
-    
+
     @Autowired
     OrderRepo orderRepo;
-    
+
     private AllInOne allInOne;
-    
+
     @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
         this.allInOne = new AllInOne("3002607"); // 設定 ECPay 配置
     }
 
-    
     @PostMapping("/checkout")
     public ResponseEntity<String> checkout(@RequestBody OrderDTO orderDTO) {
         try {
             Integer orderNumber = paymentService.generateOrderNumber();
 
             paymentService.addOrder(
-                orderNumber,
-                orderDTO.getUserId(),
-                LocalDateTime.now(),
-                orderDTO.getAmount(),
-                orderDTO.getDescription(),
-                orderDTO.getItemName(),
-                false // 設定支付狀態為未支付
+                    orderNumber,
+                    orderDTO.getUserId(),
+                    LocalDateTime.now(),
+                    orderDTO.getAmount(),
+                    orderDTO.getDescription(),
+                    orderDTO.getItemName(),
+                    false // 設定支付狀態為未支付
             );
 
             AioCheckOutALL obj = new AioCheckOutALL();
@@ -65,7 +64,8 @@ public class PaymentController {
             obj.setTradeDesc(orderDTO.getDescription());
             obj.setItemName(orderDTO.getItemName());
             obj.setReturnURL("http://localhost:8443/movie/ecpay/paymentResult");
-            obj.setOrderResultURL("http://localhost:8443/movie/ecpay/orderResult?MerchantTradeNo=" + orderNumber + "&MerchantTradeDate=" + LocalDateTime.now().format(formatter));
+            obj.setOrderResultURL("http://localhost:8443/movie/ecpay/orderResult?MerchantTradeNo=" + orderNumber
+                    + "&MerchantTradeDate=" + LocalDateTime.now().format(formatter));
 
             String ecpayFormHtml = allInOne.aioCheckOut(obj, null);
             return ResponseEntity.ok(ecpayFormHtml);
@@ -93,5 +93,23 @@ public class PaymentController {
             return ResponseEntity.status(404).body(null); // 处理订单未找到的情况
         }
     }
-}
 
+    // 新增：確認結帳當下就先建立一筆訂單，狀態是「未付款」，
+    // 不管使用者最後選哪種付款方式，訂單都已經存在，之後只需要更新付款狀態。
+    @PostMapping("/create-pending")
+    public ResponseEntity<Order> createPendingOrder(@RequestBody OrderDTO orderDTO) {
+        Integer orderNumber = paymentService.generateOrderNumber();
+
+        Order order = paymentService.addOrder(
+                orderNumber,
+                orderDTO.getUserId(),
+                LocalDateTime.now(),
+                orderDTO.getAmount(),
+                orderDTO.getDescription(),
+                orderDTO.getItemName(),
+                false // 未付款
+        );
+
+        return ResponseEntity.ok(order);
+    }
+}

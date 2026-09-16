@@ -32,11 +32,21 @@ const clientId = '817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleuserc
 function App() {
     const [cartItems, setCartItems] = useState([]);
 
+    const removeCartItem = (cartItemId) => {
+        console.log('嘗試移除的 cartItemId:', cartItemId);
+        console.log('目前購物車內容:', cartItems);
+        setCartItems(prevItems => prevItems.filter(item => item.cartItemId !== cartItemId));
+    };
+
+    const clearCart = () => {
+        setCartItems([]);
+    };
+
     return (
         <GoogleOAuthProvider clientId={clientId}>
-            
-                <Router>
-                <CartContext.Provider value={{ cartItems, setCartItems }}>
+
+            <Router>
+                <CartContext.Provider value={{ cartItems, setCartItems, removeCartItem, clearCart }}>
                     <Routes>
                         <Route path="/home" element={<HomePage />} />
                         <Route path="/HomePageIn" element={<PrivateRoute element={<HomePageIn />} />} />
@@ -63,8 +73,8 @@ function App() {
                         <Route path="/PaymentResultPage" element={<PrivateRoute element={<PaymentResultPage />} />} />
                         <Route path="*" element={<h1>找不到頁面</h1>} />
                     </Routes>
-                    </CartContext.Provider>
-                </Router>
+                </CartContext.Provider>
+            </Router>
         </GoogleOAuthProvider>
     );
 }

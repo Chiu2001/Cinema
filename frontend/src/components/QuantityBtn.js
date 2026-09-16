@@ -19,36 +19,45 @@ export default function QuantityBtn({ showtimeInfo, selectedSeats }) {
         console.log('當前購物車內容:', cartItems);
         console.log('場次信息:', showtimeInfo);
         if (selectedSeats.length > 0) {
+            let mergedSeatNumbers = selectedSeats;
+
+            if (showtimeIndexInCart !== -1) {
+                // 同一場次已經在購物車裡，把這次選的座位「合併」進去，
+                // 用 Set 去重，避免同一個座位被重複計算。
+                const existingSeats = cartItems[showtimeIndexInCart].seatNumbers;
+                mergedSeatNumbers = [...new Set([...existingSeats, ...selectedSeats])];
+            }
+
             const updatedCart = {
+                cartItemId: showtimeIndexInCart !== -1
+                    ? cartItems[showtimeIndexInCart].cartItemId
+                    : crypto.randomUUID(),
+                showtime_id: showtimeInfo.showtime_id,
                 showtime: showtimeInfo.show_time,
-                seatNumbers: selectedSeats,
-                quantity: selectedSeats.length,
+                seatNumbers: mergedSeatNumbers,
+                quantity: mergedSeatNumbers.length,
                 showDate: showtimeInfo.showDate.show_date,
                 hall: showtimeInfo.hall,
                 movie: showtimeInfo.movie,
             };
 
-            console.log('更新後的購物車項目:', updatedCart); // 打印即將加入購物車的項目
+            console.log('更新後的購物車項目:', updatedCart);
 
             if (showtimeIndexInCart === -1) {
-                // 如果購物車中沒有該場次，將其加入
                 const newCart = [...cartItems, updatedCart];
                 setCartItems(newCart);
-                console.log('加入購物車後的內容:', newCart); // 打印新的購物車內容
+                console.log('加入購物車後的內容:', newCart);
             } else {
-                // 如果購物車中已經有該場次，更新數量和座位信息
                 const newCartArray = [...cartItems];
                 newCartArray[showtimeIndexInCart] = updatedCart;
                 setCartItems(newCartArray);
                 console.log("更新購物車: ", newCartArray);
             }
 
-            // 計算總金額並顯示成功訊息
-            const totalAmount = calculateTotalAmount();
-            console.log('總金額:', totalAmount);  // 打印總金額
-            alert(`座位確認成功！您的座位為: ${selectedSeats.join(' 、 ')}\n總金額為: ${totalAmount} 元`);
+            const totalAmount = calculateTotalAmount(mergedSeatNumbers);
+            console.log('總金額:', totalAmount);
+            alert(`座位確認成功！這個場次目前的座位為: ${mergedSeatNumbers.join(' 、 ')}\n總金額為: ${totalAmount} 元`);
 
-            // 根據 localStorage 是否有 token 決定導航路徑
             const token = localStorage.getItem('token');
             if (token) {
                 navigate('/CheckOutIn');
@@ -63,23 +72,25 @@ export default function QuantityBtn({ showtimeInfo, selectedSeats }) {
     // 計算總金額
     const calculateTotalAmount = () => {
         // 定義座位價格對照表，根據實際情況修改
-        const seatPrices = {
-            A: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-            B: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-            C: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-            D: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-            E: showtimeInfo.hall ? showtimeInfo.hall.price : 0
+        const calculateTotalAmount = (seats) => {
+            const seatPrices = {
+                A: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+                B: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+                C: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+                D: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+                E: showtimeInfo.hall ? showtimeInfo.hall.price : 0
+            };
+
+            const totalAmount = seats.reduce((total, seatId) => {
+                const section = seatId[0];
+                return total + (seatPrices[section] || 0);
+            }, 0);
+
+            return totalAmount;
         };
-
-        const totalAmount = selectedSeats.reduce((total, seatId) => {
-            const section = seatId[0]; // 座位ID的第一個字母代表區域
-            return total + (seatPrices[section] || 0);
-        }, 0);
-
-        return totalAmount;
     };
 
-    
+
 
     return (
         <div className={styles.quantityBtnContainer}>

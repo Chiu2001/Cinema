@@ -166,7 +166,7 @@ export default function CheckOut() {
                     <div id={styles.cartSection}>
                         {/* 產品列表 */}
                         {cartItems.map(item => (
-                            <div className={styles.cartItemCard} key={item.movie.id}>
+                            <div className={styles.cartItemCard} key={item.cartItemId}>
                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.textContent}>
                                     <p>電影名稱: {item.movie.title}</p>

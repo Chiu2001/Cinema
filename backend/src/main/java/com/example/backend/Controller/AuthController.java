@@ -121,19 +121,20 @@ public class AuthController {
 				String jwtToken = jwtService.generateToken(userDetails);
 
 				return ResponseEntity.ok(Map.of(
-					"token", jwtToken,
-					"email", email,
-					"roles", userDetails.getAuthorities().stream()
-						.map(GrantedAuthority::getAuthority)
-						.collect(Collectors.toList()),
-					"name", name
-				));
+						"token", jwtToken,
+						"email", email,
+						"roles", userDetails.getAuthorities().stream()
+								.map(GrantedAuthority::getAuthority)
+								.collect(Collectors.toList()),
+						"name", name,
+						"id", user.getUser_id()));
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid Google token"));
 			}
 		} catch (Exception e) {
 			// 捕獲所有異常並返回詳細的錯誤訊息
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Google login error: " + e.getMessage()));
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("error", "Google login error: " + e.getMessage()));
 		}
 	}
 

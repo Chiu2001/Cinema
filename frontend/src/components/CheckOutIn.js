@@ -105,7 +105,7 @@ import styles from '../styles/Checkout.module.css'; // 引入 CSS 模組
 import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOutIn() {
-    const { cartItems, removeCartItem } = useContext(CartContext);
+    const { cartItems, removeCartItem, clearCart } = useContext(CartContext);
     const navigate = useNavigate();
     const cartEmpty = cartItems.length <= 0;
     const grandTotal = cartItems.reduce((total, item) => {
@@ -118,41 +118,61 @@ export default function CheckOutIn() {
     const [savedOrderId, setSavedOrderId] = useState(null);
     const [showLinePayButton, setShowLinePayButton] = useState(false);
 
-    const handleCheckout = async () => {
-
-        const token = localStorage.getItem('token');
-
-        // 檢查是否已登入
-        if (!token) {
-            alert('請先登入!');
-            navigate('/login'); // 跳轉到登入頁面
-            return; // 停止執行結帳邏輯
-        }
-
-        const totalAmount = cartItems.reduce((total, item) => {
+    // 建立一筆「未付款」的訂單，回傳真正的訂單編號。
+    // LinePay 跟 Stripe 都要用，抽出來共用，不要各寫一次。
+    const createPendingOrder = async (items = cartItems) => {
+        const totalAmount = items.reduce((total, item) => {
             return total + item.hall.price * item.quantity;
         }, 0);
 
-        const packages = cartItems.map(item => ({
-            name: item.movie.title,  // 存進 productPackageForm 的 name
-            amount: item.hall.price * item.quantity,  // 存進 productPackageForm 的 amount
+        const response = await fetch(`${API_BASE_URL}/api/orders/create-pending`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: parseInt(localStorage.getItem('userid'), 10),
+                amount: totalAmount,
+                description: items.map(item => item.seatNumbers.join(', ')).join('; '),
+                itemName: items.map(item => item.movie.title).join('; '),
+            }),
+        });
+        const pendingOrder = await response.json();
+        return pendingOrder.orderNumber;
+    };
+
+    const LinePayHandleCheckout = async (items = cartItems) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('請先登入!');
+            navigate('/login');
+            return;
+        }
+
+        const realOrderNumber = await createPendingOrder(items);
+
+        const totalAmount = items.reduce((total, item) => {
+            return total + item.hall.price * item.quantity;
+        }, 0);
+
+        const packages = items.map(item => ({
+            name: item.movie.title,
+            amount: item.hall.price * item.quantity,
             products: item.seatNumbers.map(seat => ({
-                name: seat,  // 存進 productForm 的 name
-                quantity: item.quantity,  // 存進 productForm 的 quantity
-                price: item.hall.price  // 存進 productForm 的 price
+                name: seat,
+                quantity: item.quantity,
+                price: item.hall.price
             }))
         }));
 
         const checkoutRequest = {
-            amount: totalAmount,  // 存進 checkoutPaymentRequestForm 的 amount
-            orderId: orderNumber,  // 存進 checkoutPaymentRequestForm 的 orderId
-            currency: 'TWD',  // 假設是台幣
-            confirmUrl: "https://www.google.com.tw", //先暫設為google
-            // confirmUrl: "http://localhost:3000/LinepayPaymentResult",
+            amount: totalAmount,
+            orderId: String(realOrderNumber),
+            currency: 'TWD',
+            confirmUrl: "https://www.google.com.tw",
             packages: packages
         };
 
-        // 發送 POST 請求到後端
         fetch(`${API_BASE_URL}/checkout/save`, {
             method: 'POST',
             headers: {
@@ -163,52 +183,33 @@ export default function CheckOutIn() {
             .then(response => response.json())
             .then(data => {
                 console.log('訂單保存成功:', data);
-                setSavedOrderId(data.orderId);  // 使用 useState 更新 orderId
-                setShowLinePayButton(true);  // 顯示 LinePay 按鈕
-                alert(`訂單已生成，訂單編號：${data.orderId}`);
+                return fetch(`${API_BASE_URL}/checkout/details/${realOrderNumber}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
             })
-            .catch((error) => {
-                console.error('錯誤:', error);
-            });
-    };
-
-    // 資料發送到LinePay
-    const LinePayHandleCheckout = () => {
-        if (!savedOrderId) {
-            alert('請先確認結帳！');
-            return;
-        }
-
-        // 第一步：取得結帳細節
-        fetch(`${API_BASE_URL}/checkout/details/${savedOrderId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
             .then(response => response.json())
-            .then(data => {
-                console.log('取得結帳細節:', data)
-
-                // 第二步：把取得的資料送到 LinePay 進行付款
+            .then(detailData => {
+                console.log('取得結帳細節:', detailData);
                 return fetch(`${API_BASE_URL}/checkout/payment`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data),  // 將取得的結帳資料發送到付款API
+                    body: JSON.stringify(detailData),
                 });
             })
             .then(response => response.json())
             .then(paymentData => {
                 console.log('LinePay 付款處理結果:', paymentData);
-
-                // 將 response 字串解析為 JSON 物件
                 const responseInfo = JSON.parse(paymentData.response);
 
-                // 根據解析後的資料進行跳轉或其他動作
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    window.location.href = responseInfo.info.paymentUrl.web;  // 跳轉到 LinePay 支付頁面
+                    // 只移除這次真正拿去結帳的品項，不是清空整個購物車
+                    items.forEach(item => removeCartItem(item.movie.id));
+                    window.location.href = responseInfo.info.paymentUrl.web;
                 } else {
                     alert('付款失敗');
                 }
@@ -216,8 +217,50 @@ export default function CheckOutIn() {
             .catch(error => {
                 console.error('錯誤:', error);
             });
+    };
 
-    }
+    const StripeHandleCheckout = async (items = cartItems) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('請先登入!');
+            navigate('/login');
+            return;
+        }
+
+        const realOrderNumber = await createPendingOrder(items);
+
+        const lineItems = items.map(item => ({
+            name: `${item.movie.title}（${item.seatNumbers.join(', ')}）`,
+            unitAmount: Math.round(item.hall.price * 100),
+            quantity: item.quantity,
+        }));
+
+        const requestBody = {
+            userId: parseInt(localStorage.getItem('userid'), 10),
+            orderNumber: realOrderNumber,
+            description: items.map(item => item.seatNumbers.join(', ')).join('; '),
+            itemName: items.map(item => item.movie.title).join('; '),
+            items: lineItems,
+        };
+
+        fetch(`${API_BASE_URL}/api/stripe/create-checkout-session`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.url) {
+                    items.forEach(item => removeCartItem(item.movie.id));
+                    window.location.href = data.url;
+                } else {
+                    alert('無法建立 Stripe 付款，請稍後再試');
+                }
+            })
+            .catch(error => console.error('Stripe 付款錯誤:', error));
+    };
 
     return (
         <div className={styles.checkoutPageWrapper}>
@@ -239,17 +282,21 @@ export default function CheckOutIn() {
                     <div id={styles.checkoutCartSection}>
                         {/* 產品列表 */}
                         {cartItems.map(item => (
-                            <div className={styles.checkoutCartItemCard} key={item.movie.movie_id}>
+                            <div className={styles.checkoutCartItemCard} key={item.cartItemId}>
                                 <img className={styles.checkoutImg} src={process.env.PUBLIC_URL + "/image/" + item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.checkoutTextContent}>
                                     <p>電影名稱: {item.movie.title}</p>
-                                    {/* 確認 showDate 存在後再顯示日期 */}
                                     <p>放映日期: {item.showDate ? item.showDate : '未指定日期'}</p>
-                                    <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p> {/* 如果需要顯示場次時間 */}
+                                    <p>放映時間: {item.showtime ? item.showtime : '未指定時間'}</p>
                                     <p>{item.hall.hall_type} {item.hall.hall_number}廳</p>
                                     <p>價格: {item.hall.price}</p>
                                     <p>數量: {item.quantity}</p>
-                                    <p>座位: {item.seatNumbers.join(', ')}</p> {/* 顯示座位號 */}
+                                    <p>座位: {item.seatNumbers.join(', ')}</p>
+                                </div>
+                                <div>
+                                    <button onClick={() => removeCartItem(item.cartItemId)}>移除</button>
+                                    <button onClick={() => LinePayHandleCheckout([item])}>單獨用 LinePay 結帳</button>
+                                    <button onClick={() => StripeHandleCheckout([item])}>單獨用 Stripe 結帳</button>
                                 </div>
                             </div>
                         ))}
@@ -266,12 +313,8 @@ export default function CheckOutIn() {
                                     滿${freeFood}贈送免費爆米花<br />
                                     還差${freeFood - grandTotal}</div>
                         }
-                        <button className={styles.checkoutCheckoutButton} onClick={handleCheckout}>確認結帳</button>
-
-                        {/* 只有當 showLinePayButton 為 true 時顯示 LinePay 按鈕 */}
-                        {showLinePayButton && (
-                            <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay結帳</button>
-                        )}
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay結帳</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={StripeHandleCheckout}>使用信用卡付款（Stripe）</button>
                     </div>
                 </div>
             }
