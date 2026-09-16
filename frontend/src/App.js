@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import HomePage from './pages/HomePage';
@@ -30,7 +30,20 @@ import { CartContext } from './CartContext';
 const clientId = '817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com';
 
 function App() {
-    const [cartItems, setCartItems] = useState([]);
+    // On first load, try to restore the cart contents previously saved in localStorage
+    const [cartItems, setCartItems] = useState(() => {
+        try {
+            const stored = localStorage.getItem('cartItems');
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    });
+
+    // Whenever the cart contents change, sync them back to localStorage
+    useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }, [cartItems]);
 
     const removeCartItem = (cartItemId) => {
         console.log('Attempting to remove cartItemId:', cartItemId);

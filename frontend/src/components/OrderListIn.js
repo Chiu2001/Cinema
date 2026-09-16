@@ -28,6 +28,33 @@ const OrderListIn = () => {
         }
     };
 
+    const payForOrder = async (order) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/api/stripe/create-checkout-session`, {
+                userId: parseInt(userId, 10),
+                orderNumber: order.orderNumber,
+                description: order.description,
+                itemName: order.itemName,
+                items: [
+                    {
+                        name: order.itemName,
+                        unitAmount: Math.round(order.amount * 100), // Stripe amounts are in cents
+                        quantity: 1,
+                    }
+                ],
+            });
+
+            if (response.data.url) {
+                window.location.href = response.data.url;
+            } else {
+                alert('Unable to create payment, please try again later');
+            }
+        } catch (error) {
+            console.error('Failed to create payment:', error);
+            alert('Unable to create payment, please try again later');
+        }
+    };
+
     // Automatically fetch order history when the component mounts
     useEffect(() => {
         if (userId) {
@@ -57,6 +84,11 @@ const OrderListIn = () => {
                                     onClick={() => fetchOrderDetail(order.orderNumber)}>
                                     View Details
                                 </button>
+                                {!order.isPaid && (
+                                    <button onClick={() => payForOrder(order)}>
+                                        Pay Now
+                                    </button>
+                                )}
                             </div>
                         </li>
                     ))}

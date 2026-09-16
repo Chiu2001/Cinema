@@ -208,7 +208,7 @@ export default function CheckOutIn() {
 
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
                     // Only remove the items that were actually checked out this time, not the whole cart
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = responseInfo.info.paymentUrl.web;
                 } else {
                     alert('Payment failed');
@@ -253,7 +253,7 @@ export default function CheckOutIn() {
             .then(response => response.json())
             .then(data => {
                 if (data.url) {
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = data.url;
                 } else {
                     alert('Unable to create Stripe payment, please try again later');
@@ -313,8 +313,8 @@ export default function CheckOutIn() {
                                     Spend ${freeFood} and get free popcorn<br />
                                     ${freeFood - grandTotal} to go</div>
                         }
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>Checkout with LinePay</button>
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={StripeHandleCheckout}>Pay with Credit Card (Stripe)</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => LinePayHandleCheckout()}>Checkout with LinePay</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
                     </div>
                 </div>
             }

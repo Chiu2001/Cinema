@@ -121,21 +121,21 @@ export default function CheckOut() {
             navigate('/login'); // Redirect to the login page
             return; // Stop executing the checkout logic
         }
-    
+
         try {
-            const response = await fetch(`${API_BASE_URL}/api/orders/create`, {
+            const response = await fetch(`${API_BASE_URL}/api/orders/create-pending`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: localStorage.getItem('userid'),
+                    userId: parseInt(localStorage.getItem('userid'), 10),
                     amount: grandTotal,
                     description: cartItems.map(item => item.seatNumbers.join(', ')).join('; '),
                     itemName: cartItems.map(item => item.movie.title).join('; '),
                 }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response error');
             }

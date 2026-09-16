@@ -70,24 +70,22 @@ export default function QuantityBtn({ showtimeInfo, selectedSeats }) {
     };
 
     // Calculate the total amount
-    const calculateTotalAmount = () => {
+    const calculateTotalAmount = (seats) => {
         // Define the seat price lookup table, adjust as needed
-        const calculateTotalAmount = (seats) => {
-            const seatPrices = {
-                A: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-                B: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-                C: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-                D: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
-                E: showtimeInfo.hall ? showtimeInfo.hall.price : 0
-            };
-
-            const totalAmount = seats.reduce((total, seatId) => {
-                const section = seatId[0];
-                return total + (seatPrices[section] || 0);
-            }, 0);
-
-            return totalAmount;
+        const seatPrices = {
+            A: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+            B: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+            C: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+            D: showtimeInfo.hall ? showtimeInfo.hall.price : 0,
+            E: showtimeInfo.hall ? showtimeInfo.hall.price : 0
         };
+
+        const totalAmount = seats.reduce((total, seatId) => {
+            const section = seatId[0];
+            return total + (seatPrices[section] || 0);
+        }, 0);
+
+        return totalAmount;
     };
 
 
