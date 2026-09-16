@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import HomePage from './pages/HomePage';
@@ -30,7 +30,20 @@ import { CartContext } from './CartContext';
 const clientId = '817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com';
 
 function App() {
-    const [cartItems, setCartItems] = useState([]);
+    // 頁面第一次載入時，先試著從 localStorage 讀回之前存的購物車內容
+    const [cartItems, setCartItems] = useState(() => {
+        try {
+            const stored = localStorage.getItem('cartItems');
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    });
+
+    // 購物車內容有變動時，同步存回 localStorage
+    useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }, [cartItems]);
 
     const removeCartItem = (cartItemId) => {
         console.log('嘗試移除的 cartItemId:', cartItemId);

@@ -114,35 +114,35 @@ export default function CheckOut() {
 
     const placeOrder = async () => {
         const token = localStorage.getItem('token');
-    
+
         // 檢查是否已登入
         if (!token) {
             alert('請先登入!');
             navigate('/login'); // 跳轉到登入頁面
             return; // 停止執行結帳邏輯
         }
-    
+
         try {
-            const response = await fetch(`${API_BASE_URL}/api/orders/create`, {
+            const response = await fetch(`${API_BASE_URL}/api/orders/create-pending`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: localStorage.getItem('userid'),
+                    userId: parseInt(localStorage.getItem('userid'), 10),
                     amount: grandTotal,
                     description: cartItems.map(item => item.seatNumbers.join(', ')).join('; '),
                     itemName: cartItems.map(item => item.movie.title).join('; '),
                 }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('網路響應錯誤');
             }
-    
+
             const orderDetails = await response.json();
             console.log('訂單詳情:', orderDetails);
-    
+
             // 結帳完成後導航到 OrderList 頁面
             navigate('/OrderList');
         } catch (error) {

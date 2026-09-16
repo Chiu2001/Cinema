@@ -208,7 +208,7 @@ export default function CheckOutIn() {
 
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
                     // 只移除這次真正拿去結帳的品項，不是清空整個購物車
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = responseInfo.info.paymentUrl.web;
                 } else {
                     alert('付款失敗');
@@ -253,7 +253,7 @@ export default function CheckOutIn() {
             .then(response => response.json())
             .then(data => {
                 if (data.url) {
-                    items.forEach(item => removeCartItem(item.movie.id));
+                    items.forEach(item => removeCartItem(item.cartItemId));
                     window.location.href = data.url;
                 } else {
                     alert('無法建立 Stripe 付款，請稍後再試');
@@ -313,8 +313,8 @@ export default function CheckOutIn() {
                                     滿${freeFood}贈送免費爆米花<br />
                                     還差${freeFood - grandTotal}</div>
                         }
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={LinePayHandleCheckout}>LinePay結帳</button>
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={StripeHandleCheckout}>使用信用卡付款（Stripe）</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => LinePayHandleCheckout()}>LinePay結帳</button>
+                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => StripeHandleCheckout()}>使用信用卡付款（Stripe）</button>
                     </div>
                 </div>
             }

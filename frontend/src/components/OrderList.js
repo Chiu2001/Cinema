@@ -29,6 +29,33 @@ const OrderList = () => {
         }
     };
 
+    const payForOrder = async (order) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/api/stripe/create-checkout-session`, {
+                userId: parseInt(userId, 10),
+                orderNumber: order.orderNumber,
+                description: order.description,
+                itemName: order.itemName,
+                items: [
+                    {
+                        name: order.itemName,
+                        unitAmount: Math.round(order.amount * 100), // Stripe 金額單位是分
+                        quantity: 1,
+                    }
+                ],
+            });
+
+            if (response.data.url) {
+                window.location.href = response.data.url;
+            } else {
+                alert('無法建立付款，請稍後再試');
+            }
+        } catch (error) {
+            console.error('建立付款失敗:', error);
+            alert('無法建立付款，請稍後再試');
+        }
+    };
+
     // 當組件加載時自動查詢歷史訂單
     useEffect(() => {
         if (userId) {
@@ -53,11 +80,16 @@ const OrderList = () => {
                                 <p><strong>描述:</strong> {order.description}</p>
                                 <p><strong>物品名稱:</strong> {order.itemName}</p>
                                 <p><strong>支付狀態:</strong> {order.isPaid ? '已支付' : '未支付'}</p>
-                                <button 
-                                    className={styles.detailsButton} 
+                                <button
+                                    className={styles.detailsButton}
                                     onClick={() => fetchOrderDetail(order.orderNumber)}>
                                     查看詳情
                                 </button>
+                                {!order.isPaid && (
+                                    <button onClick={() => payForOrder(order)}>
+                                        去付款
+                                    </button>
+                                )}
                             </div>
                         </li>
                     ))}
