@@ -1,9 +1,9 @@
 /* Overall container styles */
 .container {
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Table styles */
@@ -15,13 +15,13 @@
 
 .table th, .table td {
     padding: 12px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-line);
     text-align: left;
 }
 
 .table th {
-    background-color: #f2f2f2;
-    color: #333;
+    background-color: var(--color-primary-soft);
+    color: var(--color-ink);
 }
 
 /* Top nav bar styles */
@@ -30,8 +30,8 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
-    border-radius: 8px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-md);
 }
 
 .headerST li {
@@ -40,7 +40,7 @@
 
 .headerST li a {
     display: block;
-    color: white;
+    color: var(--color-white);
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
@@ -48,7 +48,7 @@
 }
 
 .headerST li a:hover {
-    background-color: #555;
+    background-color: var(--color-primary-hover);
 }
 
 /* Search box styles */
@@ -56,17 +56,17 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
     box-sizing: border-box;
 }
 
 /* Role dropdown styles */
 .roleDropdown {
     padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
     cursor: pointer;
 }
 
@@ -80,19 +80,24 @@
 .pageButton {
     padding: 8px 12px;
     margin: 0 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #fff;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .pageButton:hover {
-    background-color: #f2f2f2;
+    background-color: var(--color-primary-soft);
+}
+
+.pageButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .activePage {
-    background-color: #333;
-    color: white;
-    border-color: #333;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
+    border-color: var(--color-gold);
 }

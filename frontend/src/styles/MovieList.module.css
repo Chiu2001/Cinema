@@ -10,8 +10,9 @@
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #333;
-    border-bottom: 2px solid #007bff;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    border-bottom: 2px solid var(--color-gold);
     padding-bottom: 10px;
 }
 
@@ -26,18 +27,18 @@
 
 /* Movie card styles */
 .movieBorder {
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
     padding: 16px;
     text-align: center;
-    background-color: #fff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .movieBorder:hover {
     transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
 }
 
 /* Image styles */
@@ -46,7 +47,7 @@
     height: auto;
     max-width: 200px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     transition: transform 0.3s;
 }
 
@@ -57,15 +58,15 @@
 /* Movie info styles */
 .movieInfo {
     margin-top: 10px;
-    color: #333;
+    color: var(--color-sub);
 }
 
 /* Button styles */
 .btn {
-    background-color: #007bff;
-    color: #fff;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     padding: 10px 20px;
     margin-top: 10px;
     font-size: 16px;
@@ -76,10 +77,15 @@
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-hover);
     transform: scale(1.05);
 }
 
 .btn:focus {
     outline: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }

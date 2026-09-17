@@ -101,7 +101,7 @@ const HeaderIn = () => {
 
             <div className={styles['user-actions']}>
                 {/* Show logout button when logged in */}
-                <button onClick={handleLogout} className="btn btn-outline-secondary">👤 Logout</button>
+                <button onClick={handleLogout} className="btn btnOnDark">👤 Logout</button>
             </div>
         </div>
     );

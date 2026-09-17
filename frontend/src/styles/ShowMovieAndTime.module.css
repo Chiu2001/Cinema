@@ -7,16 +7,21 @@
 
 .cinema-buttons button {
     padding: 10px;
-    background-color: #FFFFFF;
-    border: 1px solid #A020F0;
-    color: #A020F0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s; /* Add a transition effect */
 }
 
 .cinema-buttons button:hover {
-    background-color: #A020F0;
-    color: #FFFFFF;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
+}
+
+.cinema-buttons button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .showdates {
@@ -27,16 +32,21 @@
 .showdates button {
     margin: 10;
     padding: 10px;
-    background-color: #FFFFFF;
-    border: 1px solid #A020F0;
-    color: #A020F0;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .showdates button:hover {
-    background-color: #A020F0;
-    color: #FFFFFF;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
+}
+
+.showdates button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .showdate-info{
@@ -51,10 +61,10 @@
     /* flex-wrap: wrap; allow wrapping if content overflows */
     /* gap: 10px; control spacing between elements */
     margin-bottom: 20px; /* Control spacing between each group */
-    border: 1px solid #ddd; /* Add a border to each group to set it apart */
+    border: 1px solid var(--color-line); /* Add a border to each group to set it apart */
     padding: 10px; /* Add padding to each group */
-    background-color: #f9f9f9; /* Add a background color to each group */
-    border-radius: 5px; /* Add rounded corners */
+    background-color: var(--color-surface); /* Add a background color to each group */
+    border-radius: var(--radius-sm); /* Add rounded corners */
     width: 650px;
 }
 
@@ -85,15 +95,20 @@
     align-items: center;
     justify-content: center; /* Center align */
     padding: 10px;
-    border: 1px solid #A020F0;
-    background-color: #fff;
+    border: 1px solid var(--color-primary);
+    background-color: var(--color-surface);
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s; /* Add a transition effect */
 }
 
 .showtime-item:hover {
-    background-color: #A020F0;
-    color: #FFFFFF;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
+}
+
+.showtime-item:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .showtime-row {

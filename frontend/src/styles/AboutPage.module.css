@@ -1,6 +1,6 @@
 .aboutContainer {
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
     line-height: 1.6;
 }
 
@@ -11,13 +11,14 @@
 .locationInfo h4 {
     margin-bottom: 10px;
     font-size: 1.2em;
-    color: #333;
+    color: var(--color-ink);
+    font-family: var(--font-display);
 }
 
 .mapContainer {
     margin-top: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-line);
     padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
 }
