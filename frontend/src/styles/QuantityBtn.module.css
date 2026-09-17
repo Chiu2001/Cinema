@@ -4,10 +4,10 @@
     padding: 10px 20px; /* Button padding */
     font-size: 16px; /* Font size */
     font-weight: bold; /* Bold text */
-    color: #fff; /* Text color */
-    background-color: #007bff; /* Background color */
+    color: var(--color-white); /* Text color */
+    background-color: var(--color-primary); /* Background color */
     border: none; /* Remove border */
-    border-radius: 4px; /* Rounded corners */
+    border-radius: var(--radius-sm); /* Rounded corners */
     text-align: center; /* Center text */
     cursor: pointer; /* Show pointer cursor on hover */
     text-decoration: none; /* Remove underline */
@@ -15,11 +15,16 @@
 }
 
 .button:hover {
-    background-color: #0056b3; /* Background color on hover */
+    background-color: var(--color-primary-hover); /* Background color on hover */
 }
 
 .button:active {
-    background-color: #004080; /* Background color when the button is clicked */
+    background-color: var(--color-primary-hover); /* Background color when the button is clicked */
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 /* Control button container styles */

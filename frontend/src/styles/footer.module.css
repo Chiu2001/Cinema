@@ -5,7 +5,7 @@
 
 /* Set the footer background color */
 .footer {
-    background-color: #2d2d32;
+    background-color: var(--color-primary);
 }
 
 /* Lay out the footer's inner content in a column, to hold the different blocks */
@@ -38,7 +38,7 @@
 
 /* Set the link color and remove the underline for a more consistent look */
 .link {
-    color: rgb(175, 175, 179);
+    color: var(--color-gold);
     text-decoration: none;
 }
 

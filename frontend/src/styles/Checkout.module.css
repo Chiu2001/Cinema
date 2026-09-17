@@ -16,7 +16,7 @@
 }
 
 .checkoutEmptyCartMessage a {
-    color: #007bff;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: bold;
     font-size: 20px;
@@ -49,38 +49,43 @@
     align-items: center; /* Horizontal center alignment */
     justify-content: center; /* Vertical center alignment */
     text-align: center; /* Center-align text */
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
     padding: 16px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     gap: 16px; /* Spacing between elements */
 }
 
 .checkoutCheckoutButton {
-    background-color: #007bff;
-    color: white;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 16px;
     text-align: center;
 }
 
 .checkoutCheckoutButton:hover {
-    background-color: #0056b3;
+    background-color: var(--color-gold-hover);
+}
+
+.checkoutCheckoutButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 /* Card styles */
 .checkoutCartItemCard {
     display: flex;
     align-items: center; /* Vertically center-align the image and text */
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
     padding: 16px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
     gap: 16px; /* Spacing between image and text */
     width: 100%; /* Ensure the card width can adjust */
 }
@@ -90,7 +95,7 @@
     width: 200px; /* Fixed image width */
     height: 200px; /* Fixed image height */
     object-fit: contain; /* Keep image aspect ratio, fill the container */
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
 /* Text styles */
@@ -108,16 +113,21 @@
 }
 
 .checkoutLinePaycheckoutButton {
-    background-color: #4CAF50; /* Grass green */
-    color: white; /* White text */
+    background-color: var(--color-success); /* Keeps the recognizable "pay" green, tied to the token system */
+    color: var(--color-white); /* White text */
     padding: 10px 20px; /* Add some padding */
     border: none; /* Remove border */
-    border-radius: 5px; /* Slightly rounded corners */
+    border-radius: var(--radius-sm); /* Slightly rounded corners */
     font-size: 16px; /* Appropriate font size */
     cursor: pointer; /* Show pointer cursor on hover */
     transition: background-color 0.3s; /* Smooth color transition effect */
 }
 
 .checkoutLinePaycheckoutButton:hover {
-    background-color: #45a049; /* Slightly darker green on hover */
+    background-color: var(--color-success-hover); /* Slightly darker green on hover */
+}
+
+.checkoutLinePaycheckoutButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }

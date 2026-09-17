@@ -1,8 +1,8 @@
 .container {
     padding: 20px;
     text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 8px;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
 }
 
 .table {
@@ -12,12 +12,12 @@
 
 .table th, .table td {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-line);
     text-align: left;
 }
 
 .table th {
-    background-color: #f2f2f2;
+    background-color: var(--color-primary-soft);
 }
 
 /* Top nav bar styles */
@@ -26,7 +26,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: var(--color-primary);
 }
 
 .headerST li {
@@ -35,14 +35,14 @@
 
 .headerST li a {
     display: block;
-    color: white;
+    color: var(--color-white);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 .headerST li a:hover {
-    background-color: #111;
+    background-color: var(--color-primary-hover);
 }
 .searchBox {
     padding: 10px;
@@ -60,12 +60,22 @@
     padding: 10px;
     margin: 0 5px;
     border: none;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
+}
+
+.pagination button:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.pagination button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .pagination .activePage {
-    background-color: #0056b3;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
 }

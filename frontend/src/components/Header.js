@@ -82,7 +82,7 @@ const Header = () => {
 
             <div className={styles['user-actions']}>
                 {/* Show login button when not logged in */}
-                <Link to="/login" className="btn btn-outline-secondary">👤 Member Login</Link>
+                <Link to="/login" className="btn btnOnDark">👤 Member Login</Link>
             </div>
         </div>
     );

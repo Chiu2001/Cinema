@@ -4,17 +4,17 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f7f7f7;
+    background-color: var(--color-bg);
 }
 
 .wrapper {
     width: 420px;
     background: transparent;
-    border: 2px solid rgb(167, 163, 163);
+    border: 2px solid var(--color-line);
     backdrop-filter: blur(30px);
-    box-shadow: 0 0 10px rgba(0,0,0,.2);
-    color: #333;
-    border-radius: 10px;
+    box-shadow: var(--shadow-md);
+    color: var(--color-ink);
+    border-radius: var(--radius-md);
     padding: 30px 40px;
 }
 
@@ -30,20 +30,25 @@
     margin: 30px 0;
 }
 
-.inputBox input { 
+.inputBox input {
     width: 100%;
     height: 100%;
     background: transparent;
-    border: 2px solid rgba(2, 2, 2, 0.2);
-    outline: none; 
-    border-radius: 40px;
+    border: 2px solid var(--color-line);
+    outline: none;
+    border-radius: var(--radius-pill);
     font-size: 16px;
-    color: #333;
+    color: var(--color-ink);
     padding: 20px 45px 20px 20px;
 }
 
+.inputBox input:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
 .inputBox input::placeholder {
-    color: #333;
+    color: var(--color-sub);
 }
 
 .icon {
@@ -62,26 +67,35 @@
 }
 
 .rememberForgot label input {
-    accent-color: #333;
+    accent-color: var(--color-primary);
     margin-right: 4px;
 }
 
 .rememberForgot a {
-    color: blue;
+    color: var(--color-primary);
     text-decoration: none;
 }
 
 .wrapper button {
     width: 100%;
     height: 45px;
-    background: #41afe6;
+    background: var(--color-gold);
     border: none;
     outline: none;
-    border-radius: 40px;
+    border-radius: var(--radius-pill);
     cursor: pointer;
     font-size: 16px;
-    color: #333;
+    color: var(--color-primary);
     font-weight: 700;
+}
+
+.wrapper button:hover {
+    background: var(--color-gold-hover);
+}
+
+.wrapper button:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .registerLink {
@@ -91,7 +105,7 @@
 }
 
 .registerLink p a {
-    color: #333;
+    color: var(--color-ink);
     text-decoration: none;
     font-weight: 600;
 }

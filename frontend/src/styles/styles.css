@@ -3,7 +3,7 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-body);
   }
 
   /* Parent container */
@@ -21,16 +21,16 @@ body, html {
 
   /* Header styles */
   header {
-    background-color: #f8f9fa;
+    background-color: var(--color-primary-soft);
   }
 
   /* Expand the main area to take up the remaining space */
   main {
     flex-grow: 1;
-    background-color: #e9ecef;
+    background-color: var(--color-bg);
   }
 
   /* Footer styles */
   footer {
-    background-color: #f8f9fa;
+    background-color: var(--color-primary-soft);
   }

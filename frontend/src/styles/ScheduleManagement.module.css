@@ -13,9 +13,9 @@
 
 /* Individual movie card styles */
 .card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
     padding: 15px;
     text-align: left;
     cursor: pointer;
@@ -28,22 +28,27 @@
 
 .card img {
     width: 100%;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 /* Add button styles */
 .addButton {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
 }
 
 .addButton:hover {
-    background-color: #45a049;
+    background-color: var(--color-gold-hover);
+}
+
+.addButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 /* Modal styles */
@@ -53,7 +58,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(43, 27, 24, 0.5);
     display: flex;
     align-items: flex-start; /* Allow content to start from the top */
     justify-content: center;
@@ -62,12 +67,12 @@
 }
 
 .modal {
-    background: white;
+    background: var(--color-surface);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     max-width: 80%;
     margin-top: 20px; /* Top margin to leave room to scroll */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
 }
 
 .modal input,
@@ -75,8 +80,8 @@
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
 }
 
 .modal textarea {
@@ -87,15 +92,15 @@
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-line);
 }
 
 .modalImage {
     width: 100%;
     height: auto;
     margin-top: 10px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 /* Modal button styles */
@@ -108,27 +113,34 @@
 .confirmButton,
 .cancelButton {
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
     cursor: pointer;
 }
 
 .confirmButton {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--color-gold);
+    color: var(--color-primary);
 }
 
 .confirmButton:hover {
-    background-color: #45a049;
+    background-color: var(--color-gold-hover);
+}
+
+.confirmButton:focus-visible,
+.cancelButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .cancelButton {
-    background-color: #f44336;
-    color: white;
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .cancelButton:hover {
-    background-color: #e53935;
+    background-color: var(--color-primary-soft);
 }
 
 /* Top nav bar styles */
@@ -137,7 +149,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: var(--color-primary);
 }
 
 .headerST li {
@@ -146,12 +158,12 @@
 
 .headerST li a {
     display: block;
-    color: white;
+    color: var(--color-white);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 .headerST li a:hover {
-    background-color: #111;
+    background-color: var(--color-primary-hover);
 }

@@ -1,12 +1,12 @@
 .area-body {
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
   padding: 20px 0;
-  background-color: #f0f0f0;
+  background-color: var(--color-bg);
   overflow-y: auto; /* Allow the page to scroll */
 }
 
@@ -14,9 +14,9 @@
   width: 800px;
   height: 650px;
   position: relative;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   padding: 20px;
   box-sizing: border-box;
 }
@@ -24,46 +24,46 @@
 .area-stage {
   width: 200px;
   height: 50px;
-  background-color: #FF5722;
+  background-color: var(--color-primary);
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   line-height: 50px;
-  color: white;
-  border-radius: 5px;
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
 }
 
 .area-section {
   position: absolute;
-  color: white;
+  color: var(--color-white);
   font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: transform 0.3s ease;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
 }
 
 .area-section:hover {
   transform: scale(1.05);
 }
 
-.area-section-a { width: 150px; height: 200px; background-color: #4CAF50; top: 100px; left: 305px; }
-.area-section-b { width: 100px; height: 200px; background-color: #9C27B0; top: 100px; left: 180px; }
-.area-section-c { width: 100px; height: 200px; background-color: #E91E63; top: 100px; right: 220px; }
-.area-section-d { width: 500px; height: 100px; background-color: #FFC107; bottom: 180px; left: 130px; border-radius: 250px 250px 0 0; }
-.area-section-e { width: 600px; height: 80px; background-color: #FF9800; bottom: 80px; left: 80px; border-radius: 300px 300px 0 0; }
+.area-section-a { width: 150px; height: 200px; background-color: var(--zone-a); top: 100px; left: 305px; }
+.area-section-b { width: 100px; height: 200px; background-color: var(--zone-b); top: 100px; left: 180px; }
+.area-section-c { width: 100px; height: 200px; background-color: var(--zone-c); top: 100px; right: 220px; }
+.area-section-d { width: 500px; height: 100px; background-color: var(--zone-d); bottom: 180px; left: 130px; border-radius: 250px 250px 0 0; }
+.area-section-e { width: 600px; height: 80px; background-color: var(--zone-e); bottom: 80px; left: 80px; border-radius: 300px 300px 0 0; }
 
 .area-confirm-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #2196F3;
-  color: white;
+  background-color: var(--color-gold);
+  color: var(--color-primary);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 16px;
   display: block;
@@ -72,11 +72,16 @@
 }
 
 .area-confirm-button:hover {
-  background-color: #1976D2;
+  background-color: var(--color-gold-hover);
 }
 
 .area-confirm-button:active {
-  background-color: #2196F3;
+  background-color: var(--color-gold);
+}
+
+.area-confirm-button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .area-checkout-container {
@@ -91,10 +96,10 @@
 
 .area-checkout-button {
   padding: 10px 20px;
-  background-color: #2196F3;
-  color: white;
+  background-color: var(--color-gold);
+  color: var(--color-primary);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 16px;
   display: block;
@@ -103,11 +108,16 @@
 }
 
 .area-checkout-button:hover {
-  background-color: #1976D2;
+  background-color: var(--color-gold-hover);
 }
 
 .area-checkout-button:active {
-  background-color: #2196F3;
+  background-color: var(--color-gold);
+}
+
+.area-checkout-button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .area-modal {
@@ -118,22 +128,22 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(43, 27, 24, 0.4);
 }
 
 .area-modal-content {
-  background-color: #fefefe;
+  background-color: var(--color-surface);
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--color-line);
   width: 80%;
   max-width: 600px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   box-sizing: border-box;
 }
 
 .area-close {
-  color: #aaa;
+  color: var(--color-sub);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -142,7 +152,7 @@
 
 .area-close:hover,
 .area-close:focus {
-  color: black;
+  color: var(--color-ink);
 }
 
 .area-seats {
@@ -164,8 +174,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
   font-size: 12px;
   text-decoration: none;
   color: inherit;
@@ -173,16 +183,16 @@
 }
 
 .area-seat:hover {
-  background-color: rgb(171, 162, 162);
+  background-color: var(--color-primary-soft);
 }
 
 .area-seat.selected {
-  background-color: #2196F3;
-  color: white;
+  background-color: var(--color-gold);
+  color: var(--color-primary);
 }
 
 .area-seat:active {
-  background-color: rgb(29, 60, 137);
+  background-color: var(--color-gold-hover);
 }
 
 .area-seat-info {
@@ -190,10 +200,10 @@
   top: 100px;
   right: 20px;
   width: 150px;
-  background-color: rgba(225, 224, 239, 0.9);
+  background-color: rgba(241, 228, 212, 0.9);
   padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .area-seat-info h3 {
