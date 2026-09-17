@@ -24,7 +24,7 @@ export default function MovieList() {
                         </Link>
                         <div className={styles.movieInfo}>
                             <p>{movie.title}</p>
-                            <p>Release Date: {movie.released_date}</p>
+                            <p>Release Date: {movie.date}</p>
                         </div>
                         <Link to={'/MovieDetail/' + movie.id}>
                             <button className={styles.btn}>Details</button>

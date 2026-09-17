@@ -43,8 +43,8 @@ const LoginForm = () => {
                     console.log('Login Success: Token and roles stored');
                     navigate('/HomePageIn');
                 } else {
-                    console.error('Backend login failed:', data.message);
-                    alert('Google login failed: ' + data.message);
+                    console.error('Backend login failed:', data.error);
+                    alert('Google login failed: ' + data.error);
                 }
             } catch (error) {
                 console.error('Error during Google login:', error);

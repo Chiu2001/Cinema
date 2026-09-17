@@ -61,7 +61,7 @@ const ScheduleManagement = () => {
             date: movie.date,
             actor: movie.actor,
             duration: movie.duration,
-            status: movie.status ? 'TRUE' : 'FALSE',
+            status: movie.status === 'TRUE' ? 'TRUE' : 'FALSE',
         });
         setShowModal(true);
     };
@@ -104,6 +104,7 @@ const ScheduleManagement = () => {
         formData.append('duration', newMovie.duration);
         formData.append('date', newMovie.date);
         formData.append('status', newMovie.status);
+        formData.append('img', newMovie.img);
     
         const token = localStorage.getItem('token');
         if (!token) {
@@ -166,7 +167,7 @@ const ScheduleManagement = () => {
                             <img src={movie.img} alt={movie.title} />
                             <h3>{movie.title}</h3>
                             <p>Release Date: {movie.date}</p>
-                            <p>{movie.status ? 'Now Showing' : 'Not Showing'}</p>
+                            <p>{movie.status === 'TRUE' ? 'Now Showing' : 'Not Showing'}</p>
                         </div>
                     ))}
                 </div>

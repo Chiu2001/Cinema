@@ -84,6 +84,7 @@ const NewsManagement = () => {
         }
         formData.append('text', newNews.text);
         formData.append('created_time', newNews.created_time);
+        formData.append('img', newNews.img);
 
         const token = localStorage.getItem('token');
         if (!token) {
