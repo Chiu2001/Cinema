@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { CartContext } from '../CartContext';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/QuantityBtn.module.css'; // Import CSS module
+import { API_BASE_URL } from '../apiConfig';
 
 export default function QuantityBtn({ showtimeInfo, selectedSeats }) {
     // Read the CartContext
@@ -13,12 +14,36 @@ export default function QuantityBtn({ showtimeInfo, selectedSeats }) {
         return element.showtime_id === showtimeInfo.showtime_id;  // Compare showtime_id
     });
 
+    // Reserve a seat in the database so other users immediately see it as
+    // unavailable instead of everyone being able to pick the same seat.
+    const reserveSeat = async (seatNumber) => {
+        const response = await fetch(`${API_BASE_URL}/api/movie/save/${showtimeInfo.showtime_id}/${seatNumber}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seatAvailability: false }),
+        });
+        if (!response.ok) {
+            const message = await response.text();
+            throw new Error(message || `Seat ${seatNumber} could not be reserved`);
+        }
+    };
+
     // Update the cart or proceed to checkout when the button is clicked
-    const handleButtonClick = () => {
+    const handleButtonClick = async () => {
         console.log('Selected seats:', selectedSeats);
         console.log('Current cart contents:', cartItems);
         console.log('Showtime info:', showtimeInfo);
         if (selectedSeats.length > 0) {
+            try {
+                // Reserve only the seats newly selected in this session; seats
+                // already in the cart from before were reserved on that earlier click.
+                await Promise.all(selectedSeats.map(reserveSeat));
+            } catch (error) {
+                console.error('Seat reservation failed:', error);
+                alert(`${error.message}\nPlease refresh and pick different seats.`);
+                return;
+            }
+
             let mergedSeatNumbers = selectedSeats;
 
             if (showtimeIndexInCart !== -1) {

@@ -8,6 +8,10 @@ public class SeatDTO {
     private Integer cinemaId;
     private Integer hallId;
 
+    // No-arg constructor required for Jackson to deserialize @RequestBody SeatDTO
+    public SeatDTO() {
+    }
+
     public SeatDTO(String seatNumber, Boolean seatAvailability, Integer showtimeId, Integer cinemaId, Integer hallId) {
         this.seatNumber = seatNumber;
         this.seatAvailability = seatAvailability;

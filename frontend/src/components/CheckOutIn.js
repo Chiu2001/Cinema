@@ -207,8 +207,10 @@ export default function CheckOutIn() {
                 const responseInfo = JSON.parse(paymentData.response);
 
                 if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    // Only remove the items that were actually checked out this time, not the whole cart
-                    items.forEach(item => removeCartItem(item.cartItemId));
+                    // Only remove the items that were actually checked out this time, not the whole
+                    // cart. Don't release their seats: the user is being sent to LinePay to actually
+                    // pay, and the seats must stay held through that, not be freed right now.
+                    items.forEach(item => removeCartItem(item.cartItemId, false));
                     window.location.href = responseInfo.info.paymentUrl.web;
                 } else {
                     alert('Payment failed');
@@ -253,7 +255,9 @@ export default function CheckOutIn() {
             .then(response => response.json())
             .then(data => {
                 if (data.url) {
-                    items.forEach(item => removeCartItem(item.cartItemId));
+                    // Don't release seats here either — the user is headed to Stripe to
+                    // actually pay, and the seats must stay held through that.
+                    items.forEach(item => removeCartItem(item.cartItemId, false));
                     window.location.href = data.url;
                 } else {
                     alert('Unable to create Stripe payment, please try again later');
