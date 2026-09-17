@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 const PrivateRoute = ({ element }) => {
     const token = localStorage.getItem('token'); // Assume the token is used to check login status
 
-    return token ? element : <Navigate to="/" />;
+    return token ? element : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

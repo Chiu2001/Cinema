@@ -98,7 +98,10 @@ public class UserImpl implements UserService {
             user.setEmail(updatedUser.getEmail());
             user.setPassword(updatedUser.getPassword());
             user.setGender(updatedUser.getGender());
-            user.setRole(Role.USER);
+            // Role changes go through ManagerController/updateUserRole; leave the
+            // existing role untouched here instead of forcing it back to USER,
+            // which previously reset any ADMIN/MANAGER editing their own profile
+            // back down to a plain USER.
             user.setBirthDate(updatedUser.getBirthDate());
             return userRepo.save(user);
         });
