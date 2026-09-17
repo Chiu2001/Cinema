@@ -26,6 +26,7 @@ import PrivateRoute from './components/PrivateRoute';
 import EcpayPage from './pages/EcpayPage';
 import PaymentResultPage from './pages/PaymentResultPage';
 import { CartContext } from './CartContext';
+import { API_BASE_URL } from './apiConfig';
 
 const clientId = '817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleusercontent.com';
 
@@ -45,9 +46,28 @@ function App() {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }, [cartItems]);
 
-    const removeCartItem = (cartItemId) => {
+    // releaseSeats defaults to true (the user is abandoning these seats), but
+    // is passed false when this is called right before redirecting to an
+    // external payment gateway (LinePay/Stripe) — the seats must stay held
+    // through the actual payment, not be freed the moment checkout starts.
+    const removeCartItem = (cartItemId, releaseSeats = true) => {
         console.log('Attempting to remove cartItemId:', cartItemId);
         console.log('Current cart contents:', cartItems);
+
+        // Release the seats this item held back to available, so other users
+        // can select them again. Best-effort: the item still leaves the cart
+        // even if a release call fails (e.g. it was already booked/paid for).
+        const removedItem = cartItems.find(item => item.cartItemId === cartItemId);
+        if (removedItem && releaseSeats) {
+            removedItem.seatNumbers.forEach(seatNumber => {
+                fetch(`${API_BASE_URL}/api/movie/save/${removedItem.showtime_id}/${seatNumber}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seatAvailability: true }),
+                }).catch(error => console.error(`Failed to release seat ${seatNumber}:`, error));
+            });
+        }
+
         setCartItems(prevItems => prevItems.filter(item => item.cartItemId !== cartItemId));
     };
 

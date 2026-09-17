@@ -55,8 +55,17 @@ public class SeatServiceImpl implements SeatService{
 			seat.setCinemaId(cinema);
 			seat.setHallId(hall);
 		} else {
-			// If the seat already exists, update its status
-			seat.setSeatAvailability(false);
+			// Reject reserving a seat that another booking already holds. This can't
+			// distinguish "already reserved by me" from "by someone else" (there's no
+			// per-reservation owner on this table), but the frontend only calls this
+			// for seats it currently shows as available, so in practice this only
+			// fires when two people raced for the same seat.
+			if (Boolean.FALSE.equals(seatDTO.getSeatAvailability()) && Boolean.FALSE.equals(seat.getSeatAvailability())) {
+				throw new IllegalStateException("Seat " + seatDTO.getSeatNumber() + " has already been reserved by someone else");
+			}
+			// If the seat already exists, update its status to whatever was requested
+			// (false to reserve, true to release back to available)
+			seat.setSeatAvailability(seatDTO.getSeatAvailability());
 		}
 
 		seatRepo.save(seat); // Save to the database
