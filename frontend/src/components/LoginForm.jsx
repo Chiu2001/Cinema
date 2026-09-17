@@ -111,7 +111,7 @@ const LoginForm = () => {
                         </div>
                         <button type="submit">Login</button>
                         <div className={styles.registerLink}>
-                            <p>Don't have an account? <Link to="/signup" style={{ color: 'blue' }}>Register</Link></p>
+                            <p>Don't have an account? <Link to="/signup">Register</Link></p>
                         </div>
                         <div className="google-login">
                             <GoogleLogin

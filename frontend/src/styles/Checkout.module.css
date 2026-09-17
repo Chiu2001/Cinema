@@ -131,3 +131,136 @@
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
 }
+
+/* ---- Logged-out cart page (CheckOut.js) ----
+   Mirrors the checkoutXxx classes above for the logged-in variant
+   (CheckOutIn.js); this page previously had no matching styles at all. */
+.pageWrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.emptyCartMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.emptyCartMessage a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.emptyCartMessage a:hover {
+    text-decoration: underline;
+}
+
+.cartContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#cartSection {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#checkoutSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    gap: 16px;
+}
+
+.cartItemCard {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    gap: 16px;
+    width: 100%;
+}
+
+.img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    flex: none;
+}
+
+.textContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.textContent p {
+    margin: 8px 0;
+    font-size: 20px;
+    text-align: left;
+}
+
+.deleteButtonContainer {
+    margin-left: auto;
+}
+
+.deleteButton {
+    background-color: var(--color-danger);
+    color: var(--color-white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.deleteButton:hover {
+    background-color: var(--color-danger-hover);
+}
+
+.deleteButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+.checkoutButton {
+    background-color: var(--color-gold);
+    color: var(--color-primary);
+    border: none;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 16px;
+}
+
+.checkoutButton:hover {
+    background-color: var(--color-gold-hover);
+}
+
+.checkoutButton:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
