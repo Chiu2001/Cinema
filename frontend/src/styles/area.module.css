@@ -10,6 +10,62 @@
   overflow-y: auto; /* Allow the page to scroll */
 }
 
+/* ---- Movie info summary shown above the seat map ---- */
+.area-info {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+}
+
+/* Grid rather than flex: the image and five <p> tags are flat siblings
+   (no wrapper div around the text), so the image spans all five text
+   rows in column 1 while each line of text sits in column 2. */
+.area-movie-info {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  column-gap: 20px;
+  align-items: start;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 16px 24px;
+}
+
+.area-img {
+  grid-column: 1;
+  grid-row: 1 / span 5;
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.area-title {
+  grid-column: 2;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--color-ink);
+  margin: 0 0 6px;
+}
+
+.area-date,
+.area-hall-type,
+.area-hall-number,
+.area-price {
+  grid-column: 2;
+  margin: 2px 0;
+  color: var(--color-sub);
+  font-size: 14px;
+}
+
+.area-header {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-size: 26px;
+  margin: 0 0 16px;
+}
+
 .area-seating-chart {
   width: 800px;
   height: 650px;
@@ -186,7 +242,9 @@
   background-color: var(--color-primary-soft);
 }
 
-.area-seat.selected {
+/* Area.js applies this as its own class alongside area-seat (not as a
+   nested "selected" class), so it must be a standalone selector. */
+.area-selected {
   background-color: var(--color-gold);
   color: var(--color-primary);
 }
