@@ -177,14 +177,14 @@ export default function CheckOut() {
                                     <p>Quantity: {item.quantity}</p>
                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
                                 </div>
-                                {/* <div className={styles.deleteButtonContainer}>
+                                <div className={styles.deleteButtonContainer}>
                                     <button
                                         className={styles.deleteButton}
-                                        onClick={() => removeCartItem(item.movie.id)} // Call the removeCartItem function
+                                        onClick={() => removeCartItem(item.cartItemId)}
                                     >
                                         Delete
                                     </button>
-                                </div> */}
+                                </div>
                             </div>
                         ))}
                     </div>
