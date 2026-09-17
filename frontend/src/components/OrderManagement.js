@@ -65,8 +65,9 @@ const OrderManagement = () => {
                     </thead>
                     <tbody>
                         {paginatedOrders.map(order => (
-                            <tr key={order.order_id}>
+                            <tr key={order.ticket_id}>
                                 <td>{order.order_id}</td>
+                                <td>{order.ticket_id}</td>
                                 <td>{order.price}</td>
                                 <td>{order.purchase_time}</td>
                                 <td>{order.seat_id}</td>
