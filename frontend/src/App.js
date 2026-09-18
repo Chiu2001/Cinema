@@ -23,8 +23,6 @@ import CheckOutPage from './pages/CheckOutPage';
 import CheckOutPageIn from './pages/CheckOutPageIn';
 import Area from './components/Area';
 import PrivateRoute from './components/PrivateRoute';
-import EcpayPage from './pages/EcpayPage';
-import PaymentResultPage from './pages/PaymentResultPage';
 import { CartContext } from './CartContext';
 import { API_BASE_URL } from './apiConfig';
 
@@ -47,9 +45,9 @@ function App() {
     }, [cartItems]);
 
     // releaseSeats defaults to true (the user is abandoning these seats), but
-    // is passed false when this is called right before redirecting to an
-    // external payment gateway (LinePay/Stripe) — the seats must stay held
-    // through the actual payment, not be freed the moment checkout starts.
+    // is passed false when this is called right before redirecting to Stripe
+    // — the seats must stay held through the actual payment, not be freed
+    // the moment checkout starts.
     const removeCartItem = (cartItemId, releaseSeats = true) => {
         console.log('Attempting to remove cartItemId:', cartItemId);
         console.log('Current cart contents:', cartItems);
@@ -102,8 +100,6 @@ function App() {
                         <Route path="/CheckOut" element={<CheckOutPage />} />
                         <Route path="/CheckOutIn" element={<PrivateRoute element={<CheckOutPageIn />} />} />
                         <Route path="/area/:showtime_id" element={<Area />} />
-                        <Route path="/EcpayPage" element={<PrivateRoute element={<EcpayPage />} />} />
-                        <Route path="/PaymentResultPage" element={<PrivateRoute element={<PaymentResultPage />} />} />
                         <Route path="*" element={<h1>Page Not Found</h1>} />
                     </Routes>
                 </CartContext.Provider>

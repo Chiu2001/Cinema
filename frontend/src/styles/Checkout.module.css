@@ -112,8 +112,8 @@
     text-align: left; /* Left-align text */
 }
 
-.checkoutLinePaycheckoutButton {
-    background-color: var(--color-success); /* Keeps the recognizable "pay" green, tied to the token system */
+.checkoutPayButton {
+    background-color: var(--color-success); /* Green reads as "pay/confirm" */
     color: var(--color-white); /* White text */
     padding: 10px 20px; /* Add some padding */
     border: none; /* Remove border */
@@ -123,11 +123,11 @@
     transition: background-color 0.3s; /* Smooth color transition effect */
 }
 
-.checkoutLinePaycheckoutButton:hover {
+.checkoutPayButton:hover {
     background-color: var(--color-success-hover); /* Slightly darker green on hover */
 }
 
-.checkoutLinePaycheckoutButton:focus-visible {
+.checkoutPayButton:focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
 }

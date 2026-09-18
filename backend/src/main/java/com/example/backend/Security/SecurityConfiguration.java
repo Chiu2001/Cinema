@@ -65,7 +65,7 @@ public class SecurityConfiguration {
 						// additionally checks that the caller can only edit their own account.
 						.requestMatchers(HttpMethod.PUT, "/api/movie/update/**").authenticated()
 						.requestMatchers("/api/movie/**").permitAll()
-						.requestMatchers("/img/**", "/news/**", "/ecpay/**", "/checkout/**", "/api/stripe/**").permitAll()
+						.requestMatchers("/img/**", "/news/**", "/api/stripe/**").permitAll()
 						.requestMatchers("/api/orders/**")
 						.permitAll().requestMatchers("/api/manager/**").hasRole("MANAGER")
 						.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "MANAGER").requestMatchers("/api/user/**")
@@ -79,10 +79,9 @@ public class SecurityConfiguration {
 					"default-src 'self'; " +
 					"script-src 'self' https://kevin-0514.github.io 'unsafe-inline'; " +
 					"style-src 'self' 'unsafe-inline'; " +
-					"img-src 'self' data: https://payment-stage.ecPay.com.tw; " +
-					"connect-src 'self' https://sandbox-api-pay.line.me https://payment-stage.ecPay.com.tw; " +
-					"frame-src https://payment-stage.ecPay.com.tw;" +
-					"form-action 'self' https://payment-stage.ecPay.com.tw; " +
+					"img-src 'self' data:; " +
+					"connect-src 'self'; " +
+					"form-action 'self'; " +
 					"base-uri 'self';")))
 				.exceptionHandling(exceptionHandling -> exceptionHandling
 					.authenticationEntryPoint(unauthorizedEntryPoint())

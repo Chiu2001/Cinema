@@ -1,102 +1,3 @@
-// import React, { useContext } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { CartContext } from '../CartContext';
-// import styles from '../styles/Checkout.module.css'; // Import CSS module
-
-// export default function CheckOutIn() {
-//     const { cartItems, removeCartItem } = useContext(CartContext);
-//     const navigate = useNavigate();
-//     const cartEmpty = cartItems.length <= 0;
-//     const grandTotal = cartItems.reduce((total, item) => {
-//         return total + (item.hall.price * item.quantity);
-//     }, 0);
-//     const freeFood = 350;
-
-//     const payment = async () => {
-//         try {
-//             const response = await fetch(`${API_BASE_URL}/ecpay/checkout`, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     userId: localStorage.getItem('userid'),
-//                     amount: grandTotal,
-//                     description: cartItems.map(item => item.seatNumbers.join(', ')).join('; '),
-//                     itemName: cartItems.map(item => item.movie.title).join('; '),
-//                 }),
-//             });
-
-//             if (!response.ok) {
-//                 throw new Error('Network response error');
-//             }
-
-//             const formHtml = await response.text();
-//             console.log('Received ECPay HTML:', formHtml); // Check the returned HTML
-//             navigate('/ecpay', { state: { ecpayHTML: formHtml } });
-//         } catch (error) {
-//             console.error('Error during checkout:', error);
-//         }
-//     };
-
-//     return (
-//         <div className={styles.pageWrapper}>
-//             <h1>Your Cart</h1>
-
-//             {cartEmpty ? (
-//                 <div className={styles.emptyCartMessage}>
-//                     <Link to="/MovieList">
-//                         <a>Your cart is empty</a><br />
-//                         <a>Go buy tickets</a>
-//                     </Link>
-//                 </div>
-//             ) : (
-//                 <div className={styles.cartContainer}>
-//                     <div id={styles.cartSection}>
-//                         {/* Product list */}
-//                         {cartItems.map(item => (
-//                             <div className={styles.cartItemCard} key={item.movie.id}>
-//                                 <img className={styles.img} src={item.movie.img} alt={item.movie.title} width={200} />
-//                                 <div className={styles.textContent}>
-//                                     <p>Movie Title: {item.movie.title}</p>
-//                                     <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
-//                                     <p>Showtime: {item.showtime ? item.showtime : 'Time not specified'}</p>
-//                                     <p>{item.hall.hall_type} Hall {item.hall.hall_number}</p>
-//                                     <p>Price: {item.hall.price}</p>
-//                                     <p>Quantity: {item.quantity}</p>
-//                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
-//                                 </div>
-//                                 <div className={styles.deleteButtonContainer}>
-//                                     <button
-//                                         className={styles.deleteButton}
-//                                         onClick={() => removeCartItem(item.movie.id)} // Call the removeCartItem function
-//                                     >
-//                                         Delete
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         ))}
-//                     </div>
-
-//                     <div id={styles.checkoutSection}>
-//                         <div>Grand Total: NT${grandTotal}</div>
-//                         {grandTotal >= freeFood ? (
-//                             <div>Spend ${freeFood} and get free popcorn</div>
-//                         ) : (
-//                             <div>
-//                                 Spend ${freeFood} and get free popcorn<br />
-//                                 ${freeFood - grandTotal} to go
-//                             </div>
-//                         )}
-//                         <button className={styles.checkoutButton} onClick={payment}>Checkout</button>
-//                     </div>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// }
-
-
 import React, { useContext, useState } from 'react';
 import Titles from './Titles'
 import { Link, useNavigate } from 'react-router-dom';
@@ -114,12 +15,7 @@ export default function CheckOutIn() {
     const freeFood = 350;
     const orderNumber = `ORD-${new Date().getTime()}`;
 
-    // Use useState to manage savedOrderId and whether the LinePay button is shown
-    const [savedOrderId, setSavedOrderId] = useState(null);
-    const [showLinePayButton, setShowLinePayButton] = useState(false);
-
     // Create an "unpaid" order and return its real order number.
-    // Both LinePay and Stripe need this, so it's extracted for reuse instead of duplicated.
     const createPendingOrder = async (items = cartItems) => {
         const totalAmount = items.reduce((total, item) => {
             return total + item.hall.price * item.quantity;
@@ -139,89 +35,6 @@ export default function CheckOutIn() {
         });
         const pendingOrder = await response.json();
         return pendingOrder.orderNumber;
-    };
-
-    const LinePayHandleCheckout = async (items = cartItems) => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Please log in first!');
-            navigate('/login');
-            return;
-        }
-
-        const realOrderNumber = await createPendingOrder(items);
-
-        const totalAmount = items.reduce((total, item) => {
-            return total + item.hall.price * item.quantity;
-        }, 0);
-
-        const packages = items.map(item => ({
-            name: item.movie.title,
-            amount: item.hall.price * item.quantity,
-            products: item.seatNumbers.map(seat => ({
-                name: seat,
-                quantity: item.quantity,
-                price: item.hall.price
-            }))
-        }));
-
-        const checkoutRequest = {
-            amount: totalAmount,
-            orderId: String(realOrderNumber),
-            currency: 'TWD',
-            // LINE Pay redirects the browser here (appending transactionId/orderId
-            // itself) once the user approves payment; the backend confirms the
-            // payment there and marks the order paid before redirecting onward.
-            confirmUrl: `${API_BASE_URL}/checkout/confirm`,
-            packages: packages
-        };
-
-        fetch(`${API_BASE_URL}/checkout/save`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(checkoutRequest),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Order saved successfully:', data);
-                return fetch(`${API_BASE_URL}/checkout/details/${realOrderNumber}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-            })
-            .then(response => response.json())
-            .then(detailData => {
-                console.log('Retrieved checkout details:', detailData);
-                return fetch(`${API_BASE_URL}/checkout/payment`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(detailData),
-                });
-            })
-            .then(response => response.json())
-            .then(paymentData => {
-                console.log('LinePay payment processing result:', paymentData);
-                const responseInfo = JSON.parse(paymentData.response);
-
-                if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    // Only remove the items that were actually checked out this time, not the whole
-                    // cart. Don't release their seats: the user is being sent to LinePay to actually
-                    // pay, and the seats must stay held through that, not be freed right now.
-                    items.forEach(item => removeCartItem(item.cartItemId, false));
-                    window.location.href = responseInfo.info.paymentUrl.web;
-                } else {
-                    alert('Payment failed');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     };
 
     const StripeHandleCheckout = async (items = cartItems) => {
@@ -302,7 +115,6 @@ export default function CheckOutIn() {
                                 </div>
                                 <div>
                                     <button onClick={() => removeCartItem(item.cartItemId)}>Remove</button>
-                                    <button onClick={() => LinePayHandleCheckout([item])}>Checkout this item with LinePay</button>
                                     <button onClick={() => StripeHandleCheckout([item])}>Checkout this item with Stripe</button>
                                 </div>
                             </div>
@@ -320,8 +132,7 @@ export default function CheckOutIn() {
                                     Spend ${freeFood} and get free popcorn<br />
                                     ${freeFood - grandTotal} to go</div>
                         }
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => LinePayHandleCheckout()}>Checkout with LinePay</button>
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
+                        <button className={styles.checkoutPayButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
                     </div>
                 </div>
             }

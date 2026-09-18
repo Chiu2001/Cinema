@@ -3,7 +3,7 @@
 [![Java](https://img.shields.io/badge/language-Java-brightgreen)](https://www.oracle.com/java/)
 
 ## Project Overview
-This project implements a movie ticket booking website, including a movie homepage, login, sign-up, seat selection and ticket purchasing, a shopping cart, third-party login, third-party payment (ECPay, LinePay, and now Stripe), and an admin system, with the goal of improving the user's ticket-booking experience.
+This project implements a movie ticket booking website, including a movie homepage, login, sign-up, seat selection and ticket purchasing, a shopping cart, third-party login, third-party payment (Stripe), and an admin system, with the goal of improving the user's ticket-booking experience.
 
 
 ## System Architecture
@@ -11,7 +11,7 @@ This project implements a movie ticket booking website, including a movie homepa
    - User login, Google login
    - Admin backend (publish/unpublish movies)
    - Movie seat selection
-   - Third-party payment (ECPay, LinePay, Stripe)
+   - Third-party payment (Stripe)
 
 2. Backend
    - Seat reservation for ticket purchases
