@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -35,6 +36,9 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserImpl implements UserService {
 
+    // At least 8 characters, including at least one letter and one digit
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d).{8,}$");
+
     @Autowired
     private UserRepo userRepo;
     
@@ -58,6 +62,10 @@ public class UserImpl implements UserService {
         boolean userExists = userRepo.existsByUsernameOrEmail(userDTO.getUsername(), userDTO.getEmail());
         if (userExists) {
             throw new Exception("Username or email already exists");
+        }
+
+        if (!PASSWORD_PATTERN.matcher(userDTO.getPassword() == null ? "" : userDTO.getPassword()).matches()) {
+            throw new Exception("Password must be at least 8 characters long and include both letters and numbers");
         }
 
         User user = new User();
@@ -96,7 +104,18 @@ public class UserImpl implements UserService {
         return userRepo.findById(id).map(user -> {
             user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword());
+            // Only touch the password if a new one was actually submitted, so leaving
+            // it blank keeps the current password instead of wiping it. When one is
+            // submitted, it must meet the same strength rule as registration and gets
+            // BCrypt-encoded the same way saveOrUpdateUser does — this used to store
+            // whatever plaintext value was sent, which broke login on the next attempt.
+            String newPassword = updatedUser.getPassword();
+            if (newPassword != null && !newPassword.isBlank()) {
+                if (!PASSWORD_PATTERN.matcher(newPassword).matches()) {
+                    throw new IllegalArgumentException("Password must be at least 8 characters long and include both letters and numbers");
+                }
+                user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            }
             user.setGender(updatedUser.getGender());
             // Role changes go through ManagerController/updateUserRole; leave the
             // existing role untouched here instead of forcing it back to USER,

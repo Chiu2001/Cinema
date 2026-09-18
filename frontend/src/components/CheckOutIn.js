@@ -169,7 +169,10 @@ export default function CheckOutIn() {
             amount: totalAmount,
             orderId: String(realOrderNumber),
             currency: 'TWD',
-            confirmUrl: "https://www.google.com.tw",
+            // LINE Pay redirects the browser here (appending transactionId/orderId
+            // itself) once the user approves payment; the backend confirms the
+            // payment there and marks the order paid before redirecting onward.
+            confirmUrl: `${API_BASE_URL}/checkout/confirm`,
             packages: packages
         };
 

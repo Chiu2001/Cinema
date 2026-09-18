@@ -204,4 +204,49 @@ public class LinePayService {
         }
     }
 
+    // Finalizes a LINE Pay payment. LINE Pay only authorizes the amount when the
+    // user approves it on their hosted page; the merchant must call this Confirm
+    // API afterward (within a time limit) to actually capture it. This is what
+    // was missing: the checkout flow reached "approved" but never confirmed, so
+    // no payment was ever captured and no order was ever marked paid.
+    public boolean confirmPayment(String transactionId, String orderId) {
+        Optional<LinePayCheckoutPaymentRequestForm> optionalForm = repository.findByOrderId(orderId);
+        if (optionalForm.isEmpty()) {
+            System.out.println("LinePay confirm: no saved checkout request for orderId " + orderId);
+            return false;
+        }
+        LinePayCheckoutPaymentRequestForm form = optionalForm.get();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String nonce = UUID.randomUUID().toString();
+        String requestUri = "/v3/payments/" + transactionId + "/confirm";
+
+        try {
+            Map<String, Object> confirmBody = Map.of(
+                    "amount", form.getAmount(),
+                    "currency", form.getCurrency());
+            String body = mapper.writeValueAsString(confirmBody);
+            String signature = encrypt(ChannelSecret, ChannelSecret + requestUri + body + nonce);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("X-LINE-ChannelId", ChannelId);
+            headers.add("X-LINE-Authorization-Nonce", nonce);
+            headers.add("X-LINE-Authorization", signature);
+
+            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(confirmBody, headers);
+            String url = "https://sandbox-api-pay.line.me" + requestUri;
+            ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+
+            System.out.println("LinePay confirm response: " + response.getBody());
+
+            // LINE Pay always answers 200 OK; success is "0000" inside the JSON body
+            Map<String, Object> parsed = mapper.readValue(response.getBody(), Map.class);
+            return "0000".equals(String.valueOf(parsed.get("returnCode")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
