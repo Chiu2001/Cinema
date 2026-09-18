@@ -75,7 +75,7 @@ public class NewsImpl implements NewsService{
 	    news.setCreatedTime(LocalDateTime.now());
 
 	    // Build the full URL
-	    String fileUrl = baseUrl  + "/news/" + fileName;  // The full URL
+	    String fileUrl = baseUrl + "/img/" + fileName;  // The full URL
 	    news.setImg(fileUrl);  // Save the full image URL
 	    newsRepo.save(news);
 
