@@ -23,8 +23,6 @@ import CheckOutPage from './pages/CheckOutPage';
 import CheckOutPageIn from './pages/CheckOutPageIn';
 import Area from './components/Area';
 import PrivateRoute from './components/PrivateRoute';
-import EcpayPage from './pages/EcpayPage';
-import PaymentResultPage from './pages/PaymentResultPage';
 import { CartContext } from './CartContext';
 import { API_BASE_URL } from './apiConfig';
 
@@ -102,8 +100,6 @@ function App() {
                         <Route path="/CheckOut" element={<CheckOutPage />} />
                         <Route path="/CheckOutIn" element={<PrivateRoute element={<CheckOutPageIn />} />} />
                         <Route path="/area/:showtime_id" element={<Area />} />
-                        <Route path="/EcpayPage" element={<PrivateRoute element={<EcpayPage />} />} />
-                        <Route path="/PaymentResultPage" element={<PrivateRoute element={<PaymentResultPage />} />} />
                         <Route path="*" element={<h1>Page Not Found</h1>} />
                     </Routes>
                 </CartContext.Provider>
