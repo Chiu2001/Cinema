@@ -23,6 +23,13 @@ const RegisterForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Password must be at least 8 characters and contain both letters and numbers
+        const passwordRules = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+        if (!passwordRules.test(formData.password)) {
+            alert('Password must be at least 8 characters long and include both letters and numbers');
+            return;
+        }
+
         // Check that the password and confirm password match
         if (formData.password !== formData.confirmPassword) {
             alert('Password and confirm password do not match');
@@ -85,8 +92,11 @@ const RegisterForm = () => {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleChange}
+                        pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
+                        title="At least 8 characters, including both letters and numbers"
                         required
                     />
+                    <p className={styles.passwordHint}>At least 8 characters, including both letters and numbers</p>
                     <input
                         type="password"
                         name="confirmPassword"

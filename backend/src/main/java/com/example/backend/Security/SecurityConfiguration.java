@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
@@ -58,7 +59,12 @@ public class SecurityConfiguration {
 			return corsConfig;
 		}))
 				.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(authz -> authz.requestMatchers("/api/movie/**").permitAll()
+				.authorizeHttpRequests(authz -> authz
+						// More specific than the /api/movie/** permitAll below, so it's evaluated
+						// first: editing a profile requires being logged in. The controller itself
+						// additionally checks that the caller can only edit their own account.
+						.requestMatchers(HttpMethod.PUT, "/api/movie/update/**").authenticated()
+						.requestMatchers("/api/movie/**").permitAll()
 						.requestMatchers("/img/**", "/news/**", "/ecpay/**", "/checkout/**", "/api/stripe/**").permitAll()
 						.requestMatchers("/api/orders/**")
 						.permitAll().requestMatchers("/api/manager/**").hasRole("MANAGER")

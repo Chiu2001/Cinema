@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -139,7 +141,21 @@ public class AuthController {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
+	public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User updatedUser,
+			Authentication authentication) {
+		// This route requires authentication (see SecurityConfiguration), but that only
+		// proves the caller is logged in as *someone* — without this check they could
+		// still pass any {id} and overwrite a different account.
+		if (!(authentication.getPrincipal() instanceof CustomUserDetails callerDetails)) {
+			throw new AccessDeniedException("You do not have permission to perform this action");
+		}
+		User caller = callerDetails.getUser();
+		boolean isSelf = caller.getUser_id().equals(id);
+		boolean isAdminOrManager = caller.getRole() == Role.ADMIN || caller.getRole() == Role.MANAGER;
+		if (!isSelf && !isAdminOrManager) {
+			throw new AccessDeniedException("You do not have permission to perform this action");
+		}
+
 		Optional<User> updated = userService.updateUser(id, updatedUser);
 
 		return updated.map(user -> ResponseEntity.ok(user))
