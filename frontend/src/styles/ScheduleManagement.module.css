@@ -11,6 +11,23 @@
     gap: 20px;
 }
 
+/* Showtimes table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid var(--color-line);
+    text-align: left;
+}
+
+.table th {
+    background-color: var(--color-primary-soft);
+}
+
 /* Individual movie card styles */
 .card {
     background-color: var(--color-surface);
