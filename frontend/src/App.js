@@ -47,9 +47,9 @@ function App() {
     }, [cartItems]);
 
     // releaseSeats defaults to true (the user is abandoning these seats), but
-    // is passed false when this is called right before redirecting to an
-    // external payment gateway (LinePay/Stripe) — the seats must stay held
-    // through the actual payment, not be freed the moment checkout starts.
+    // is passed false when this is called right before redirecting to Stripe
+    // — the seats must stay held through the actual payment, not be freed
+    // the moment checkout starts.
     const removeCartItem = (cartItemId, releaseSeats = true) => {
         console.log('Attempting to remove cartItemId:', cartItemId);
         console.log('Current cart contents:', cartItems);

@@ -114,12 +114,7 @@ export default function CheckOutIn() {
     const freeFood = 350;
     const orderNumber = `ORD-${new Date().getTime()}`;
 
-    // Use useState to manage savedOrderId and whether the LinePay button is shown
-    const [savedOrderId, setSavedOrderId] = useState(null);
-    const [showLinePayButton, setShowLinePayButton] = useState(false);
-
     // Create an "unpaid" order and return its real order number.
-    // Both LinePay and Stripe need this, so it's extracted for reuse instead of duplicated.
     const createPendingOrder = async (items = cartItems) => {
         const totalAmount = items.reduce((total, item) => {
             return total + item.hall.price * item.quantity;
@@ -139,89 +134,6 @@ export default function CheckOutIn() {
         });
         const pendingOrder = await response.json();
         return pendingOrder.orderNumber;
-    };
-
-    const LinePayHandleCheckout = async (items = cartItems) => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Please log in first!');
-            navigate('/login');
-            return;
-        }
-
-        const realOrderNumber = await createPendingOrder(items);
-
-        const totalAmount = items.reduce((total, item) => {
-            return total + item.hall.price * item.quantity;
-        }, 0);
-
-        const packages = items.map(item => ({
-            name: item.movie.title,
-            amount: item.hall.price * item.quantity,
-            products: item.seatNumbers.map(seat => ({
-                name: seat,
-                quantity: item.quantity,
-                price: item.hall.price
-            }))
-        }));
-
-        const checkoutRequest = {
-            amount: totalAmount,
-            orderId: String(realOrderNumber),
-            currency: 'TWD',
-            // LINE Pay redirects the browser here (appending transactionId/orderId
-            // itself) once the user approves payment; the backend confirms the
-            // payment there and marks the order paid before redirecting onward.
-            confirmUrl: `${API_BASE_URL}/checkout/confirm`,
-            packages: packages
-        };
-
-        fetch(`${API_BASE_URL}/checkout/save`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(checkoutRequest),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Order saved successfully:', data);
-                return fetch(`${API_BASE_URL}/checkout/details/${realOrderNumber}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-            })
-            .then(response => response.json())
-            .then(detailData => {
-                console.log('Retrieved checkout details:', detailData);
-                return fetch(`${API_BASE_URL}/checkout/payment`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(detailData),
-                });
-            })
-            .then(response => response.json())
-            .then(paymentData => {
-                console.log('LinePay payment processing result:', paymentData);
-                const responseInfo = JSON.parse(paymentData.response);
-
-                if (responseInfo.info && responseInfo.info.paymentUrl && responseInfo.info.paymentUrl.web) {
-                    // Only remove the items that were actually checked out this time, not the whole
-                    // cart. Don't release their seats: the user is being sent to LinePay to actually
-                    // pay, and the seats must stay held through that, not be freed right now.
-                    items.forEach(item => removeCartItem(item.cartItemId, false));
-                    window.location.href = responseInfo.info.paymentUrl.web;
-                } else {
-                    alert('Payment failed');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     };
 
     const StripeHandleCheckout = async (items = cartItems) => {
@@ -302,7 +214,6 @@ export default function CheckOutIn() {
                                 </div>
                                 <div>
                                     <button onClick={() => removeCartItem(item.cartItemId)}>Remove</button>
-                                    <button onClick={() => LinePayHandleCheckout([item])}>Checkout this item with LinePay</button>
                                     <button onClick={() => StripeHandleCheckout([item])}>Checkout this item with Stripe</button>
                                 </div>
                             </div>
@@ -320,8 +231,7 @@ export default function CheckOutIn() {
                                     Spend ${freeFood} and get free popcorn<br />
                                     ${freeFood - grandTotal} to go</div>
                         }
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => LinePayHandleCheckout()}>Checkout with LinePay</button>
-                        <button className={styles.checkoutLinePaycheckoutButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
+                        <button className={styles.checkoutPayButton} onClick={() => StripeHandleCheckout()}>Pay with Credit Card (Stripe)</button>
                     </div>
                 </div>
             }

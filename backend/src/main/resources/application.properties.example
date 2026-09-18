@@ -33,7 +33,3 @@ app.base-url=http://localhost:8443/movie
 # (must be the exact same Client ID the frontend's @react-oauth/google uses,
 # or the two sides won't match up).
 google.oauth.client-id=
-
-# ---- LinePay ----
-Linepay.api.ChannelId=
-Linepay.api.ChannelSecret=
