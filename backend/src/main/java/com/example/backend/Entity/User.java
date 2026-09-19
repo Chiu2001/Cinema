@@ -3,6 +3,8 @@ package com.example.backend.Entity;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import com.example.backend.Entity.Role;
 import com.example.backend.Entity.Gender;
@@ -83,6 +85,10 @@ public class User {
         this.email = email;
     }
 
+    // WRITE_ONLY: still accepted in incoming request bodies (e.g. updateUser),
+    // but never serialized back out — every endpoint that returns a User was
+    // leaking the BCrypt hash to any caller who could see the response.
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }
