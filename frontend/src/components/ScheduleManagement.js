@@ -22,6 +22,18 @@ const ScheduleManagement = () => {
     const [file, setFile] = useState(null);
     const [tempStatus, setTempStatus] = useState('FALSE');
 
+    const [showtimes, setShowtimes] = useState([]);
+    const [cinemas, setCinemas] = useState([]);
+    const [halls, setHalls] = useState([]);
+    const [showShowtimeModal, setShowShowtimeModal] = useState(false);
+    const [newShowtime, setNewShowtime] = useState({
+        movieId: '',
+        cinemaId: '',
+        hallId: '',
+        showDate: '',
+        showTime: '',
+    });
+
     // Fetch movie data from the backend
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -48,6 +60,66 @@ const ScheduleManagement = () => {
                 }
             });
     }, []);
+
+    // Fetch showtimes plus the cinemas/halls needed to build the Add Showtime form
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        axios.get(`${API_BASE_URL}/api/admin/showtimes`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(response => setShowtimes(response.data))
+            .catch(error => console.error('Error fetching showtimes:', error));
+
+        axios.get(`${API_BASE_URL}/api/movie/cinemas`)
+            .then(response => setCinemas(response.data))
+            .catch(error => console.error('Error fetching cinemas:', error));
+
+        axios.get(`${API_BASE_URL}/api/movie/halls`)
+            .then(response => setHalls(response.data))
+            .catch(error => console.error('Error fetching halls:', error));
+    }, []);
+
+    const handleShowtimeInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewShowtime({ ...newShowtime, [name]: value });
+    };
+
+    const saveNewShowtime = () => {
+        if (!newShowtime.movieId || !newShowtime.cinemaId || !newShowtime.hallId || !newShowtime.showDate || !newShowtime.showTime) {
+            alert('Please make sure all fields are filled in');
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in first');
+            window.location.href = '/login';
+            return;
+        }
+
+        axios.post(`${API_BASE_URL}/api/admin/add-showtime`, newShowtime, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => {
+                setShowtimes([...showtimes, response.data]);
+                setShowShowtimeModal(false);
+                setNewShowtime({ movieId: '', cinemaId: '', hallId: '', showDate: '', showTime: '' });
+            })
+            .catch(error => {
+                console.error('Error adding showtime:', error);
+                if (error.response && error.response.status === 401) {
+                    alert('Token has expired or is invalid, please log in again');
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                } else {
+                    alert('Unable to add showtime, please check the fields and try again');
+                }
+            });
+    };
 
     // Show the modal and populate it with the selected movie's info
     const handleCardClick = (movie) => {
@@ -194,6 +266,66 @@ const ScheduleManagement = () => {
                             </select>
                             <button onClick={saveUpdatedMovie}>Save</button>
                             <button onClick={() => setShowModal(false)}>Close</button>
+                        </div>
+                    </div>
+                )}
+
+                <h1>Showtimes</h1>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Movie</th>
+                            <th>Cinema</th>
+                            <th>Hall</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {showtimes.map(showtime => (
+                            <tr key={showtime.showtime_id}>
+                                <td>{showtime.movie.title}</td>
+                                <td>{showtime.cinema.name}</td>
+                                <td>{showtime.hall.hall_type} Hall {showtime.hall.hall_number}</td>
+                                <td>{showtime.showDate.show_date}</td>
+                                <td>{showtime.show_time}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {/* Add showtime button */}
+                <button onClick={() => setShowShowtimeModal(true)} className={styles.addButton}>Add Showtime</button>
+
+                {/* Add showtime modal */}
+                {showShowtimeModal && (
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modal}>
+                            <h2>Add Showtime</h2>
+                            <select name="movieId" value={newShowtime.movieId} onChange={handleShowtimeInputChange}>
+                                <option value="" disabled>Select a movie</option>
+                                {movies.map(movie => (
+                                    <option key={movie.id} value={movie.id}>{movie.title}</option>
+                                ))}
+                            </select>
+                            <select name="cinemaId" value={newShowtime.cinemaId} onChange={handleShowtimeInputChange}>
+                                <option value="" disabled>Select a cinema</option>
+                                {cinemas.map(cinema => (
+                                    <option key={cinema.cinema_id} value={cinema.cinema_id}>{cinema.name}</option>
+                                ))}
+                            </select>
+                            <select name="hallId" value={newShowtime.hallId} onChange={handleShowtimeInputChange}>
+                                <option value="" disabled>Select a hall</option>
+                                {halls.map(hall => (
+                                    <option key={hall.hall_id} value={hall.hall_id}>{hall.hall_type} Hall {hall.hall_number}</option>
+                                ))}
+                            </select>
+                            <input type="date" name="showDate" value={newShowtime.showDate} onChange={handleShowtimeInputChange} />
+                            <input type="time" name="showTime" step="1" value={newShowtime.showTime} onChange={handleShowtimeInputChange} />
+                            <div className={styles.modalButtons}>
+                                <button className={styles.confirmButton} onClick={saveNewShowtime}>Save</button>
+                                <button className={styles.cancelButton} onClick={() => setShowShowtimeModal(false)}>Close</button>
+                            </div>
                         </div>
                     </div>
                 )}
