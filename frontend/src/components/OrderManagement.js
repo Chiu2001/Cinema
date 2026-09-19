@@ -11,12 +11,26 @@ const OrderManagement = () => {
     const ordersPerPage = 10;
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/api/admin/tickets`)  // Updated to the backend's new API endpoint
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in first');
+            window.location.href = '/login';
+            return;
+        }
+
+        axios.get(`${API_BASE_URL}/api/admin/tickets`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
             .then(response => {
                 setOrders(response.data);
             })
             .catch(error => {
                 console.error('Error fetching orders:', error);
+                if (error.response && error.response.status === 401) {
+                    alert('Token has expired or is invalid, please log in again');
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
             });
     }, []);
 

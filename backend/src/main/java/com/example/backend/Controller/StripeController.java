@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.backend.DTO.TicketItemDTO;
 import com.example.backend.Service.PaymentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.Stripe;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
@@ -31,6 +35,8 @@ public class StripeController {
 
     @Autowired
     private PaymentService paymentService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${stripe.secret-key}")
     private String stripeSecretKey;
@@ -50,6 +56,10 @@ public class StripeController {
         private String name;
         private long unitAmount;
         private long quantity;
+        // New: which showtime and seats this line item covers, so a Ticket
+        // can be created per seat once the webhook confirms payment.
+        private Integer showtimeId;
+        private List<String> seatNumbers;
 
         public String getName() {
             return name;
@@ -73,6 +83,22 @@ public class StripeController {
 
         public void setQuantity(long quantity) {
             this.quantity = quantity;
+        }
+
+        public Integer getShowtimeId() {
+            return showtimeId;
+        }
+
+        public void setShowtimeId(Integer showtimeId) {
+            this.showtimeId = showtimeId;
+        }
+
+        public List<String> getSeatNumbers() {
+            return seatNumbers;
+        }
+
+        public void setSeatNumbers(List<String> seatNumbers) {
+            this.seatNumbers = seatNumbers;
         }
     }
 
@@ -144,6 +170,15 @@ public class StripeController {
                         .build())
                 .collect(Collectors.toList());
 
+        // New: also carry each item's showtime + seats through as JSON, so the
+        // webhook can create a Ticket per seat once payment is confirmed.
+        String ticketItemsJson;
+        try {
+            ticketItemsJson = objectMapper.writeValueAsString(request.getItems());
+        } catch (JsonProcessingException e) {
+            ticketItemsJson = "[]";
+        }
+
         // New: store userId, description, and itemName in the Stripe Session metadata.
         // Stripe keeps this data as-is and sends it back to us when payment completes.
         SessionCreateParams params = SessionCreateParams.builder()
@@ -155,6 +190,7 @@ public class StripeController {
                 .putMetadata("orderNumber", String.valueOf(request.getOrderNumber()))
                 .putMetadata("description", request.getDescription())
                 .putMetadata("itemName", request.getItemName())
+                .putMetadata("ticketItems", ticketItemsJson)
                 .build();
 
         Session session = Session.create(params);
@@ -191,6 +227,17 @@ public class StripeController {
 
                 Integer orderNumber = Integer.valueOf(metadata.get("orderNumber"));
                 paymentService.updateOrder(orderNumber, LocalDateTime.now(), amount, description, itemName, true);
+
+                // New: now that payment is confirmed, create the actual Ticket
+                // rows (one per seat) so Order Lookup has something to show.
+                try {
+                    List<TicketItemDTO> ticketItems = objectMapper.readValue(
+                            metadata.getOrDefault("ticketItems", "[]"),
+                            new TypeReference<List<TicketItemDTO>>() {});
+                    paymentService.createTicketsForOrder(orderNumber, ticketItems);
+                } catch (JsonProcessingException e) {
+                    System.err.println("Could not parse ticketItems metadata for order " + orderNumber + ": " + e.getMessage());
+                }
             });
         }
 
