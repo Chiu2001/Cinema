@@ -264,3 +264,9 @@
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
 }
+
+.checkoutItemActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}

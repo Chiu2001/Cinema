@@ -103,7 +103,7 @@ export default function CheckOutIn() {
                         {/* Product list */}
                         {cartItems.map(item => (
                             <div className={styles.checkoutCartItemCard} key={item.cartItemId}>
-                                <img className={styles.checkoutImg} src={process.env.PUBLIC_URL + "/image/" + item.movie.img} alt={item.movie.title} width={200} />
+                                <img className={styles.checkoutImg} src={item.movie.img} alt={item.movie.title} width={200} />
                                 <div className={styles.checkoutTextContent}>
                                     <p>Movie Title: {item.movie.title}</p>
                                     <p>Showing Date: {item.showDate ? item.showDate : 'Date not specified'}</p>
@@ -113,9 +113,9 @@ export default function CheckOutIn() {
                                     <p>Quantity: {item.quantity}</p>
                                     <p>Seats: {item.seatNumbers.join(', ')}</p>
                                 </div>
-                                <div>
-                                    <button onClick={() => removeCartItem(item.cartItemId)}>Remove</button>
-                                    <button onClick={() => StripeHandleCheckout([item])}>Checkout this item with Stripe</button>
+                                <div className={styles.checkoutItemActions}>
+                                    <button className={styles.deleteButton} onClick={() => removeCartItem(item.cartItemId)}>Remove</button>
+                                    <button className={styles.checkoutPayButton} onClick={() => StripeHandleCheckout([item])}>Checkout</button>
                                 </div>
                             </div>
                         ))}
