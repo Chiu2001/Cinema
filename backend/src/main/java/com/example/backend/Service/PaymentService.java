@@ -7,14 +7,20 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.backend.DTO.TicketItemDTO;
 import com.example.backend.Entity.Order;
+import com.example.backend.Entity.Ticket;
 import com.example.backend.Repo.OrderRepo;
+import com.example.backend.Repo.TicketRepo;
 
 @Service
 public class PaymentService {
 
     @Autowired
     private OrderRepo orderRepo;
+
+    @Autowired
+    private TicketRepo ticketRepo;
 
     private static final String PAYMENT_SUCCESS = "Paid"; // Defines the "payment succeeded" status
 
@@ -68,5 +74,25 @@ public class PaymentService {
 
     public List<Order> getOrdersByUserId(Integer userId) {
         return orderRepo.findByUserId(userId); // Fetch orders by user ID
+    }
+
+    // Create one Ticket row per seat once payment is confirmed, so Order
+    // Lookup has something to show. Called from the Stripe webhook handler.
+    public void createTicketsForOrder(Integer orderNumber, List<TicketItemDTO> items) {
+        LocalDateTime now = LocalDateTime.now();
+
+        for (TicketItemDTO item : items) {
+            int pricePerSeat = item.getUnitAmount() / 100; // cents -> dollars
+
+            for (String seatNumber : item.getSeatNumbers()) {
+                Ticket ticket = new Ticket();
+                ticket.setOrder(orderNumber);
+                ticket.setShowtime(item.getShowtimeId());
+                ticket.setSeat(seatNumber);
+                ticket.setPrice(pricePerSeat);
+                ticket.setPurchasetime(now);
+                ticketRepo.save(ticket);
+            }
+        }
     }
 }

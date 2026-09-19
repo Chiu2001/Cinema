@@ -2,6 +2,8 @@ package com.example.backend.Entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,10 +30,14 @@ public class Ticket {
 
 	@Column(name = "price")
 	private int price;
-	
+
 	@Column(name = "purchase_time")
 	private LocalDateTime purchasetime;
 
+	// @JsonProperty renames these to the snake_case keys OrderManagement.js
+	// expects (order_id, ticket_id, seat_id, showtime_id, purchase_time),
+	// since Jackson would otherwise serialize using the plain getter names.
+	@JsonProperty("ticket_id")
 	public Long getId() {
 		return id;
 	}
@@ -40,6 +46,7 @@ public class Ticket {
 		this.id = id;
 	}
 
+	@JsonProperty("order_id")
 	public int getOrder() {
 		return order;
 	}
@@ -48,6 +55,7 @@ public class Ticket {
 		this.order = order;
 	}
 
+	@JsonProperty("showtime_id")
 	public int getShowtime() {
 		return showtime;
 	}
@@ -56,6 +64,7 @@ public class Ticket {
 		this.showtime = showtime;
 	}
 
+	@JsonProperty("seat_id")
 	public String getSeat() {
 		return seat;
 	}
@@ -72,6 +81,7 @@ public class Ticket {
 		this.price = price;
 	}
 
+	@JsonProperty("purchase_time")
 	public LocalDateTime getPurchasetime() {
 		return purchasetime;
 	}

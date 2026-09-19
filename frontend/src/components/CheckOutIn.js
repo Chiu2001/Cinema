@@ -51,6 +51,8 @@ export default function CheckOutIn() {
             name: `${item.movie.title}（${item.seatNumbers.join(', ')}）`,
             unitAmount: Math.round(item.hall.price * 100),
             quantity: item.quantity,
+            showtimeId: item.showtime_id,
+            seatNumbers: item.seatNumbers,
         }));
 
         const requestBody = {
