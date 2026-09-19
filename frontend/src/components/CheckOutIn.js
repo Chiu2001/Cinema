@@ -25,6 +25,7 @@ export default function CheckOutIn() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
             body: JSON.stringify({
                 userId: parseInt(localStorage.getItem('userid'), 10),

@@ -11,7 +11,10 @@ const OrderListIn = () => {
     // Fetch order history
     const fetchOrders = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/orders/user?userId=${userId}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${API_BASE_URL}/api/orders/user?userId=${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             setOrders(response.data);
         } catch (error) {
             console.error('Unable to fetch orders', error);
@@ -21,7 +24,10 @@ const OrderListIn = () => {
     // Fetch a single order's details
     const fetchOrderDetail = async (orderNumber) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/api/orders/details?orderNumber=${orderNumber}`);
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${API_BASE_URL}/api/orders/details?orderNumber=${orderNumber}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             setSelectedOrder(response.data); // Save the order details
         } catch (error) {
             console.error('Unable to fetch order details', error);

@@ -66,8 +66,12 @@ public class SecurityConfiguration {
 						.requestMatchers(HttpMethod.PUT, "/api/movie/update/**").authenticated()
 						.requestMatchers("/api/movie/**").permitAll()
 						.requestMatchers("/img/**", "/news/**", "/api/stripe/**").permitAll()
+						// Order history/details previously had no auth requirement at all, so
+						// anyone could read any user's orders just by guessing a userId or
+						// order number. The controller additionally checks the caller can
+						// only see their own orders (or is ADMIN/MANAGER).
 						.requestMatchers("/api/orders/**")
-						.permitAll().requestMatchers("/api/manager/**").hasRole("MANAGER")
+						.authenticated().requestMatchers("/api/manager/**").hasRole("MANAGER")
 						.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "MANAGER").requestMatchers("/api/user/**")
 						.hasRole("USER").anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
