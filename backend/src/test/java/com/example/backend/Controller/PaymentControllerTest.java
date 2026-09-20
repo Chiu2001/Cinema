@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -47,7 +48,9 @@ class PaymentControllerTest {
         user.setRole(role);
 
         Authentication authentication = mock(Authentication.class);
-        when(authentication.getPrincipal()).thenReturn(new CustomUserDetails(user));
+        // lenient: some tests (e.g. order-not-found) never actually reach the
+        // ownership check, so this stub legitimately goes unused there.
+        lenient().when(authentication.getPrincipal()).thenReturn(new CustomUserDetails(user));
         return authentication;
     }
 
