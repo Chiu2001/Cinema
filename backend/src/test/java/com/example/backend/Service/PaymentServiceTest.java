@@ -120,4 +120,17 @@ class PaymentServiceTest {
         verify(ticketRepo).save(any(Ticket.class));
         verify(seatRepo, never()).save(any());
     }
+
+    @Test
+    void createTicketsForOrder_ticketsAlreadyExistForOrder_doesNothing() {
+        // Simulates Stripe redelivering the same checkout.session.completed
+        // event a second time — tickets for this order already exist.
+        when(ticketRepo.existsByOrder(774520727)).thenReturn(true);
+
+        TicketItemDTO item = ticketItem(6, List.of("D1-5", "D1-6"), 16000);
+        paymentService.createTicketsForOrder(774520727, List.of(item));
+
+        verify(ticketRepo, never()).save(any());
+        verify(seatRepo, never()).findByShowtimeIdAndSeatNumber(any(), any());
+    }
 }

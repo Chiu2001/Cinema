@@ -82,7 +82,17 @@ public class PaymentService {
 
     // Create one Ticket row per seat once payment is confirmed, so Order
     // Lookup has something to show. Called from the Stripe webhook handler.
+    //
+    // Idempotent: Stripe redelivers webhook events (network retries, slow
+    // responses, etc.), so the same checkout.session.completed event can
+    // trigger this method more than once for the same order. Without this
+    // check, a redelivered webhook would create duplicate tickets for
+    // seats that were already sold.
     public void createTicketsForOrder(Integer orderNumber, List<TicketItemDTO> items) {
+        if (ticketRepo.existsByOrder(orderNumber)) {
+            return;
+        }
+
         LocalDateTime now = LocalDateTime.now();
 
         for (TicketItemDTO item : items) {
