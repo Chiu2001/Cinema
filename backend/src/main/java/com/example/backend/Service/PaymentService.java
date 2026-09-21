@@ -11,6 +11,7 @@ import com.example.backend.DTO.TicketItemDTO;
 import com.example.backend.Entity.Order;
 import com.example.backend.Entity.Ticket;
 import com.example.backend.Repo.OrderRepo;
+import com.example.backend.Repo.SeatRepo;
 import com.example.backend.Repo.TicketRepo;
 
 @Service
@@ -21,6 +22,9 @@ public class PaymentService {
 
     @Autowired
     private TicketRepo ticketRepo;
+
+    @Autowired
+    private SeatRepo seatRepo;
 
     private static final String PAYMENT_SUCCESS = "Paid"; // Defines the "payment succeeded" status
 
@@ -92,6 +96,15 @@ public class PaymentService {
                 ticket.setPrice(pricePerSeat);
                 ticket.setPurchasetime(now);
                 ticketRepo.save(ticket);
+
+                // The seat is now genuinely sold, not just held — clear its
+                // reservation timestamp so SeatReservationCleanupTask never
+                // releases it back to available.
+                seatRepo.findByShowtimeIdAndSeatNumber(item.getShowtimeId(), seatNumber)
+                        .ifPresent(seat -> {
+                            seat.setReservedAt(null);
+                            seatRepo.save(seat);
+                        });
             }
         }
     }

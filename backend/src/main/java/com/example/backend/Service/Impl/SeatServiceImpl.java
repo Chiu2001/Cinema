@@ -1,5 +1,6 @@
 package com.example.backend.Service.Impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,16 @@ public class SeatServiceImpl implements SeatService{
 			// If the seat already exists, update its status to whatever was requested
 			// (false to reserve, true to release back to available)
 			seat.setSeatAvailability(seatDTO.getSeatAvailability());
+		}
+
+		// Track when a hold started, so SeatReservationCleanupTask can release it
+		// if the cart is abandoned. Releasing a seat clears the timestamp; a
+		// reservation created/confirmed as a real booking clears it too (see
+		// PaymentService.createTicketsForOrder) so it's never swept.
+		if (Boolean.FALSE.equals(seatDTO.getSeatAvailability())) {
+			seat.setReservedAt(LocalDateTime.now());
+		} else {
+			seat.setReservedAt(null);
 		}
 
 		seatRepo.save(seat); // Save to the database
