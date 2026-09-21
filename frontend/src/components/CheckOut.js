@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../CartContext';
 import styles from '../styles/Checkout.module.css'; // Import CSS module
-import { API_BASE_URL } from '../apiConfig';
 
 export default function CheckOut() {
     const { cartItems, removeCartItem } = useContext(CartContext);
@@ -13,43 +12,22 @@ export default function CheckOut() {
     }, 0);
     const freeFood = 350;
 
-    const placeOrder = async () => {
+    // This page exists so a guest can preview their cart before logging in
+    // (/CheckOutIn is behind PrivateRoute and would bounce them straight to
+    // /login). It used to also create a pending order here and dump the user
+    // on /OrderList without ever charging them — the real Stripe checkout
+    // only exists on CheckOutIn, so hand off there instead of duplicating
+    // (and getting wrong) that logic.
+    const placeOrder = () => {
         const token = localStorage.getItem('token');
 
-        // Check whether the user is logged in
         if (!token) {
             alert('Please log in first!');
-            navigate('/login'); // Redirect to the login page
-            return; // Stop executing the checkout logic
+            navigate('/login');
+            return;
         }
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/orders/create-pending`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    userId: parseInt(localStorage.getItem('userid'), 10),
-                    amount: grandTotal,
-                    description: cartItems.map(item => item.seatNumbers.join(', ')).join('; '),
-                    itemName: cartItems.map(item => item.movie.title).join('; '),
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response error');
-            }
-
-            const orderDetails = await response.json();
-            console.log('Order details:', orderDetails);
-
-            // Navigate to the OrderList page once checkout is complete
-            navigate('/OrderList');
-        } catch (error) {
-            console.error('Error during checkout:', error);
-        }
+        navigate('/CheckOutIn');
     };
 
     return (
