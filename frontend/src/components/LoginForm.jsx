@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../styles/LoginForm.module.css';
 import { FaUser, FaLock } from "react-icons/fa";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
@@ -10,6 +10,11 @@ const clientId = "817410459835-mgi4raiakq80l828g3nd2vhn791urcdd.apps.googleuserc
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    // Whoever redirected here (PrivateRoute, CheckOut, CheckOutIn) can pass
+    // where the user was headed, so login sends them back there instead of
+    // always landing on the home page.
+    const redirectTo = location.state?.from?.pathname || '/HomePageIn';
 
     const responseGoogle = async (credentialResponse) => {
         console.log('Google Login Success:', credentialResponse);
@@ -41,7 +46,7 @@ const LoginForm = () => {
                     localStorage.setItem('userid', id);  // Store the id
 
                     console.log('Login Success: Token and roles stored');
-                    navigate('/HomePageIn');
+                    navigate(redirectTo);
                 } else {
                     console.error('Backend login failed:', data.error);
                     alert('Google login failed: ' + data.error);
@@ -86,7 +91,7 @@ const LoginForm = () => {
                 localStorage.setItem('roles', JSON.stringify(roles));
                 localStorage.setItem('userid', id); // Store the id
 
-                navigate('/HomePageIn');
+                navigate(redirectTo);
             } else {
                 alert('Login failed: ' + data.message);
             }

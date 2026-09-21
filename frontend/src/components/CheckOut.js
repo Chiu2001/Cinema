@@ -23,7 +23,9 @@ export default function CheckOut() {
 
         if (!token) {
             alert('Please log in first!');
-            navigate('/login');
+            // Send them straight back to the real checkout page once they log in,
+            // instead of the home page.
+            navigate('/login', { state: { from: { pathname: '/CheckOutIn' } } });
             return;
         }
 
