@@ -6,6 +6,10 @@
 # listing "what settings this project actually needs" — anyone who clones it fresh
 # (or an interviewer) has no idea what to fill in, and the project just won't start.
 
+# ---- Server ----
+server.port=8443
+server.servlet.context-path=/movie
+
 # ---- Database (MariaDB) ----
 spring.datasource.url=jdbc:mariadb://localhost:3306/cinema
 spring.datasource.username=root
@@ -27,6 +31,14 @@ app.cors.allowed-origins=http://localhost:3000
 # ---- Static files (movie poster / news image uploads) ----
 file.upload-dir=uploads
 app.base-url=http://localhost:8443/movie
+
+# ---- Stripe ----
+# Get these from the Stripe Dashboard (test mode is fine for local dev).
+# webhook-secret comes from `stripe listen`, not the dashboard, when testing locally.
+stripe.secret-key=
+stripe.webhook-secret=
+# Where Stripe redirects back to after checkout succeeds/is cancelled.
+app.frontend-url=http://localhost:3000
 
 # ---- Google login ----
 # The Client ID obtained after creating an OAuth Client in Google Cloud Console
