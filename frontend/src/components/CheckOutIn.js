@@ -42,7 +42,7 @@ export default function CheckOutIn() {
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Please log in first!');
-            navigate('/login');
+            navigate('/login', { state: { from: { pathname: '/CheckOutIn' } } });
             return;
         }
 
