@@ -33,3 +33,8 @@ app.base-url=http://localhost:8443/movie
 # (must be the exact same Client ID the frontend's @react-oauth/google uses,
 # or the two sides won't match up).
 google.oauth.client-id=
+
+# ---- Seat reservation TTL ----
+# Minutes a seat stays held after being selected before an abandoned cart's
+# hold is automatically released back to available. Optional — defaults to 10.
+seat.reservation.ttl-minutes=10

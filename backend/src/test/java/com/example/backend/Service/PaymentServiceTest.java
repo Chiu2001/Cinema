@@ -1,14 +1,18 @@
 package com.example.backend.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,18 +22,24 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.backend.DTO.TicketItemDTO;
+import com.example.backend.Entity.Seat;
 import com.example.backend.Entity.Ticket;
+import com.example.backend.Repo.SeatRepo;
 import com.example.backend.Repo.TicketRepo;
 
 // Unit tests for PaymentService.createTicketsForOrder — the method behind
-// yesterday's "Order Lookup stays empty" bug. TicketRepo is mocked, nothing
-// here touches a database; these tests only check that the right Ticket
-// objects would be saved.
+// yesterday's "Order Lookup stays empty" bug, plus the seat-reservation TTL
+// cleanup: once a booking is paid, the seat's hold must be cleared so
+// SeatReservationCleanupTask never releases it. Repos are mocked, nothing
+// here touches a database.
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
     @Mock
     private TicketRepo ticketRepo;
+
+    @Mock
+    private SeatRepo seatRepo;
 
     @InjectMocks
     private PaymentService paymentService;
@@ -80,5 +90,34 @@ class PaymentServiceTest {
         paymentService.createTicketsForOrder(123, Collections.emptyList());
 
         verify(ticketRepo, never()).save(any());
+    }
+
+    @Test
+    void createTicketsForOrder_seatWasReserved_clearsItsReservationTimestamp() {
+        TicketItemDTO item = ticketItem(6, List.of("D1-5"), 16000);
+
+        Seat heldSeat = new Seat();
+        heldSeat.setSeatNumber("D1-5");
+        heldSeat.setSeatAvailability(false);
+        heldSeat.setReservedAt(LocalDateTime.now());
+        when(seatRepo.findByShowtimeIdAndSeatNumber(6, "D1-5")).thenReturn(Optional.of(heldSeat));
+
+        paymentService.createTicketsForOrder(774520727, List.of(item));
+
+        // Now that it's genuinely booked, the hold timestamp must be gone —
+        // otherwise the cleanup task would eventually release a sold seat.
+        assertNull(heldSeat.getReservedAt());
+        verify(seatRepo).save(heldSeat);
+    }
+
+    @Test
+    void createTicketsForOrder_seatRowMissing_stillSavesTheTicket() {
+        TicketItemDTO item = ticketItem(6, List.of("D1-5"), 16000);
+        when(seatRepo.findByShowtimeIdAndSeatNumber(6, "D1-5")).thenReturn(Optional.empty());
+
+        paymentService.createTicketsForOrder(774520727, List.of(item));
+
+        verify(ticketRepo).save(any(Ticket.class));
+        verify(seatRepo, never()).save(any());
     }
 }

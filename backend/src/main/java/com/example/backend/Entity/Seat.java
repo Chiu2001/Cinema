@@ -1,5 +1,7 @@
 package com.example.backend.Entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,14 @@ public class Seat {
 
     @Column(name = "seat_availability", nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean seatAvailability;
+
+    // Set when a seat is reserved (seatAvailability = false), cleared back to
+    // null once the booking is actually paid for. A scheduled task releases
+    // any seat whose hold is older than the TTL, so an abandoned cart doesn't
+    // lock a seat forever; a null value here (with seatAvailability still
+    // false) means the seat is permanently booked and never gets swept.
+    @Column(name = "reserved_at")
+    private LocalDateTime reservedAt;
 
     public Long getId() {
         return id;
@@ -81,5 +91,13 @@ public class Seat {
 
     public void setSeatAvailability(Boolean seatAvailability) {
         this.seatAvailability = seatAvailability;
+    }
+
+    public LocalDateTime getReservedAt() {
+        return reservedAt;
+    }
+
+    public void setReservedAt(LocalDateTime reservedAt) {
+        this.reservedAt = reservedAt;
     }
 }
